@@ -16,13 +16,13 @@ import java.util.List;
 public class ElementMuse{
     private String line;
     private String element;
-    private int muse;
+    private double muse;
 
     public ElementMuse(String line){
         try{
             String[] tmp = line.split(",");
             this.element = tmp[0];
-            this.muse = Integer.parseInt(tmp[1]);
+            this.muse = Double.parseDouble(tmp[1]);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("[ERROR] 行：" + line + "异常！无法转换为对象！");
@@ -42,7 +42,7 @@ public class ElementMuse{
         return element;
     }
 
-    public int getMuse() {
+    public double getMuse() {
         return muse;
     }
 }
