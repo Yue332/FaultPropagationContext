@@ -42,7 +42,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         }
 
         String[] funcArr = config.getConfig(ConfigUtils.PRO_FUNC_KEY).split(",");
-        String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY);
+        String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY) + "\r\n";
         String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
                 project + File.separator + project + "-MetallaxisSuspValue.csv";
         File outputFile = new File(outputFilePath);
@@ -60,14 +60,18 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
     }
 
-    private void processOne(Runtime runTime, String projectPath, String project, String bug,
-                            Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName) throws Exception {
-        String middleParamsFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
-                project + File.separator + bug + File.separator + "为了后续计算的中间变量的值.csv";
-
+    public void processOne(Runtime runTime, String projectPath, String project, String bug,
+                           Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName) throws Exception {
         int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
         int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
 
+        processOne(project, bug, outputMap, analysisFunc, funcName, passCount, failCount);
+    }
+
+    public void processOne(String project, String bug, Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName,
+                            int passCount, int failCount) throws Exception {
+        String middleParamsFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
+                project + File.separator + bug + File.separator + "为了后续计算的中间变量的值.csv";
         List<MiddleParams> middleParamList = new AllMiddleParams(middleParamsFilePath).getMiddleParams();
         double[][] martix = getMartix(middleParamList, passCount, failCount);
 
@@ -76,7 +80,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         String reportFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bug + File.separator + "result.csv";
         List<CalMUSE.MutatorReport> reportList = CalMUSE.MutatorReport.getMutatorReportList(reportFilePath);
         //按类+行号分组
-        Map<String, List<CalMUSE.MutatorReport>> groupByMap = reportList.stream().collect(Collectors.groupingBy(line -> line.getMutatedClass() + "#" + line.getMutatedClass()));
+        Map<String, List<CalMUSE.MutatorReport>> groupByMap = reportList.stream().collect(Collectors.groupingBy(line -> line.getMutatedClass() + "#" + line.getLineNumber()));
         for(Map.Entry<String, List<CalMUSE.MutatorReport>> entry : groupByMap.entrySet()){
             String line = entry.getKey();
             List<CalMUSE.MutatorReport> mutatorReportList = entry.getValue();
