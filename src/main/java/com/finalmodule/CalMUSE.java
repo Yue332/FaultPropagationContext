@@ -38,7 +38,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
 				if(!resultCsvFile.exists()) {
 					throw new Exception("[ERROR] 文件"+resultCsvFile.getAbsolutePath()+"不存在！");
 				}
-				String[] failingTests = getFailingTestArray(runTime, project, bugId);
+				String[] failingTests = Utils.getFailingTestArray(runTime, super.config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY), project, bugId);
 				System.out.println("[DEBUGGER] failingTest : " + Arrays.toString(failingTests));
 				cal(resultCsvFile, failingTests, project, bugId);
 			}
@@ -52,20 +52,6 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
 		
 	}
 	
-	public String COMMAND = "cd @PROJECT_PATH@,defects4j test";
-	public String[] getFailingTestArray(Runtime runTime, String project, String bugId) throws Exception {
-		String[] command = COMMAND.replace("@PROJECT_PATH@", super.config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY) + File.separator + project + "_" + bugId + File.separator).split(",");
-		String[] ret = Utils.executeCommandLine(runTime, command);
-		String[] tmpArr = ret[1].split("-");
-		List<String> list = new ArrayList<String>(tmpArr.length - 1);
-		for(String str : tmpArr) {
-			if(str.contains("Failing tests")) {
-				continue;
-			}
-			list.add(str.replace("::", ".").trim());
-		}
-		return list.toArray(new String[] {});
-	}
 
 	public void cal(File resultCsvFile, String[] failingTests, String project, String bugId){
         int failingTestsNum = failingTests.length;
@@ -240,6 +226,13 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }
+        }
+
+        public static List<MutatorReport> getMutatorReportList(String reportPath)throws Exception{
+            File file = new File(reportPath);
+            List<String> csvList = FileUtils.readLines(file, "utf-8");
+            csvList.remove(0);
+            return getMutatorReportList(csvList);
         }
 
         public static List<MutatorReport> getMutatorReportList(List<String> csvList){

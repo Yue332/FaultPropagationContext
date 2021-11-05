@@ -234,4 +234,26 @@ public class Utils {
 		Collections.sort(list);
 		return list;
 	}
+
+	public static String COMMAND = "cd @PROJECT_PATH@,defects4j test";
+	public static String[] getFailingTestArray(Runtime runTime, String projectPath, String project, String bugId) throws Exception {
+		String[] command = COMMAND.replace("@PROJECT_PATH@", projectPath + File.separator + project + "_" + bugId + File.separator).split(",");
+		String[] ret = Utils.executeCommandLine(runTime, command);
+		String[] tmpArr = ret[1].split("-");
+		List<String> list = new ArrayList<>(tmpArr.length - 1);
+		for(String str : tmpArr) {
+			if(str.contains("Failing tests")) {
+				continue;
+			}
+			list.add(str.replace("::", ".").trim());
+		}
+		return list.toArray(new String[] {});
+	}
+
+	public static final String COMMAND_GETALLTESTS = "cd @PROJECT_PATH@, defects4j export -p tests.all";
+	public static String[] getAllTestArray(Runtime runTime, String projectPath, String project, String bugId) throws Exception {
+		String[] command = COMMAND_GETALLTESTS.replace("@PROJECT_PATH@", projectPath + File.separator + project + "_" + bugId + File.separator).split(",");
+		String[] ret = Utils.executeCommandLine(runTime, command);
+		return ret[1].split("\r\n");
+	}
 }
