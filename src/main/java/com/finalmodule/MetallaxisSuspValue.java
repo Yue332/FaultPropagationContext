@@ -38,10 +38,14 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                     project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
             File outputFile = new File(outputFilePath);
             FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
+
+            int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
+            int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
+
             for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()){
                 String funcName = entry.getKey();
                 IAnalysisFunc analysisFunc = entry.getValue();
-                processOne(runTime, projectPath, project, bug, outputMap, analysisFunc, funcName);
+                processOne(project, bug, outputMap, analysisFunc, funcName, passCount, failCount);
             }
             StringBuilder finalResult = new StringBuilder();
             for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()){
@@ -55,14 +59,6 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
             }
             FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
         }
-    }
-
-    public void processOne(Runtime runTime, String projectPath, String project, String bug,
-                           Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName) throws Exception {
-        int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
-        int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
-
-        processOne(project, bug, outputMap, analysisFunc, funcName, passCount, failCount);
     }
 
     public void processOne(String project, String bug, Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName,
