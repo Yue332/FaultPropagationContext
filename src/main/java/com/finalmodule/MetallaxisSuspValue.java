@@ -64,7 +64,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                             Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName) throws Exception {
         String middleParamsFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
                 project + File.separator + bug + File.separator + "为了后续计算的中间变量的值.csv";
-        //TODO:
+
         int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
         int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
 
@@ -91,7 +91,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
     }
 
     private double[][] getMartix(List<MiddleParams> list, int passCount, int failCount){
-        double[][] ret = new double[list.size()][3];
+        double[][] ret = new double[list.size()][4];
         for(int i = 0, length = list.size(); i < length; i ++){
             MiddleParams middleParam = list.get(i);
             ret[i][0] = middleParam.getTotalKillingTests();
