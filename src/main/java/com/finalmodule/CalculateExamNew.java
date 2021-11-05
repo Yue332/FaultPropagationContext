@@ -52,7 +52,7 @@ public class CalculateExamNew extends FinalBean implements IFinalProcessModule {
     }
 
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String title = "bugid," + Arrays.toString(funcArr).replace("[", "").replace("]", "") + "\r\n";
         File outputFile = new File(outputPath);
         if(!outputFile.exists()) {

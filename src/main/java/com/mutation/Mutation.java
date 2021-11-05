@@ -20,7 +20,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 	
 
 	@Override
-	public void process(Runtime runTime) throws Exception {
+	public void process(Runtime runTime, StringBuilder processLog) throws Exception {
 		this.projects = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY).split(",");
 		this.bugs = super.config.getBugIdArr();
 		boolean needCheckOut = "YES".equals(config.getConfig("NEED_CHECKOUT"));

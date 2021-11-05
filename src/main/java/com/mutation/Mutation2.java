@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,7 @@ import com.utils.ConfigUtils;
 public class Mutation2 extends FinalBean implements IFinalProcessModule {
 
 	@Override
-	public void process(Runtime runTime) throws Exception {
+	public void process(Runtime runTime, StringBuilder processLog) throws Exception {
 		String[] projects = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY).split(",");
 		String[] bugIdArr = super.config.getBugIdArr();
 		String baseReportDir = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + "@:PROJECT_ID@" + File.separator + "@:BUG_ID@" + File.separator;

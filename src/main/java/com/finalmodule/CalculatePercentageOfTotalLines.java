@@ -15,7 +15,7 @@ public class CalculatePercentageOfTotalLines extends FinalBean implements IFinal
     private String func;
 
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String[] funcArr = config.getConfig(ConfigUtils.PRO_FUNC_KEY).split(",");
         if(funcArr.length != 1){
             throw new Exception("[ERROR] " + ConfigUtils.PRO_FUNC_KEY + "请只配置一个公式！");

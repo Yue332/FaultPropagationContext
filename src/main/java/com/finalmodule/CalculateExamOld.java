@@ -23,7 +23,7 @@ public class CalculateExamOld extends FinalBean implements IFinalProcessModule {
     private String examPath;
 
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String projectId = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY);
         String projectPath = config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY) + File.separator +
                 projectId + "_@:BUG_ID@" + File.separator;

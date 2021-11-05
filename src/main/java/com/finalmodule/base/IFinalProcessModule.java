@@ -5,7 +5,7 @@ import java.util.List;
 import com.utils.Configer;
 
 public interface IFinalProcessModule {
-	public void process(Runtime runTime)throws Exception;
+	public void process(Runtime runTime, StringBuilder processLog)throws Exception;
 	
 	public void setConfig(Configer conf);
 	

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MFR extends FinalBean implements IFinalProcessModule {
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String[] projectArr = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY).split(",");
         String[] funcArr = super.config.getConfig(ConfigUtils.PRO_FUNC_KEY).split(",");
         StringBuilder info = new StringBuilder();

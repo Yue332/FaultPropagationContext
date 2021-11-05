@@ -9,7 +9,7 @@ import com.utils.Utils;
 public class Test extends FinalBean implements IFinalProcessModule{
 
 	@Override
-	public void process(Runtime runTime) throws Exception {
+	public void process(Runtime runTime, StringBuilder processLog) throws Exception {
 		String[] command = config.getConfig("COMMAND").split(",");
 		String[] ret = Utils.executeCommandLine(runTime, command);
 		System.out.println(Arrays.toString(ret));

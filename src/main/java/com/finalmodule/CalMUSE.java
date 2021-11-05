@@ -4,15 +4,12 @@ import org.apache.commons.io.FileUtils;
 
 import com.finalmodule.base.FinalBean;
 import com.finalmodule.base.IFinalProcessModule;
-import com.utils.Bean;
 import com.utils.ConfigUtils;
-import com.utils.Configer;
 import com.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,7 +28,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
 	private String[] bugIds;
 	
 	@Override
-	public void process(Runtime runTime) throws Exception {
+	public void process(Runtime runTime, StringBuilder processLog) throws Exception {
 		for(String project : projects) {
 			for(String bugId : bugIds) {
 				File resultCsvFile = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "result.csv");

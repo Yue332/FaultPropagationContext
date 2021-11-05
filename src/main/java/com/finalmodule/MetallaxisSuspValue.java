@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModule {
 
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String projectPath = super.config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY);
         String project = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY);
         String[] bugArr = super.config.getBugIdArr();
@@ -33,31 +33,35 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         funcMap.forEach((key, func) -> funcList.add(key));
         String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY) + "\r\n";
         for(String bug : bugArr){
-            Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
-            String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
-                    project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
-            File outputFile = new File(outputFilePath);
-            FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
+            try {
+                Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
+                int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
+                int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
 
-            int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
-            int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
-
-            for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()){
-                String funcName = entry.getKey();
-                IAnalysisFunc analysisFunc = entry.getValue();
-                processOne(project, bug, outputMap, analysisFunc, funcName, passCount, failCount);
-            }
-            StringBuilder finalResult = new StringBuilder();
-            for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()){
-                String element = entry.getKey();
-                Map<String, BigDecimal> funcScore = entry.getValue();
-                StringBuilder score = new StringBuilder(element).append(",");
-                for(String func : funcList){
-                    score.append(funcScore.get(func).toPlainString()).append(",");
+                for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()) {
+                    String funcName = entry.getKey();
+                    IAnalysisFunc analysisFunc = entry.getValue();
+                    processOne(project, bug, outputMap, analysisFunc, funcName, passCount, failCount);
                 }
-                finalResult.append(score.substring(0, score.length() - 1)).append("\r\n");
+                StringBuilder finalResult = new StringBuilder();
+                for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()) {
+                    String element = entry.getKey();
+                    Map<String, BigDecimal> funcScore = entry.getValue();
+                    StringBuilder score = new StringBuilder(element).append(",");
+                    for (String func : funcList) {
+                        score.append(funcScore.get(func).toPlainString()).append(",");
+                    }
+                    finalResult.append(score.substring(0, score.length() - 1)).append("\r\n");
+                }
+                String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
+                        project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
+                File outputFile = new File(outputFilePath);
+                FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
+                FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
+            }catch (Exception e){
+                e.printStackTrace();
+                processLog.append("项目:").append(project).append("，bug:").append(bug).append("处理异常！原因：").append(Utils.getExceptionString(e)).append("\r\n");
             }
-            FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
         }
     }
 

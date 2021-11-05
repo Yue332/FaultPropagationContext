@@ -12,7 +12,7 @@ import java.util.List;
 
 public class FinalMFR extends FinalBean implements IFinalProcessModule {
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         File outputFile = getOutputFile();
         for(File project : getMFRProjectPath()){
         	System.out.println("[DEBUG] 开始处理" + project.getName());

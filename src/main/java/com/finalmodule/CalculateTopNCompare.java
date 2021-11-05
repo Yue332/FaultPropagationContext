@@ -44,7 +44,7 @@ public class CalculateTopNCompare extends FinalBean implements IFinalProcessModu
     }
 
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         int top = Integer.parseInt(config.getConfig(ConfigUtils.TOP_N_KEY));
         for(int i = 0; i < funcArr.length; i ++) {
             File outputFile = new File(output.replaceAll("@:TOP@", String.valueOf(top))

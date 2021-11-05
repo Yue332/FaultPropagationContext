@@ -21,7 +21,7 @@ import java.util.Map;
  **/
 public class CalTopNWithMUSE extends FinalBean implements IFinalProcessModule {
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String projectPath = config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY);
         String project = config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY);
         String[] bugArray = config.getBugIdArr();

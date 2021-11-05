@@ -6,7 +6,6 @@ import com.utils.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class CalculateTopNSrc extends FinalBean implements IFinalProcessModule {
     }
 
     @Override
-    public void process(Runtime runTime) throws Exception {
+    public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         int top = Integer.parseInt(config.getConfig(ConfigUtils.TOP_N_KEY));
         // 遍历每个公式
         for (String func : funcArr) {

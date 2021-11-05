@@ -26,7 +26,7 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
 	private String projectId;
 
 	@Override
-	public void process(Runtime runTime) throws Exception {
+	public void process(Runtime runTime, StringBuilder processLog) throws Exception {
 		Map<String, String> map = new LinkedHashMap<String, String>(funcArr.length);
 		StringBuilder avagScore = new StringBuilder("average score,");
 		for(int iFuncIdx = 0; iFuncIdx < funcArr.length; iFuncIdx ++) {

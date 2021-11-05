@@ -2,7 +2,6 @@ package com.finalmodule;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.utils.*;
@@ -19,7 +18,7 @@ public class CalculateTopN extends FinalBean implements IFinalProcessModule {
 	private int top;
 	
 	@Override
-	public void process(Runtime runTime) throws Exception {
+	public void process(Runtime runTime, StringBuilder processLog) throws Exception {
 		String title = "bugId,function,Top-N,contained,total_lines" + "\r\n";
 		for(int i = 0; i < funcArr.length; i ++) {
 			File outputFile = new File(config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY) + File.separator + "Top"+top+"-"+funcArr[i]+".csv");

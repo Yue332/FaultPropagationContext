@@ -81,13 +81,15 @@ public class Main {
 		}
 		// 最终处理模块
 		List<IFinalProcessModule> fianlProcessModuleList = config.getFinalProcessModuleList();
+		StringBuilder finalProcessLog = new StringBuilder();
 		for(IFinalProcessModule module : fianlProcessModuleList) {
 			System.out.println("[INFO] 开始执行模块" + module.getClass().getName());
+			finalProcessLog.append("模块").append(module.getClass().getName()).append("执行日志：\r\n");
 			try {
 				module.setConfig(config);
 				module.setFailBugId(failBugIdList);
 				module.onPrepare();
-				module.process(runTime);
+				module.process(runTime, finalProcessLog);
 			} catch (Exception e) {
 				failMsg.append("最终模块【"+module.getClass().getName()+"】执行异常！异常原因：" + Utils.getExceptionString(e)).append("\r\n");
 				System.out.println("[ERROR] 最终模块【"+module.getClass().getName()+"】执行异常！" + e.getMessage());
@@ -98,11 +100,11 @@ public class Main {
 		long endTime = System.currentTimeMillis();
 		
 		String failFilePath = config.getConfig(ConfigUtils.FAIL_FILE_PATH_KEY);
-		if(!"".contentEquals(failFilePath) && failMsg.length() != 0) {
+		if(!"".contentEquals(failFilePath)) {
 			System.out.println("[INFO] 失败信息不为空！写入失败文件");
 			File failFile = new File(failFilePath);
 			try {
-				FileUtils.writeStringToFile(failFile, failMsg.toString(), false);
+				FileUtils.writeStringToFile(failFile, failMsg + "\r\n" + finalProcessLog, false);
 			} catch (Exception e) {
 				System.out.println("[WARNING] 失败信息写入异常！" + e.getMessage());
 				e.printStackTrace();
