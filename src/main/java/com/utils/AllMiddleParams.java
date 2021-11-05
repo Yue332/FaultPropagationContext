@@ -16,10 +16,12 @@ public class AllMiddleParams {
     private int totalFailtoPassTestsNum;
 
     public AllMiddleParams(String filePath) throws Exception {
+        System.out.println("[DEBUG] 读取文件" + filePath);
         File file = new File(filePath);
         List<String> list = FileUtils.readLines(file, "utf-8");
         list.remove(0);
         String lastLine = list.get(list.size() - 1);
+        System.out.println("[DEBUG] 最后一行" + lastLine);
         String[] tmp = lastLine.split(",");
         this.totalPasstoFailTestsNum = Integer.parseInt(tmp[0]);
         this.totalFailtoPassTestsNum = Integer.parseInt(tmp[1]);
