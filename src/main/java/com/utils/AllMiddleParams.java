@@ -21,10 +21,9 @@ public class AllMiddleParams {
         List<String> list = FileUtils.readLines(file, "utf-8");
         list.remove(0);
         String lastLine = list.get(list.size() - 1);
-        System.out.println("[DEBUG] 最后一行" + lastLine);
         String[] tmp = lastLine.split(",");
-        this.totalPasstoFailTestsNum = Integer.parseInt(tmp[0]);
-        this.totalFailtoPassTestsNum = Integer.parseInt(tmp[1]);
+        this.totalPasstoFailTestsNum = Integer.parseInt(tmp[1]);
+        this.totalFailtoPassTestsNum = Integer.parseInt(tmp[2]);
         list.remove(list.size() - 1);
         list.remove(list.size() - 1);
 
