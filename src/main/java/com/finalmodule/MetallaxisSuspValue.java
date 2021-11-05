@@ -31,31 +31,30 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         LinkedHashMap<String, IAnalysisFunc> funcMap = TFuncRegister.getRegistClass(config);
         List<String> funcList = new ArrayList<>(funcMap.size());
         funcMap.forEach((key, func) -> funcList.add(key));
-        Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
+        String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY) + "\r\n";
         for(String bug : bugArr){
+            Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
+            String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
+                    project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
+            File outputFile = new File(outputFilePath);
+            FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
             for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()){
                 String funcName = entry.getKey();
                 IAnalysisFunc analysisFunc = entry.getValue();
                 processOne(runTime, projectPath, project, bug, outputMap, analysisFunc, funcName);
             }
-        }
-
-        String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY) + "\r\n";
-        String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
-                project + File.separator + project + "-MetallaxisSuspValue.csv";
-        File outputFile = new File(outputFilePath);
-        FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
-        StringBuilder finalResult = new StringBuilder();
-        for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()){
-            String element = entry.getKey();
-            Map<String, BigDecimal> funcScore = entry.getValue();
-            StringBuilder score = new StringBuilder(element).append(",");
-            for(String func : funcList){
-                score.append(funcScore.get(func).toPlainString()).append(",");
+            StringBuilder finalResult = new StringBuilder();
+            for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()){
+                String element = entry.getKey();
+                Map<String, BigDecimal> funcScore = entry.getValue();
+                StringBuilder score = new StringBuilder(element).append(",");
+                for(String func : funcList){
+                    score.append(funcScore.get(func).toPlainString()).append(",");
+                }
+                finalResult.append(score.substring(0, score.length() - 1)).append("\r\n");
             }
-            finalResult.append(score.substring(0, score.length() - 1)).append("\r\n");
+            FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
         }
-        FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
     }
 
     public void processOne(Runtime runTime, String projectPath, String project, String bug,
