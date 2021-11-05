@@ -12,10 +12,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +29,8 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         String project = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY);
         String[] bugArr = super.config.getBugIdArr();
         LinkedHashMap<String, IAnalysisFunc> funcMap = TFuncRegister.getRegistClass(config);
+        List<String> funcList = new ArrayList<>(funcMap.size());
+        funcMap.forEach((key, func) -> funcList.add(key));
         Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
         for(String bug : bugArr){
             for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()){
@@ -41,7 +40,6 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
             }
         }
 
-        String[] funcArr = config.getConfig(ConfigUtils.PRO_FUNC_KEY).split(",");
         String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY) + "\r\n";
         String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
                 project + File.separator + project + "-MetallaxisSuspValue.csv";
@@ -52,7 +50,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
             String element = entry.getKey();
             Map<String, BigDecimal> funcScore = entry.getValue();
             StringBuilder score = new StringBuilder(element).append(",");
-            for(String func : funcArr){
+            for(String func : funcList){
                 score.append(funcScore.get(func).toPlainString()).append(",");
             }
             finalResult.append(score.substring(0, score.length() - 1)).append("\r\n");
