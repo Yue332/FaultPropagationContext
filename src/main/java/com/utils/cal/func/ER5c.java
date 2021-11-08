@@ -17,6 +17,8 @@ public class ER5c implements IAnalysisFunc {
                 suspValue.add(i, new BigDecimal("0"));
             }else if( matrix[i][1] == (matrix[i][1]+matrix[i][3])){
                 suspValue.add(i,new BigDecimal("1"));
+            }else{
+                suspValue.add(i, BigDecimal.ZERO);
             }
         }
         return suspValue;
