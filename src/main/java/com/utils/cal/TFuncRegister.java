@@ -106,7 +106,7 @@ public class TFuncRegister {
 			String name = jarEntry.getName();
 			if(name.endsWith(".class")){
 				name = name.replace(".class", "").replace("/", ".");
-				if(realPackageName.equals(name.substring(0, name.lastIndexOf("."))) && !name.contains("$")){
+				if(name.startsWith(realPackageName) && !name.contains("$")){
 					builder.append(name).append(",");
 				}
 			}
