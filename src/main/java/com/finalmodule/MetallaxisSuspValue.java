@@ -30,44 +30,43 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         String project = super.config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY);
         String[] bugArr = super.config.getBugIdArr();
         LinkedHashMap<String, IAnalysisFunc> funcMap = TFuncRegister.getRegistClass(config);
-        List<String> funcList = new ArrayList<>(funcMap.size());
-        funcMap.forEach((key, func) -> funcList.add(func.getName()));
-        StringBuilder header = new StringBuilder("element,");
-        funcList.forEach(m -> header.append(m).append(","));
-        for(String bug : bugArr){
-            try {
-                Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
-                int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
-                int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
+        for (String bug : bugArr) {
 
-                String middleParamsFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
-                        project + File.separator + bug + File.separator + "为了后续计算的中间变量的值.csv";
-                List<MiddleParams> middleParamList = new AllMiddleParams(middleParamsFilePath).getMiddleParams();
-                double[][] martix = getMartix(middleParamList, passCount, failCount, project, bug);
+            Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
+            int passCount = Utils.getAllTestArray(runTime, projectPath, project, bug).length;
+            int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
 
-                for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()) {
-                    IAnalysisFunc analysisFunc = entry.getValue();
+            String middleParamsFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
+                    project + File.separator + bug + File.separator + "为了后续计算的中间变量的值.csv";
+            List<MiddleParams> middleParamList = new AllMiddleParams(middleParamsFilePath).getMiddleParams();
+            double[][] martix = getMartix(middleParamList, passCount, failCount, project, bug);
+
+            for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()) {
+                IAnalysisFunc analysisFunc = entry.getValue();
+                try {
                     processOne(project, bug, outputMap, analysisFunc, middleParamList, martix);
+                } catch (Exception e) {
+                    processLog.append("项目:").append(project).append("，bug:").append(bug).append("公式").append(analysisFunc.getName()).append("处理异常！原因：").append(Utils.getExceptionString(e)).append("\r\n");
                 }
-                StringBuilder finalResult = new StringBuilder();
-                for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()) {
-                    String element = entry.getKey();
-                    Map<String, BigDecimal> funcScore = entry.getValue();
-                    StringBuilder score = new StringBuilder(element).append(",");
-                    for (String func : funcList) {
-                        score.append(funcScore.get(func).toPlainString()).append(",");
-                    }
-                    finalResult.append(score.substring(0, score.length() - 1)).append("\r\n");
-                }
-                String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
-                        project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
-                File outputFile = new File(outputFilePath);
-                FileUtils.writeStringToFile(outputFile, header.substring(0, header.length() - 1) + "\r\n", "utf-8", false);
-                FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
-            }catch (Exception e){
-                e.printStackTrace();
-                processLog.append("项目:").append(project).append("，bug:").append(bug).append("处理异常！原因：").append(Utils.getExceptionString(e)).append("\r\n");
             }
+            StringBuilder header = new StringBuilder("element,");
+            StringBuilder finalResult = new StringBuilder();
+            for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()) {
+                String element = entry.getKey();
+                Map<String, BigDecimal> funcScore = entry.getValue();
+                StringBuilder scoreBuilder = new StringBuilder(element).append(",");
+                funcScore.forEach((funcName, score) -> {
+                    header.append(funcName).append(",");
+                    scoreBuilder.append(score.toPlainString()).append(",");
+                });
+                finalResult.append(scoreBuilder.substring(0, scoreBuilder.length() - 1)).append("\r\n");
+            }
+            String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
+                    project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
+            File outputFile = new File(outputFilePath);
+            FileUtils.writeStringToFile(outputFile, header.substring(0, header.length() - 1) + "\r\n", "utf-8", false);
+            FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
+
         }
     }
 
@@ -80,12 +79,12 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         List<CalMUSE.MutatorReport> reportList = CalMUSE.MutatorReport.getMutatorReportList(reportFilePath);
         //按类+行号分组
         Map<String, List<CalMUSE.MutatorReport>> groupByMap = reportList.stream().collect(Collectors.groupingBy(line -> line.getMutatedClass() + "#" + line.getLineNumber()));
-        for(Map.Entry<String, List<CalMUSE.MutatorReport>> entry : groupByMap.entrySet()){
+        for (Map.Entry<String, List<CalMUSE.MutatorReport>> entry : groupByMap.entrySet()) {
             String line = entry.getKey();
             List<CalMUSE.MutatorReport> mutatorReportList = entry.getValue();
             BigDecimal score = BigDecimal.ZERO;
             Map<String, BigDecimal> funcScore = outputMap.get(line) == null ? new HashMap<>() : outputMap.get(line);
-            for(CalMUSE.MutatorReport report : mutatorReportList){
+            for (CalMUSE.MutatorReport report : mutatorReportList) {
                 score = score.max(mutatorSuspValueMap.get(report.getMutator()));
             }
             funcScore.put(funcName, score);
@@ -96,7 +95,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
     public double[][] getMartix(List<MiddleParams> list, int passCount, int failCount, String project, String bug) throws IOException {
         double[][] ret = new double[list.size()][4];
         StringBuilder martixStr = new StringBuilder();
-        for(int i = 0, length = list.size(); i < length; i ++){
+        for (int i = 0, length = list.size(); i < length; i++) {
             MiddleParams middleParam = list.get(i);
             ret[i][0] = middleParam.getTotalKillingTests();
             ret[i][1] = middleParam.getTotalSucceedingTests();
@@ -113,10 +112,10 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         return ret;
     }
 
-    private Map<String, BigDecimal> getMutatorSuspValue(List<MiddleParams> middleParamsList, IAnalysisFunc func, double[][] martix){
+    private Map<String, BigDecimal> getMutatorSuspValue(List<MiddleParams> middleParamsList, IAnalysisFunc func, double[][] martix) {
         Map<String, BigDecimal> mutatorSuspValue = new LinkedHashMap<>(middleParamsList.size());
         List<BigDecimal> valueList = func.onProcess(martix);
-        for(int i = 0, length = middleParamsList.size(); i < length; i ++){
+        for (int i = 0, length = middleParamsList.size(); i < length; i++) {
             MiddleParams middleParams = middleParamsList.get(i);
             mutatorSuspValue.put(middleParams.getMutator(), valueList.get(i));
         }
