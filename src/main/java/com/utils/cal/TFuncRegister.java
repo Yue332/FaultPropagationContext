@@ -2,12 +2,15 @@ package com.utils.cal;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import com.utils.ConfigUtils;
 import com.utils.Configer;
@@ -52,6 +55,9 @@ public class TFuncRegister {
 					if("file".equals(protocol)){
 						String filePath = URLDecoder.decode(url.getFile(), "utf-8");
 						return findClassesInPackageByFile(filePath);
+					}else if("jar".equals(protocol)){
+						JarFile jarFile = ((JarURLConnection)url.openConnection()).getJarFile();
+						return findAllClassNameByJar(jarFile);
 					}
 				}
 			}
@@ -86,6 +92,23 @@ public class TFuncRegister {
 				// 去掉后面的.class 只留下类名
 				String className = realPackageName + "." + file.getName().substring(0, file.getName().length() - 6);
 				builder.append(className).append(",");
+			}
+		}
+		return builder.length() >= 1 ? builder.substring(0, builder.length() - 1) : null;
+	}
+
+	private static String findAllClassNameByJar(JarFile jarFile){
+		StringBuilder builder = new StringBuilder();
+		String realPackageName = SCAN_PACKAGE.replace("/", ".");
+		Enumeration<JarEntry> entry = jarFile.entries();
+		while (entry.hasMoreElements()){
+			JarEntry jarEntry = entry.nextElement();
+			String name = jarEntry.getName();
+			if(name.endsWith(".class")){
+				name = name.replace(".class", "").replace("/", ".");
+				if(realPackageName.equals(name.substring(0, name.lastIndexOf("."))) && !name.contains("$")){
+					builder.append(name).append(",");
+				}
 			}
 		}
 		return builder.length() >= 1 ? builder.substring(0, builder.length() - 1) : null;
