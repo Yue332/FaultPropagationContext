@@ -50,15 +50,21 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                 }
             }
             StringBuilder header = new StringBuilder("element,");
+            boolean flag = true;
             StringBuilder finalResult = new StringBuilder();
             for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()) {
                 String element = entry.getKey();
                 Map<String, BigDecimal> funcScore = entry.getValue();
                 StringBuilder scoreBuilder = new StringBuilder(element).append(",");
-                funcScore.forEach((funcName, score) -> {
-                    header.append(funcName).append(",");
+                for(Map.Entry<String, BigDecimal> entry1 : funcScore.entrySet()){
+                    String funcName = entry1.getKey();
+                    BigDecimal score = entry1.getValue();
+                    if(flag){
+                        header.append(funcName).append(",");
+                    }
                     scoreBuilder.append(score.toPlainString()).append(",");
-                });
+                }
+                flag = false;
                 finalResult.append(scoreBuilder.substring(0, scoreBuilder.length() - 1)).append("\r\n");
             }
             String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
