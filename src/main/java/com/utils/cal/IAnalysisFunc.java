@@ -6,6 +6,10 @@ import java.util.List;
 public interface IAnalysisFunc {
 	
 	public List<BigDecimal> onProcess(double[][] matrix);
+
+	default String getName(){
+		return this.getClass().getSimpleName();
+	}
 	
 	public int scale = 19;
 	

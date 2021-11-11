@@ -31,8 +31,9 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         String[] bugArr = super.config.getBugIdArr();
         LinkedHashMap<String, IAnalysisFunc> funcMap = TFuncRegister.getRegistClass(config);
         List<String> funcList = new ArrayList<>(funcMap.size());
-        funcMap.forEach((key, func) -> funcList.add(key));
-        String header = "element," + config.getConfig(ConfigUtils.PRO_FUNC_KEY) + "\r\n";
+        funcMap.forEach((key, func) -> funcList.add(func.getName()));
+        StringBuilder header = new StringBuilder("element,");
+        funcList.forEach(m -> header.append(m).append(","));
         for(String bug : bugArr){
             try {
                 Map<String, Map<String, BigDecimal>> outputMap = new HashMap<>();
@@ -45,9 +46,8 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                 double[][] martix = getMartix(middleParamList, passCount, failCount, project, bug);
 
                 for (Map.Entry<String, IAnalysisFunc> entry : funcMap.entrySet()) {
-                    String funcName = entry.getKey();
                     IAnalysisFunc analysisFunc = entry.getValue();
-                    processOne(project, bug, outputMap, analysisFunc, funcName, middleParamList, martix);
+                    processOne(project, bug, outputMap, analysisFunc, middleParamList, martix);
                 }
                 StringBuilder finalResult = new StringBuilder();
                 for (Map.Entry<String, Map<String, BigDecimal>> entry : outputMap.entrySet()) {
@@ -62,7 +62,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                 String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
                         project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
                 File outputFile = new File(outputFilePath);
-                FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
+                FileUtils.writeStringToFile(outputFile, header.substring(0, header.length() - 1) + "\r\n", "utf-8", false);
                 FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
             }catch (Exception e){
                 e.printStackTrace();
@@ -71,9 +71,9 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
         }
     }
 
-    public void processOne(String project, String bug, Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc, String funcName,
+    public void processOne(String project, String bug, Map<String, Map<String, BigDecimal>> outputMap, IAnalysisFunc analysisFunc,
                            List<MiddleParams> middleParamList, double[][] martix) throws Exception {
-
+        String funcName = analysisFunc.getName();
         Map<String, BigDecimal> mutatorSuspValueMap = getMutatorSuspValue(middleParamList, analysisFunc, martix);
 
         String reportFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bug + File.separator + "result.csv";
