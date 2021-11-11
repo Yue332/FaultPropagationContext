@@ -21,8 +21,8 @@ public class TFuncRegister {
 	public static LinkedHashMap<String, IAnalysisFunc> FUNC_MAP = null;
 	public static final String SCAN_PACKAGE = "com/utils/cal/func";
 
-	public static LinkedHashMap<String, IAnalysisFunc> getRegistClass(Configer config) throws Exception{
-		String inputStr = config.getConfig(ConfigUtils.PRO_FUNC_KEY);
+	public static LinkedHashMap<String, IAnalysisFunc> getRegistClass(Configer config, String configKey) throws Exception{
+		String inputStr = config.getConfig(configKey);
 		if("all".equalsIgnoreCase(inputStr)){
 			System.out.println("[INFO] 为配置公式，使用" + SCAN_PACKAGE + "下的所有公式！！！");
 			inputStr = loadAllFuncs();
@@ -69,7 +69,6 @@ public class TFuncRegister {
 
 	/**
 	 * 以文件的形式来获取包下的所有Class
-	 * @param packagePath
 	 */
 	private static String findClassesInPackageByFile(String packagePath) {
 		String realPackageName = SCAN_PACKAGE.replace("/", ".");
@@ -115,17 +114,7 @@ public class TFuncRegister {
 	}
 
 
-	public static LinkedHashMap<String, IAnalysisFunc> getRegistClass(Configer config, String configKey) throws Exception{
-		String[] funcArr = config.getConfig(configKey).split(",");
-		LinkedHashMap<String, IAnalysisFunc> funcMap = new LinkedHashMap<>(funcArr.length);
-		for(String func : funcArr) {
-			Class<?> clz = Class.forName(func);
-			Object o = clz.newInstance();
-			if(!(o instanceof IAnalysisFunc)) {
-				throw new Exception("注册方法类【"+func+"】需要实现" + IAnalysisFunc.class.getName());
-			}
-			funcMap.put(clz.getSimpleName(), (IAnalysisFunc) o);
-		}
-		return funcMap;
+	public static LinkedHashMap<String, IAnalysisFunc> getRegistClass(Configer config) throws Exception{
+		return getRegistClass(config, ConfigUtils.PRO_FUNC_KEY);
 	}
 }
