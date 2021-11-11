@@ -26,6 +26,7 @@ public class FuncSuspValue {
             throw new RuntimeException("[ERROR] 文件" + suspValueFile.getAbsolutePath() + "内容为空！");
         }
         this.funcArray = list.get(0).split(",");
+        list.remove(0);
         this.suspValueList = new ArrayList<>(list.size() - 1);
         list.forEach(row -> suspValueList.add(new ElementFuncSuspValue(row, funcArray)));
     }
@@ -66,7 +67,7 @@ public class FuncSuspValue {
             this.element = lineSplit.get(0);
             suspValue = new HashMap<>(lineSplit.size() - 1);
             for(int i = 1, length = lineSplit.size(); i < length; i ++){
-                suspValue.put(funcArr[i - 1], new BigDecimal(lineSplit.get(i)));
+                suspValue.put(funcArr[i], new BigDecimal(lineSplit.get(i)));
             }
         }
 

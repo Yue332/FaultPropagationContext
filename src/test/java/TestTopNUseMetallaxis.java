@@ -13,9 +13,8 @@ public class TestTopNUseMetallaxis {
     public static void main(String[] args)throws Exception{
         System.setProperty("user.home", "C:\\Users\\zhangziyi\\Desktop\\1\\");
         String projectPathBase = System.getProperty("user.home");
-        String[] funcArr = new String[]{"com.utils.cal.func.ER5c"};
         List<String> funcList = new ArrayList<>();
-        funcList.add("com.utils.cal.func.ER5c");
+        funcList.add("Tarantula");
         String project = "Chart";
         String[] bugArr = new String[]{"1"};
         int top = 5;

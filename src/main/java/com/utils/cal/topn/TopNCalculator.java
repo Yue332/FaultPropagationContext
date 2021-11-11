@@ -60,7 +60,7 @@ public class TopNCalculator {
         for(String func : this.sortFunc){
             System.out.println("[INFO] 开始使用公式" + func + "计算Top-N");
 
-            File outputFile = new File(OUTPUTFILEPATH + project + File.separator + project + "-" + func + "Top-" + top + ".csv");
+            File outputFile = new File(OUTPUTFILEPATH + project + File.separator + project + "-" + func + "-Top-" + top + ".csv");
             FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
 
             StringBuilder data = new StringBuilder();
