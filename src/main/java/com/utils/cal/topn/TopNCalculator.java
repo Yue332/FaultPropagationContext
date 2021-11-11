@@ -78,7 +78,7 @@ public class TopNCalculator {
 
                 List<String> elementList = new ArrayList<>(realTop);
                 subList.forEach(row -> elementList.add(row.getElement()));
-                List<String> buggyLineAllElements = BuggyLine.getAllElements(projectPath, project, bug);
+                List<String> buggyLineAllElements = BuggyLine.getAllElements(this.projectPathBase, project, bug);
                 Map<String, Integer> map = BuggyLine.getTotalAndContained(buggyLineAllElements, elementList);
                 int total = map.get("TOTAL");
                 int contained = map.get("CONTAINED");
