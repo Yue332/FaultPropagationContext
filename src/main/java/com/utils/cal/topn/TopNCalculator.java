@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -57,17 +58,19 @@ public class TopNCalculator {
     }
 
     public void calculate(String suspValueFilePath)throws Exception{
-        for(String func : this.sortFunc){
+        a:for(String func : this.sortFunc){
             System.out.println("[INFO] 开始使用公式" + func + "计算Top-N");
 
             File outputFile = new File(OUTPUTFILEPATH + project + File.separator + project + "-" + func + "-Top-" + top + ".csv");
-            FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
 
             StringBuilder data = new StringBuilder();
             for(String bug : bugArray){
-                String projectPath = this.projectPathBase + File.separator + project + "_" + bug + File.separator;
                 File suspValueFile = new File(suspValueFilePath.replace("@PROJECT@", project).replace("@BUG@", bug));
                 FuncSuspValue suspValue = new FuncSuspValue(suspValueFile);
+                if(!Arrays.asList(suspValue.getFuncArray()).contains(func)){
+                    System.out.println("[INFO] 怀疑度文件中不包含公式" + func + "，跳过此公式");
+                    continue a;
+                }
                 suspValue.setCurrentFunc(func);
                 // 倒序排序
                 suspValue.sortReversed();
@@ -85,6 +88,7 @@ public class TopNCalculator {
 
                 data.append(project).append("-").append(bug).append(",").append(func).append(",").append(top).append(",").append(contained).append(",").append(total).append("\r\n");
             }
+            FileUtils.writeStringToFile(outputFile, header, "utf-8", false);
             FileUtils.writeStringToFile(outputFile, data.toString(), "utf-8", true);
             System.out.println("[INFO] 公式" + func + "计算完成");
         }
