@@ -256,4 +256,17 @@ public class Utils {
 		String[] ret = Utils.executeCommandLine(runTime, command);
 		return ret[1].split("\r\n");
 	}
+
+	public static <T> T[] deleteArrayElements(T[] array, T... removeObj){
+		List<T> list = new ArrayList<>(array.length - removeObj.length);
+		List<T> removeList = Arrays.asList(removeObj);
+		for (T t : array) {
+			if (removeList.contains(t)) {
+				continue;
+			}
+			list.add(t);
+		}
+		T[] tmp = Arrays.copyOf(array, list.size());
+		return list.toArray(tmp);
+	}
 }

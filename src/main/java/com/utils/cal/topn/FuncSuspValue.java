@@ -1,9 +1,11 @@
 package com.utils.cal.topn;
 
+import com.utils.Utils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -18,18 +20,40 @@ public class FuncSuspValue {
     private List<ElementFuncSuspValue> suspValueList;
     private String currentFunc;
     private File suspValueFile;
+    private String bug;
+
+    public FuncSuspValue(String project, String bug)throws Exception{
+        File suspValueFile = new File(System.getProperty("user.home") + File.separator +
+                "mutationReports" + File.separator + project + File.separator +
+                project + "-" + bug + "-MetallaxisSuspValue.csv");
+        this.bug = bug;
+        init(suspValueFile);
+
+    }
 
     public FuncSuspValue(File suspValueFile)throws Exception{
+        this.bug = suspValueFile.getName().split("-")[1];
+        init(suspValueFile);
+    }
+
+    public void init(File suspValueFile) throws Exception {
         this.suspValueFile = suspValueFile;
-        List<String> list = FileUtils.readLines(suspValueFile, "utf-8");
+        List<String> list;
+        try {
+            list = FileUtils.readLines(suspValueFile, "utf-8");
+        }catch (IOException e){
+            throw new SuspValueNotFoundException(e.getMessage());
+        }
         if(CollectionUtils.isEmpty(list)){
             throw new RuntimeException("[ERROR] 文件" + suspValueFile.getAbsolutePath() + "内容为空！");
         }
-        this.funcArray = list.get(0).split(",");
+//        this.funcArray = list.get(0).split(",");
+        this.funcArray = Utils.deleteArrayElements(list.get(0).split(","), "element");
         list.remove(0);
         this.suspValueList = new ArrayList<>(list.size() - 1);
         list.forEach(row -> suspValueList.add(new ElementFuncSuspValue(row, funcArray)));
     }
+
 
     public void setCurrentFunc(String func){
         this.currentFunc = func;
@@ -39,8 +63,22 @@ public class FuncSuspValue {
         return this.funcArray;
     }
 
+    public String getBug() {
+        return bug;
+    }
+
     public List<ElementFuncSuspValue> getSuspValueList(){
         return this.suspValueList;
+    }
+
+    public List<String> getAllElements(){
+        if(this.suspValueList == null){
+            throw new RuntimeException("[ERROR] 未初始怀疑度列表，请检查调用方式！");
+        }
+        List<String> allElements = new ArrayList<>(this.suspValueList.size());
+        this.suspValueList.forEach(m -> allElements.add(m.getElement()));
+
+        return allElements;
     }
 
     /**
@@ -51,11 +89,12 @@ public class FuncSuspValue {
     }
 
     /**
-     * TODO:按指定公式排序，待实现
+     * 按指定公式排序
      * @param func func
      */
     public void sortReversed(String func){
-
+        this.setCurrentFunc(func);
+        sortReversed();
     }
 
     public class ElementFuncSuspValue{
@@ -67,7 +106,7 @@ public class FuncSuspValue {
             this.element = lineSplit.get(0);
             suspValue = new HashMap<>(lineSplit.size() - 1);
             for(int i = 1, length = lineSplit.size(); i < length; i ++){
-                suspValue.put(funcArr[i], new BigDecimal(lineSplit.get(i)));
+                suspValue.put(funcArr[i - 1], new BigDecimal(lineSplit.get(i)));
             }
         }
 
