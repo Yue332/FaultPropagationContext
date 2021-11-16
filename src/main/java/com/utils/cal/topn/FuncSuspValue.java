@@ -37,12 +37,17 @@ public class FuncSuspValue {
     }
 
     public void init(File suspValueFile) throws Exception {
+        System.out.println("[INFO] 开始读取文件" + suspValueFile.getAbsolutePath());
         this.suspValueFile = suspValueFile;
         List<String> list;
         try {
             list = FileUtils.readLines(suspValueFile, "utf-8");
         }catch (IOException e){
             throw new SuspValueNotFoundException(e.getMessage());
+        }
+        //只有表头的情况
+        if(list.size() == 1){
+            throw new SuspValueNotFoundException("");
         }
         if(CollectionUtils.isEmpty(list)){
             throw new RuntimeException("[ERROR] 文件" + suspValueFile.getAbsolutePath() + "内容为空！");

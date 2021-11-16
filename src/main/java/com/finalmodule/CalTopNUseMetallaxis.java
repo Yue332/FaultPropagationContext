@@ -18,6 +18,6 @@ public class CalTopNUseMetallaxis extends FinalBean implements IFinalProcessModu
         TopNCalculator calculator = new TopNCalculator(config);
         String suspValueFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
                 "@PROJECT@" + File.separator + "@PROJECT@" + "-" + "@BUG@" + "-MetallaxisSuspValue.csv";;
-        calculator.calculate(suspValueFilePath);
+        calculator.calculate(suspValueFilePath, processLog);
     }
 }

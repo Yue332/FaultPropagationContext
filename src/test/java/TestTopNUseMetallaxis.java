@@ -19,6 +19,6 @@ public class TestTopNUseMetallaxis {
         String[] bugArr = new String[]{"1"};
         int top = 5;
         TopNCalculator calculator = new TopNCalculator(projectPathBase, project, bugArr, funcList, top);
-        calculator.calculate("C:\\Users\\zhangziyi\\Desktop\\1\\mutationReports\\@PROJECT@\\@PROJECT@-@BUG@-MetallaxisSuspValue.csv");
+        calculator.calculate("C:\\Users\\zhangziyi\\Desktop\\1\\mutationReports\\@PROJECT@\\@PROJECT@-@BUG@-MetallaxisSuspValue.csv", new StringBuilder());
     }
 }

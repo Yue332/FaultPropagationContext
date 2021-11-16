@@ -57,7 +57,7 @@ public class TopNCalculator {
         }
     }
 
-    public void calculate(String suspValueFilePath)throws Exception{
+    public void calculate(String suspValueFilePath, StringBuilder log)throws Exception{
         a:for(String func : this.sortFunc){
             System.out.println("[INFO] 开始使用公式" + func + "计算Top-N");
 
@@ -66,7 +66,16 @@ public class TopNCalculator {
             StringBuilder data = new StringBuilder();
             for(String bug : bugArray){
                 File suspValueFile = new File(suspValueFilePath.replace("@PROJECT@", project).replace("@BUG@", bug));
-                FuncSuspValue suspValue = new FuncSuspValue(suspValueFile);
+                FuncSuspValue suspValue;
+                try {
+                    suspValue = new FuncSuspValue(suspValueFile);
+                }catch (Exception e){
+                    if(e instanceof SuspValueNotFoundException){
+                        log.append("项目[").append(project).append("]bug[").append(bug).append("]未找到怀疑度文件或怀疑度文件内容为空，跳过！");
+                        continue;
+                    }
+                    throw e;
+                }
                 if(!Arrays.asList(suspValue.getFuncArray()).contains(func)){
                     System.out.println("[INFO] 怀疑度文件中不包含公式" + func + "，跳过此公式");
                     continue a;
