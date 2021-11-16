@@ -33,9 +33,9 @@ public class CalExamUseMetallaxis extends FinalBean implements IFinalProcessModu
     public void process(String projectPath, String project, String[] bugIdArr, String[] sortFuncCustom, StringBuilder log) throws Exception {
         List<FuncSuspValue> funcSuspValueList = findUseableSuspValue(project, bugIdArr, log);
         String[] sortFuncArr = sortFuncCustom;
-        if (sortFuncArr == null || sortFuncArr.length == 0) {
+        if (sortFuncArr == null || sortFuncArr.length == 0 || (sortFuncArr.length == 1 && "all".equals(sortFuncArr[0]))) {
             String firstBug = funcSuspValueList.get(0).getBug();
-            System.out.println("[INFO] 未配置排序公式，使用第一个bug（" + firstBug + "）怀疑度文件中的所有公式计算");
+            System.out.println("[INFO] 未配置排序公式或配置为all，使用第一个bug（" + firstBug + "）怀疑度文件中的所有公式计算");
             sortFuncArr = funcSuspValueList.get(0).getFuncArray();
             System.out.println("[INFO] 排序公式为：" + Arrays.toString(sortFuncArr));
         }
