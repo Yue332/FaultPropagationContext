@@ -71,6 +71,7 @@ public class TopNCalculator {
                     suspValue = new FuncSuspValue(suspValueFile);
                 }catch (Exception e){
                     if(e instanceof SuspValueNotFoundException){
+                        System.out.println("[WARNING] 项目["+project+"]bug["+bug+"]未找到怀疑度文件或怀疑度文件内容为空，跳过！");
                         log.append("项目[").append(project).append("]bug[").append(bug).append("]未找到怀疑度文件或怀疑度文件内容为空，跳过！");
                         continue;
                     }
