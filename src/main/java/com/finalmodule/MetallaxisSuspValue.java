@@ -9,6 +9,7 @@ import com.utils.Utils;
 import com.utils.cal.IAnalysisFunc;
 import com.utils.cal.TFuncRegister;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                 try {
                     processOne(project, bug, outputMap, analysisFunc, middleParamList, martix);
                 } catch (Exception e) {
+                    System.out.println("[WARNING] 项目["+project+"]，bug["+bug+"]公式["+analysisFunc.getName()+"]处理异常！原因：\r\n" + Utils.getExceptionString(e));
                     processLog.append("项目:").append(project).append("，bug:").append(bug).append("公式").append(analysisFunc.getName()).append("处理异常！原因：").append(Utils.getExceptionString(e)).append("\r\n");
                 }
             }
@@ -70,9 +72,13 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
             String outputFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
                     project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
             File outputFile = new File(outputFilePath);
+            if(StringUtils.isEmpty(finalResult)){
+                System.out.println("[WARNING] 项目["+project+"]bug["+bug+"]怀疑度为空，跳过（如存在原文件，则删除）!");
+                outputFile.deleteOnExit();
+                continue;
+            }
             FileUtils.writeStringToFile(outputFile, header.substring(0, header.length() - 1) + "\r\n", "utf-8", false);
             FileUtils.writeStringToFile(outputFile, finalResult.toString(), "utf-8", true);
-
         }
     }
 
