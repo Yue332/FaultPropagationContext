@@ -9,10 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.utils.FileUtils;
 
@@ -268,5 +265,23 @@ public class Utils {
 		}
 		T[] tmp = Arrays.copyOf(array, list.size());
 		return list.toArray(tmp);
+	}
+
+	//交集(注意结果集中若使用LinkedList添加，则需要判断是否包含该元素，否则其中会包含重复的元素)
+	public static String[] intersect(String[] arr1, String[] arr2){
+		List<String> l = new LinkedList<>();
+		Set<String> common = new HashSet<>();
+		for(String str:arr1){
+			if(!l.contains(str)){
+				l.add(str);
+			}
+		}
+		for(String str:arr2){
+			if(l.contains(str)){
+				common.add(str);
+			}
+		}
+		String[] result={};
+		return common.toArray(result);
 	}
 }
