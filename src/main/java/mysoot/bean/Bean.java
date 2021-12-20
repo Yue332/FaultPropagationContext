@@ -1,35 +1,19 @@
 package mysoot.bean;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import mysoot.MyMain;
-import soot.Body;
-import soot.PatchingChain;
-import soot.SootClass;
-import soot.SootField;
-import soot.SootMethod;
-import soot.Unit;
-import soot.Value;
-import soot.ValueBox;
+import soot.*;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.ParameterRef;
 import soot.jimple.ThisRef;
-import soot.jimple.internal.InvokeExprBox;
-import soot.jimple.internal.JAssignStmt;
-import soot.jimple.internal.JIdentityStmt;
-import soot.jimple.internal.JInstanceFieldRef;
-import soot.jimple.internal.JInvokeStmt;
-import soot.jimple.internal.JNewExpr;
-import soot.jimple.internal.JReturnStmt;
-import soot.jimple.internal.JimpleLocal;
+import soot.jimple.internal.*;
 import soot.tagkit.ParamNamesTag;
 import soot.tagkit.Tag;
-import soot.toolkits.graph.Block;
-import soot.util.Chain;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Bean {
 	private SootClass sootClass;
@@ -37,15 +21,16 @@ public class Bean {
 	private Unit unit;
 	private Map<SootMethod, List<Value>> map; // 需要分析的方法-参数列表
 	private List<Value> memberParamList;// 成员变量
+	public List<SootMethod> otherClzMethodList;
 	
 	public Bean(SootClass sootClass, SootMethod sootMethod, Unit unit) {
 		super();
 		this.sootClass = sootClass;
 		this.sootMethod = sootMethod;
 		this.unit = unit;
-		this.map = new HashMap<SootMethod, List<Value>>();
-		this.memberParamList = new ArrayList<Value>();
-		
+		this.map = new HashMap<>();
+		this.memberParamList = new ArrayList<>();
+		otherClzMethodList = new ArrayList<>();
 	}
 	public SootClass getSootClass() {
 		return sootClass;
@@ -90,6 +75,7 @@ public class Bean {
 	}
 	
 	public void analysis() {
+		System.out.println(unit + "为" + unit.getClass().getName() + "语句");
 		if(this.unit instanceof JAssignStmt) {
 			analysisJAssignStmt();
 		}else if(this.unit instanceof JReturnStmt) {
@@ -146,18 +132,18 @@ public class Bean {
 		JReturnStmt stmt = (JReturnStmt) unit;
 		Value v = stmt.getOpBox().getValue();
 		if(v instanceof Constant) {
-//			System.out.println("语句 ["+unit+"] 返回的为常量，不分析");
+			System.out.println("语句 ["+unit+"] 返回的为常量，不分析");
 			return;
 		}
 
 		Body b = this.sootMethod.retrieveActiveBody();
-		List<Unit> defUnitList = new ArrayList<Unit>();
+		List<Unit> defUnitList = new ArrayList<>();
 		for(Unit u : b.getUnits()) {
 			List<ValueBox> defBoxList = u.getDefBoxes();
 			for(ValueBox defBox : defBoxList) {
 				Value value = defBox.getValue();
 				if(value.equals(v)) {
-//					System.out.println("变量["+value.toString()+"]在["+u.toString()+"]被定义。源代码行号["+MyMain.getLineNumber(u)+"]");
+					System.out.println("变量["+ value +"]在["+ u +"]被定义。源代码行号["+MyMain.getLineNumber(u)+"]");
 					defUnitList.add(u);
 				}
 			}
@@ -165,7 +151,7 @@ public class Bean {
 			for(ValueBox useBox : useBoxList) {
 				Value value = useBox.getValue();
 				if(value.equals(v)) {
-//					System.out.println("变量["+value.toString()+"]在["+u.toString()+"]被使用。源代码行号["+MyMain.getLineNumber(u)+"]");
+					System.out.println("变量["+ value +"]在["+ u +"]被使用。源代码行号["+MyMain.getLineNumber(u)+"]");
 					this.addMap(this.sootMethod, value);
 				}
 			}
@@ -179,16 +165,16 @@ public class Bean {
 				}else if(value instanceof JimpleLocal) {
 					JimpleLocal j = (JimpleLocal) value;
 					if(j.getType().toString().equals(this.sootClass.getType().toString())) {
-//						System.out.println("变量["+j.toString()+"]为该类实例化对象，不进行分析");
+						System.out.println("变量["+ j +"]为该类实例化对象，不进行分析");
 						continue;
 					}
 					this.addMap(this.sootMethod, value);
 				}else if(value instanceof JInstanceFieldRef) {
 					JInstanceFieldRef j = (JInstanceFieldRef) value;
-//					System.out.println("变量["+j.toString()+"]为成员变量，另行分析");
+					System.out.println("变量["+ j +"]为成员变量，另行分析");
 					MyMain.addList(memberParamList, value);
 				}else {
-//					System.out.println("变量类型["+value.getClass().getName().toString()+"]未实现处理逻辑");
+					System.out.println("变量类型["+ value.getClass().getName() +"]未实现处理逻辑");
 				}
 			}
 		}
@@ -212,18 +198,20 @@ public class Bean {
 		SootMethod callMethod = exp.getMethod();
 		// 本类的方法才处理
 		if(!callMethod.getDeclaringClass().equals(this.sootClass)) {
-//			System.out.println("语句["+unit.toString()+"]调用了非本类的方法，不分析");
+			System.out.println("语句["+unit.toString()+"]调用了非本类的方法，放入类间map");
+			// TODO:
+			this.otherClzMethodList.add(callMethod);
 			return;
 		}
 		if(callMethod.isAbstract()) {
-//			System.out.println("方法["+callMethod.toString()+"]为抽象方法，不分析");
+			System.out.println("方法["+ callMethod +"]为抽象方法，不分析");
 			return;
 		}
-		List<Integer> argsIdxList = new ArrayList<Integer>();
+		List<Integer> argsIdxList = new ArrayList<>();
 		int idx = 0;
 		for(Value v : argList) {
 			if(v instanceof Constant) {
-//				System.out.println("调用["+callMethod.toString()+"]方法传入的参数["+v.toString()+"]为常量，不分析");
+				System.out.println("调用["+ callMethod +"]方法传入的参数["+ v +"]为常量，不分析");
 				idx ++;
 				continue;
 			}
@@ -240,7 +228,7 @@ public class Bean {
 			}
 		}
 		if(paramNamesTag == null) {
-//			System.out.println("[！！！ERROR！！！] 方法["+callMethod.toString()+"]不包含ParamNamesTag标签，无法分析！");
+			System.out.println("[！！！ERROR！！！] 方法["+ callMethod +"]不包含ParamNamesTag标签，无法分析！");
 			return;
 		}
 		List<String> paramNameList = paramNamesTag.getNames();
@@ -252,7 +240,7 @@ public class Bean {
 				if(v instanceof ParameterRef) {
 					if(argsIdxList.contains(new Integer(i))) {
 						Value def = u.getDefBoxes().get(0).getValue();
-//						System.out.println("方法["+callMethod.toString()+"]的第["+(i + 1)+"]个参数为["+def.toString()+"]("+def.getType().toString()+")");
+						System.out.println("方法["+ callMethod +"]的第["+(i + 1)+"]个参数为["+def.toString()+"]("+def.getType().toString()+")");
 						this.addMap(callMethod, def);
 					}
 					i ++;

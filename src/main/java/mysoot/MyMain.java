@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.utils.Utils;
@@ -80,7 +82,7 @@ public class MyMain {
 //	    String javapath = System.getProperty("java.class.path");
 //	    path.append(javapath).append(File.pathSeparator).append(projectPath);
 		path.append(projectPath + File.separator + Utils.getCompilePathByProjectID(projectId, bugId));
-//	    System.out.println(path.toString());
+	    System.out.println(path);
 	    Scene.v().setSootClassPath(path.toString());
 	    
 	}
@@ -89,7 +91,9 @@ public class MyMain {
 //		setSootEnv("C:\\Users\\44789\\Desktop\\Lang_23\\target\\classes\\");
 //		doMyAnalysis("org.apache.commons.lang3.text.ExtendedMessageFormat", 151);
 		
-		setSootEnv("/home/yy/Locate_buggylines/SBFL-Closure/Closure_1/", "Closure", "1");
+//		setSootEnv("/home/yy/Locate_buggylines/SBFL-Closure/Closure_1/", "Closure", "1");
+		setSootEnv("C:\\Users\\86186\\Desktop\\Chart_2\\", "Chart", "2");
+		doMyAnalysis("org.jfree.data.xy.XYIntervalSeriesCollection", 73);
 	}
 	
 	public static String analysis(StringBuilder info, String clzName, int lineNum) {
@@ -130,7 +134,22 @@ public class MyMain {
 		}
 		return null;
 	}
-	
+
+    public static void dataDepBetweenClasses(String clzName, int lineNum){
+        SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//加载待分析的类
+        Scene.v().loadNecessaryClasses();
+        List<SootMethod> methodList = sootClass.getMethods();
+        methodList.removeIf(SootMethod::isAbstract);
+        methodList.forEach(method -> {
+            Body body = method.retrieveActiveBody();
+            for(Unit unit : body.getUnits()){
+                if(lineNum != getLineNumber(unit) || unit instanceof JNopStmt || method.getReturnType() instanceof VoidType && unit.toString().equals("return")){
+                    continue;
+                }
+
+            }
+        });
+    }
 	
 	public static List<String> doMyAnalysis(String clzName, int lineNum) {
 		Map<SootMethod, List<Value>> m = new HashMap<SootMethod, List<Value>>();
@@ -166,6 +185,9 @@ public class MyMain {
 					for(Value v : memberList) {
 						MyMain.addList(memberParamList, v);
 					}
+
+					//类间分析
+					betweenClzAnalysis(b.otherClzMethodList);
 				}
 			}
 		}
@@ -180,6 +202,20 @@ public class MyMain {
 //		System.out.println("行号：" + b.get().toString());
 		
 		return b.get();
+	}
+
+	public static void betweenClzAnalysis(List<SootMethod> methodList){
+		if(CollectionUtils.isNotEmpty(methodList)){
+			methodList.forEach(sootMethod -> {
+				SootClass sootClass = sootMethod.getDeclaringClass();
+				for (SootMethod method : sootClass.getMethods()){
+					if (sootMethod.equals(method)){
+						Unit unit = method.retrieveActiveBody().getThisUnit();
+						System.out.println(getLineNumber(unit));
+					}
+				}
+			});
+		}
 	}
 	
 	public static int getLineNumber(Unit u) {
@@ -236,7 +272,8 @@ public class MyMain {
 		}
 		m.put(method, newList);
 	}
-	
+
+
 	//需要引用额外jar包项目集合，如果还有再继续添加
 	public static List<String> DEAL_LIST = Arrays.asList(new String[] {"Mockito","Math","Time","Gson"});
 	
