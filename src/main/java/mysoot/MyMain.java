@@ -92,8 +92,8 @@ public class MyMain {
 //		doMyAnalysis("org.apache.commons.lang3.text.ExtendedMessageFormat", 151);
 		
 //		setSootEnv("/home/yy/Locate_buggylines/SBFL-Closure/Closure_1/", "Closure", "1");
-		setSootEnv("C:\\Users\\86186\\Desktop\\Chart_2\\", "Chart", "2");
-		doMyAnalysis("org.jfree.data.xy.XYIntervalSeriesCollection", 73);
+		setSootEnv("C:\\Users\\86186\\IdeaProjects\\SBTandem\\", "test", "1");
+		doMyAnalysis("mysoot.test.A", 6);
 	}
 	
 	public static String analysis(StringBuilder info, String clzName, int lineNum) {
@@ -134,28 +134,13 @@ public class MyMain {
 		}
 		return null;
 	}
-
-    public static void dataDepBetweenClasses(String clzName, int lineNum){
-        SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//加载待分析的类
-        Scene.v().loadNecessaryClasses();
-        List<SootMethod> methodList = sootClass.getMethods();
-        methodList.removeIf(SootMethod::isAbstract);
-        methodList.forEach(method -> {
-            Body body = method.retrieveActiveBody();
-            for(Unit unit : body.getUnits()){
-                if(lineNum != getLineNumber(unit) || unit instanceof JNopStmt || method.getReturnType() instanceof VoidType && unit.toString().equals("return")){
-                    continue;
-                }
-
-            }
-        });
-    }
 	
 	public static List<String> doMyAnalysis(String clzName, int lineNum) {
-		Map<SootMethod, List<Value>> m = new HashMap<SootMethod, List<Value>>();
-		List<Value> memberParamList = new ArrayList<Value>();
+		Map<SootMethod, List<Value>> m = new HashMap<>();
+		List<Value> memberParamList = new ArrayList<>();
 		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//加载待分析的类
 		Scene.v().loadNecessaryClasses();
+		List<SootMethod> betweenClzMethodList = new ArrayList<>();
 		for(SootMethod method : sootClass.getMethods()) {
 			if(method.isAbstract()) {
 //				System.out.println("[INFO] method : ["+method.toString()+"]为抽象方法，无法分析！！！");
@@ -187,7 +172,7 @@ public class MyMain {
 					}
 
 					//类间分析
-					betweenClzAnalysis(b.otherClzMethodList);
+					betweenClzMethodList.addAll(b.otherClzMethodList);
 				}
 			}
 		}
@@ -204,19 +189,43 @@ public class MyMain {
 		return b.get();
 	}
 
-	public static void betweenClzAnalysis(List<SootMethod> methodList){
-		if(CollectionUtils.isNotEmpty(methodList)){
-			methodList.forEach(sootMethod -> {
-				SootClass sootClass = sootMethod.getDeclaringClass();
-				for (SootMethod method : sootClass.getMethods()){
-					if (sootMethod.equals(method)){
-						Unit unit = method.retrieveActiveBody().getThisUnit();
-						System.out.println(getLineNumber(unit));
+	/**
+	 * 类间分析
+	 * @param clzName
+	 * @param lineNum
+	 * @return
+	 */
+	public List<Map<String, Integer>> analysisBetweenClz(String clzName, int lineNum){
+		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//加载待分析的类
+		Scene.v().loadNecessaryClasses();
+		List<SootMethod> betweenClzMethodList = new ArrayList<>();
+		for(SootMethod method : sootClass.getMethods()) {
+			if(method.isAbstract()) {
+				System.out.println("[INFO] method : ["+ method +"]为抽象方法，无法分析！！！");
+				continue;
+			}
+			Body body = method.retrieveActiveBody();
+			for(Unit unit : body.getUnits()) {
+				if(lineNum == getLineNumber(unit)) {
+					if(unit instanceof JNopStmt) {
+						System.out.println(String.format("unit [%s] 为JNopStmt，不做处理", unit));
+						continue;
+					}else if(method.getReturnType() instanceof VoidType && unit.toString().equals("return")) {
+						System.out.println("unit ["+ unit +"] 为return，不做处理");
+						continue;
 					}
+					System.out.println("unit ["+ unit +"]对应源代码行号["+lineNum+"]");
+					Bean b = new Bean(sootClass, method, unit);
+					b.analysis();
+					//类间分析
+					betweenClzMethodList.addAll(b.otherClzMethodList);
 				}
-			});
+			}
 		}
+		GetLineNumberBean bean = new GetLineNumberBean(betweenClzMethodList);
+		return bean.getBetweenClzAnalysis();
 	}
+
 	
 	public static int getLineNumber(Unit u) {
 		List<Tag> tagList = u.getTags();
