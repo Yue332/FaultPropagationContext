@@ -195,7 +195,7 @@ public class MyMain {
 	 * @param lineNum
 	 * @return
 	 */
-	public List<Map<String, Integer>> analysisBetweenClz(String clzName, int lineNum){
+	public static List<Map<String, Integer>> analysisBetweenClz(String clzName, int lineNum){
 		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//加载待分析的类
 		Scene.v().loadNecessaryClasses();
 		List<SootMethod> betweenClzMethodList = new ArrayList<>();
