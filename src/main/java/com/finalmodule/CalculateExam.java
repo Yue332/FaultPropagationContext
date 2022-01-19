@@ -35,23 +35,23 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
 			List<String> cantUseId = new ArrayList<String>();
 			for(String bugId : this.allBugIdArr) {
 				if(super.failBugIdList.contains(bugId)) {
-					System.out.println("[INFO] bugId¡¾"+bugId+"¡¿ÔÚÖ®Ç°µÄ´¦ÀíÄ£¿éÖÖ´æÔÚÒì³££¬´Ë´¦²»¼ÆËã¸Ãbugid");
+					System.out.println("[INFO] bugIdã€"+bugId+"ã€‘åœ¨ä¹‹å‰çš„å¤„ç†æ¨¡å—ç§å­˜åœ¨å¼‚å¸¸ï¼Œæ­¤å¤„ä¸è®¡ç®—è¯¥bugid");
 					continue;
 				}
-				System.out.println("[INFO] ¿ªÊ¼Ê¹ÓÃ¹«Ê½¡¾"+funcArr[iFuncIdx]+"¡¿¼ÆËãbug¡¾"+bugId+"¡¿µÄµÃ·Ö");
+				System.out.println("[INFO] å¼€å§‹ä½¿ç”¨å…¬å¼ã€"+funcArr[iFuncIdx]+"ã€‘è®¡ç®—bugã€"+bugId+"ã€‘çš„å¾—åˆ†");
 				List<String> data = readAndLableData(bugId);
 				BigDecimal score = readAndMetric(data, iFuncIdx, funcArr[iFuncIdx]);
 	            if (score.doubleValue() != 1){
 	                count ++;
-	                //System.out.println(identifier+"ÏîÄ¿"+i+"´íÎó°æ±¾"+formName+"¹«Ê½"+metricName+"µÃ·Ö£º:"+score);
+	                //System.out.println(identifier+"é¡¹ç›®"+i+"é”™è¯¯ç‰ˆæœ¬"+formName+"å…¬å¼"+metricName+"å¾—åˆ†ï¼š:"+score);
 	                sum = sum.add(score);
 //	                sum += score;
 	            }else {
-	                //ÔİÊ±²»¿ÉÓÃ´íÎó°æ±¾
+	                //æš‚æ—¶ä¸å¯ç”¨é”™è¯¯ç‰ˆæœ¬
 	                cantUseId.add(bugId);
-	                System.out.print("[INFO] ÔİÊ±²»¿ÉÓÃµÄbugid£º" + bugId);          	
+	                System.out.print("[INFO] æš‚æ—¶ä¸å¯ç”¨çš„bugidï¼š" + bugId);          	
 	            }
-	            System.out.println("[INFO] bug¡¾"+bugId+"¡¿µÃ·ÖÎª["+score.toPlainString()+"]");
+	            System.out.println("[INFO] bugã€"+bugId+"ã€‘å¾—åˆ†ä¸º["+score.toPlainString()+"]");
 	            if(map.containsKey(bugId)) {
 	            	map.put(bugId, map.get(bugId) + "," + score.toPlainString());
 	            }else {
@@ -61,8 +61,8 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
 			
 			BigDecimal avag = sum.divide(new BigDecimal(count), 7, RoundingMode.HALF_UP);
 			avagScore.append(avag.toPlainString()).append(",");
-	        System.out.println("ÏîÄ¿¡¾"+projectId+"¡¿¿ÉÓÃ°æ±¾Êı£¨È±Ïİ¸öÊı£©£º" + count);
-	        System.out.println("¹«Ê½¡¾"+funcArr[iFuncIdx]+"¡¿£¬¶ÈÁ¿Ä£¿é¡¾"+CalculateExam.class.getName()+"¡¿£¬ÏîÄ¿Æ½¾ùµÃ·Ö£º" + avag.toPlainString());
+	        System.out.println("é¡¹ç›®ã€"+projectId+"ã€‘å¯ç”¨ç‰ˆæœ¬æ•°ï¼ˆç¼ºé™·ä¸ªæ•°ï¼‰ï¼š" + count);
+	        System.out.println("å…¬å¼ã€"+funcArr[iFuncIdx]+"ã€‘ï¼Œåº¦é‡æ¨¡å—ã€"+CalculateExam.class.getName()+"ã€‘ï¼Œé¡¹ç›®å¹³å‡å¾—åˆ†ï¼š" + avag.toPlainString());
 	        System.out.println("---------------------");
 		}
 //		System.out.println("[INFO] " + outputMsg.toString());
@@ -73,7 +73,7 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
 			title.append(func).append(",");
 		}
 		File outputFile = new File(this.outputFilePath);
-		System.out.println("[INFO] ½«Ä£¿éµÃ·ÖÊä³öÖÁÎÄ¼ş£º" + outputFile.getAbsolutePath());
+		System.out.println("[INFO] å°†æ¨¡å—å¾—åˆ†è¾“å‡ºè‡³æ–‡ä»¶ï¼š" + outputFile.getAbsolutePath());
 		FileUtils.writeStringToFile(outputFile, title.substring(0, title.length() - 1) + "\r\n", false);
 		for(Map.Entry<String, String> entry : map.entrySet()) {
 			FileUtils.writeStringToFile(outputFile, entry.getKey() + "," + entry.getValue() + "\r\n", true);
@@ -98,16 +98,16 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
     private List<String> readAndLableData(String bugId) throws Exception {
         File suspValueFile = new File(suspValueCsvPath.replaceAll("@:BUG_ID@", bugId));
         if(!suspValueFile.exists()) {
-        	throw new Exception("[ERROR] ÕÒ²»µ½ÎÄ¼ş¡¾"+suspValueFile.getAbsolutePath()+"¡¿£¬ÇëÊ¹ÓÃgzoltarÉú³É²¢½«ÎÄ¼ş·ÅÖÃÔÚÄ¿Â¼¡¾"+suspValueFile.getParent()+"¡¿ÖĞ!");
+        	throw new Exception("[ERROR] æ‰¾ä¸åˆ°æ–‡ä»¶ã€"+suspValueFile.getAbsolutePath()+"ã€‘ï¼Œè¯·ä½¿ç”¨gzoltarç”Ÿæˆå¹¶å°†æ–‡ä»¶æ”¾ç½®åœ¨ç›®å½•ã€"+suspValueFile.getParent()+"ã€‘ä¸­!");
         }
         File labelFile = new File(labelCsvPath.replaceAll("@:BUG_ID@", bugId));
         if(!labelFile.exists()) {
-        	throw new Exception("[ERROR] ÕÒ²»µ½ÎÄ¼ş¡¾"+labelFile.getAbsolutePath()+"¡¿£¬ÇëÊ¹ÓÃlabelÉú³É²¢½«ÎÄ¼ş·ÅÖÃÔÚÄ¿Â¼¡¾"+labelFile.getParent()+"¡¿ÖĞ!");
+        	throw new Exception("[ERROR] æ‰¾ä¸åˆ°æ–‡ä»¶ã€"+labelFile.getAbsolutePath()+"ã€‘ï¼Œè¯·ä½¿ç”¨labelç”Ÿæˆå¹¶å°†æ–‡ä»¶æ”¾ç½®åœ¨ç›®å½•ã€"+labelFile.getParent()+"ã€‘ä¸­!");
         }
         List<String> data = FileUtils.readLines(suspValueFile,"UTF-8");
         data.remove(0); // remove title line
         List<String> label = FileUtils.readLines(labelFile,"UTF-8");
-        //½«±êÇ©·ÅÔÚÊı¾İ×îºó(ÓÃ,·Ö¸ô)
+        //å°†æ ‡ç­¾æ”¾åœ¨æ•°æ®æœ€å(ç”¨,åˆ†éš”)
         for (int i = 0, length = data.size(); i < length; i++) {
 //        	System.out.println("[DEBUG] data.size() = " + length + " i = " + i);
             String temp = StringUtils.substringAfter(data.get(i),",") +","+ StringUtils.substringAfter(label.get(i),",");
@@ -125,13 +125,13 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
             	FileUtils.writeStringToFile(dataBeforeOrder, a + "\r\n", true);
             }
         }catch (Exception e) {
-			System.out.println("[WARNING] ÅÅĞòÇ°ÎÄ¼şÊä³öÒì³££¡" + e.getMessage());
+			System.out.println("[WARNING] æ’åºå‰æ–‡ä»¶è¾“å‡ºå¼‚å¸¸ï¼" + e.getMessage());
 			e.printStackTrace();
 		}
 
         for (int i = 0; i < data.size(); i++) {
             for (int j = i+1; j < data.size(); j++) {
-                //Ê¹ÓÃÕıÔò±í´ïÊ½»ñÈ¡µÚiÁĞµÄÖµ,·Å½øĞÂÊı×é°É
+                //ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼è·å–ç¬¬iåˆ—çš„å€¼,æ”¾è¿›æ–°æ•°ç»„å§
                 //double valueA = Double.parseDouble(StringUtils.substringBefore(data.get(i),","));
                 //double valueB = Double.parseDouble(StringUtils.substringBefore(data.get(j),","));
                 String[] tempString = data.get(i).split("\\,");
@@ -141,20 +141,20 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
 
                 int labelA = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
                 int labelB = Integer.parseInt(StringUtils.substringAfterLast(data.get(j),","));
-                //doubleÀàĞÍ±È½Ï´óĞ¡
+                //doubleç±»å‹æ¯”è¾ƒå¤§å°
                 if(valueA.compareTo(valueB) < 0){
                     String temp = data.get(i);
                     data.remove(i);
-                    data.add(i,data.get(j-1));//removeÖ®ºó£¬ÕûÌåsize-1
+                    data.add(i,data.get(j-1));//removeä¹‹åï¼Œæ•´ä½“size-1
                     data.remove(j);
                     data.add(j,temp);
                 }
-                //Çó×î¼ÑºÍ×î²îĞèÒª
+                //æ±‚æœ€ä½³å’Œæœ€å·®éœ€è¦
                 /*
                 if((valueA == valueB) && (labelA < labelB)){
                     String temp = data.get(i);
                     data.remove(i);
-                    data.add(i,data.get(j-1));//removeÖ®ºó£¬ÕûÌåsize-1
+                    data.add(i,data.get(j-1));//removeä¹‹åï¼Œæ•´ä½“size-1
                     data.remove(j);
                     data.add(j,temp);
                 }
@@ -170,7 +170,7 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
             	FileUtils.writeStringToFile(dataAfterOrder, a + "\r\n", true);
             }
         }catch (Exception e) {
-			System.out.println("[WARNING] ÅÅĞòºóÎÄ¼şÊä³öÒì³££¡" + e.getMessage());
+			System.out.println("[WARNING] æ’åºåæ–‡ä»¶è¾“å‡ºå¼‚å¸¸ï¼" + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -182,17 +182,17 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
         // double[] score=new double[2];
 
         /*
-        int count = 0;  //²é¿´µ½´ï´íÎóÓï¾äÇ°,ÓĞ¶àÉÙÓï¾ä
-        int label = 0;  //ÅĞ¶ÏÊÇ·ñÊÇ´íÎóÓï¾ä
-        double fault_susValue = 0;  //Èç¹ûÊÇ´íÎóÓï¾ä,»ñÈ¡Æä»³ÒÉÖµ
-        int sameSusValue_count = 0; //ÏàÍ¬»³ÒÉÖµ,ÓĞ¶àÉÙÓï¾ä
-        int sameSusValueAndLabel_count =0;  //ÏàÍ¬»³ÒÉÖµºÍ±êÇ©,ÓĞ¶àÉÙÓï¾ä
-        double best = 0.0 ,worse = 0.0;     //×îÓÅºÍ×î²î
-        boolean flag = true;    //ÅĞ¶ÏÊÇ·ñµÚÒ»´ÎÓöµ½
+        int count = 0;  //æŸ¥çœ‹åˆ°è¾¾é”™è¯¯è¯­å¥å‰,æœ‰å¤šå°‘è¯­å¥
+        int label = 0;  //åˆ¤æ–­æ˜¯å¦æ˜¯é”™è¯¯è¯­å¥
+        double fault_susValue = 0;  //å¦‚æœæ˜¯é”™è¯¯è¯­å¥,è·å–å…¶æ€€ç–‘å€¼
+        int sameSusValue_count = 0; //ç›¸åŒæ€€ç–‘å€¼,æœ‰å¤šå°‘è¯­å¥
+        int sameSusValueAndLabel_count =0;  //ç›¸åŒæ€€ç–‘å€¼å’Œæ ‡ç­¾,æœ‰å¤šå°‘è¯­å¥
+        double best = 0.0 ,worse = 0.0;     //æœ€ä¼˜å’Œæœ€å·®
+        boolean flag = true;    //åˆ¤æ–­æ˜¯å¦ç¬¬ä¸€æ¬¡é‡åˆ°
 
         for (int i = 0; i < data.size(); i++) {
             label = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
-            if(label != 1){ //´íÎóÓï¾ä
+            if(label != 1){ //é”™è¯¯è¯­å¥
                 count++;
             }
             if(label == 1 && flag == true){
@@ -202,7 +202,7 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
                 for (int j = i; j < data.size(); j++) {
                     double temp = Double.parseDouble(data.get(j).split("\\,")[col]);
                     //double temp = Double.parseDouble(StringUtils.substringBefore(data.get(j),","));
-                    if(temp == fault_susValue){ //»³ÒÉÖµÏàÍ¬
+                    if(temp == fault_susValue){ //æ€€ç–‘å€¼ç›¸åŒ
                         sameSusValue_count ++;
                         int tempLabel =  Integer.parseInt(StringUtils.substringAfterLast(data.get(j),","));
                         if(tempLabel == 1){
@@ -210,7 +210,7 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
                         }
                     }
                 }
-                break; // µ½´ïµÚÒ»¸ö´íÎóÓï¾äÎ»ÖÃ,Ìø³ö
+                break; // åˆ°è¾¾ç¬¬ä¸€ä¸ªé”™è¯¯è¯­å¥ä½ç½®,è·³å‡º
             }
         }
         best = (float)count / data.size();
@@ -218,14 +218,14 @@ public class CalculateExam extends FinalBean implements IFinalProcessModule {
         score[0] = best;
         score[1] = worse;
         */
-        int count = 0;  //²é¿´µ½´ï´íÎóÓï¾äÇ°,ÓĞ¶àÉÙÓï¾ä
-        int label = 0;  //ÅĞ¶ÏÊÇ·ñÊÇ´íÎóÓï¾ä
+        int count = 0;  //æŸ¥çœ‹åˆ°è¾¾é”™è¯¯è¯­å¥å‰,æœ‰å¤šå°‘è¯­å¥
+        int label = 0;  //åˆ¤æ–­æ˜¯å¦æ˜¯é”™è¯¯è¯­å¥
         for (int i = 0; i < data.size(); i++) {
             label = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
-            if(label != 1) count++; //´íÎóÓï¾ä
+            if(label != 1) count++; //é”™è¯¯è¯­å¥
             if(label == 1) break;
         }
-        // ±£Áô7Î»Ğ¡Êı ËÄÉáÎåÈë
+        // ä¿ç•™7ä½å°æ•° å››èˆäº”å…¥
         return new BigDecimal(String.valueOf(count)).divide(new BigDecimal(data.size()), IAnalysisFunc.scale, IAnalysisFunc.roundingMode);
 //        return (double)count / data.size();
     }

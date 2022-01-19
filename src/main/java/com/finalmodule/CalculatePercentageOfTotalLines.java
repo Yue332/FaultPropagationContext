@@ -18,7 +18,7 @@ public class CalculatePercentageOfTotalLines extends FinalBean implements IFinal
     public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         String[] funcArr = config.getConfig(ConfigUtils.PRO_FUNC_KEY).split(",");
         if(funcArr.length != 1){
-            throw new Exception("[ERROR] " + ConfigUtils.PRO_FUNC_KEY + "ÇëÖ»ÅäÖÃÒ»¸ö¹«Ê½£¡");
+            throw new Exception("[ERROR] " + ConfigUtils.PRO_FUNC_KEY + "è¯·åªé…ç½®ä¸€ä¸ªå…¬å¼ï¼");
         }
         this.func = funcArr[0];
 
@@ -44,7 +44,7 @@ public class CalculatePercentageOfTotalLines extends FinalBean implements IFinal
 
             int m = getAllBuggyLineCount(buggyLinePath);
             if(m == 0){
-                throw new Exception("[ERROR] ¶ÁÈ¡buggylineÎÄ¼şµÃµ½m=0£¬ÎŞ·¨¼ÆËã£¡");
+                throw new Exception("[ERROR] è¯»å–buggylineæ–‡ä»¶å¾—åˆ°m=0ï¼Œæ— æ³•è®¡ç®—ï¼");
             }
             // {top,score}
             Map<String, String> scoreMap = new HashMap<>();
@@ -81,7 +81,7 @@ public class CalculatePercentageOfTotalLines extends FinalBean implements IFinal
     private int getAllBuggyLineCount(String buggyLinePath)throws Exception{
         File buggyLineDir = new File(buggyLinePath);
         if(!buggyLineDir.exists()){
-            throw new Exception("[ERROR] buggyLineÄ¿Â¼["+buggyLineDir.getAbsolutePath()+"]²»´æÔÚ£¡");
+            throw new Exception("[ERROR] buggyLineç›®å½•["+buggyLineDir.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
         }
         File[] buggyLines = buggyLineDir.listFiles(new FilenameFilter() {
             @Override
@@ -90,7 +90,7 @@ public class CalculatePercentageOfTotalLines extends FinalBean implements IFinal
             }
         });
         if(buggyLines == null || buggyLines.length == 0){
-            throw new Exception("[ERROR] buggyLineÄ¿Â¼ÏÂÎ´ÕÒµ½ÒÔ.buggy.lines½áÎ²µÄÈÎºÎÎÄ¼ş£¬ÇëÈ·ÈÏbuggylineÎÄ¼şÊÇ·ñ´æÔÚ£¡");
+            throw new Exception("[ERROR] buggyLineç›®å½•ä¸‹æœªæ‰¾åˆ°ä»¥.buggy.linesç»“å°¾çš„ä»»ä½•æ–‡ä»¶ï¼Œè¯·ç¡®è®¤buggylineæ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼");
         }
         int sumLine = 0;
         for(File buggyLine : buggyLines){
@@ -110,11 +110,11 @@ public class CalculatePercentageOfTotalLines extends FinalBean implements IFinal
         Map<String, Integer> map = new HashMap<>();
         File topNSrcPathDir = new File(topNSrcPath);
         if(!topNSrcPathDir.exists()){
-            throw new Exception("[ERROR] topNÄ¿Â¼["+topNSrcPathDir.getAbsolutePath()+"]²»´æÔÚ£¡");
+            throw new Exception("[ERROR] topNç›®å½•["+topNSrcPathDir.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
         }
         File[] topNSrcs = topNSrcPathDir.listFiles((dir, name) -> name.endsWith(getTopNCsvNameEnd(this.func)));
         if(topNSrcs == null || topNSrcs.length == 0){
-            throw new Exception("[ERROR] topNÄ¿Â¼ÏÂÎ´ÕÒµ½ÒÔ"+getTopNCsvNameEnd(func)+"½áÎ²µÄÈÎºÎÎÄ¼ş£¬ÇëÈ·ÈÏtopNÎÄ¼şÊÇ·ñ´æÔÚ£¡");
+            throw new Exception("[ERROR] topNç›®å½•ä¸‹æœªæ‰¾åˆ°ä»¥"+getTopNCsvNameEnd(func)+"ç»“å°¾çš„ä»»ä½•æ–‡ä»¶ï¼Œè¯·ç¡®è®¤topNæ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼");
         }
         for(File topNSrcFile : topNSrcs){
             String fileName = topNSrcFile.getName();

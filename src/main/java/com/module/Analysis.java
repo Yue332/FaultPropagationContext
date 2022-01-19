@@ -28,7 +28,7 @@ public class Analysis extends Bean implements IProcessModule{
 	public void process(Runtime runTime) throws Exception {
 		File spectra = new File(spectraPath);
 		File matrix = new File(matrixPath);
-		// É¾³ımatrixÎÄ¼şËùÔÚÄ¿Â¼ÏÂ£¬ÒÔmatrix_¿ªÍ·µÄÎÄ¼ş
+		// åˆ é™¤matrixæ–‡ä»¶æ‰€åœ¨ç›®å½•ä¸‹ï¼Œä»¥matrix_å¼€å¤´çš„æ–‡ä»¶
 		File[] matrixs = matrix.getParentFile().listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -42,22 +42,22 @@ public class Analysis extends Bean implements IProcessModule{
 		}
 		List<String> codeLinesList = FileUtils.readLines(spectra, "UTF-8");
 		List<String> matrixList = FileUtils.readLines(matrix, "UTF-8");
-		// »ñÈ¡Ê§°ÜµÄ²âÊÔÓÃÀı£¨Ä©Î² - µÄ£©
+		// è·å–å¤±è´¥çš„æµ‹è¯•ç”¨ä¾‹ï¼ˆæœ«å°¾ - çš„ï¼‰
 		String failMatrix = getFailMatrixArr(matrixList);
 		int failMatrixIdx = matrixList.indexOf(failMatrix);
 		if(failMatrixIdx == -1) {
-			throw new Exception("matrixÎÄ¼şÖĞ²»´æÔÚ" + failMatrix);
+			throw new Exception("matrixæ–‡ä»¶ä¸­ä¸å­˜åœ¨" + failMatrix);
 		}
 		matrixList.remove(failMatrixIdx);
 		String[] failMatrixArr = failMatrix.split(" ");
 		if(failMatrixArr.length - 1 != codeLinesList.size()) {
-			throw new Exception("spectraÎÄ¼şÖĞµÄ´úÂëĞĞÊı("+codeLinesList.size()+")²»µÈÓÚmatrixÎÄ¼şÖĞÊ§°ÜµÄÁĞÊı-1("+(failMatrixArr.length - 1)+")");
+			throw new Exception("spectraæ–‡ä»¶ä¸­çš„ä»£ç è¡Œæ•°("+codeLinesList.size()+")ä¸ç­‰äºmatrixæ–‡ä»¶ä¸­å¤±è´¥çš„åˆ—æ•°-1("+(failMatrixArr.length - 1)+")");
 		}
 		File lithiumOuput = new File(lithiumOutputPath);
 		if(!lithiumOuput.exists()) {
-			throw new Exception("[ERROR] Ä¿Â¼¡¾"+lithiumOutputPath+"¡¿²»´æÔÚ£¬Çë½«Ô¼¼õºóµÄÄ¿Â¼·ÅÖÁ´ËÄ¿Â¼ÏÂ");
+			throw new Exception("[ERROR] ç›®å½•ã€"+lithiumOutputPath+"ã€‘ä¸å­˜åœ¨ï¼Œè¯·å°†çº¦å‡åçš„ç›®å½•æ”¾è‡³æ­¤ç›®å½•ä¸‹");
 		}
-		System.out.println("[INFO] ¼ÆËãÇ°Ê§°ÜÓÃÀı£º" + Arrays.toString(failMatrixArr));
+		System.out.println("[INFO] è®¡ç®—å‰å¤±è´¥ç”¨ä¾‹ï¼š" + Arrays.toString(failMatrixArr));
 		File[] paths = lithiumOuput.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.isDirectory();
@@ -65,7 +65,7 @@ public class Analysis extends Bean implements IProcessModule{
 		});
 		List<String> newMatrixList = new ArrayList<String>();
 		for(File path : paths) {
-			System.out.println("[INFO] ¿ªÊ¼´¦ÀíÄ¿Â¼¡¾"+path.getAbsolutePath()+"¡¿");
+			System.out.println("[INFO] å¼€å§‹å¤„ç†ç›®å½•ã€"+path.getAbsolutePath()+"ã€‘");
 			List<String> compareList = getCompareFileList(path);
 			List<Integer> codeLineIdxList = new ArrayList<Integer>();
 			int idx;
@@ -83,8 +83,8 @@ public class Analysis extends Bean implements IProcessModule{
 					failMatrixArr[i] = "0";
 				}
 			}
-			System.out.println("[INFO] Êı×éµÚ["+info.toString()+"]ÁĞ±äÎª0");
-			System.out.println("[INFO] " + path.getAbsolutePath() + "´¦Àí½á¹û£º" + Arrays.toString(failMatrixArr));
+			System.out.println("[INFO] æ•°ç»„ç¬¬["+info.toString()+"]åˆ—å˜ä¸º0");
+			System.out.println("[INFO] " + path.getAbsolutePath() + "å¤„ç†ç»“æœï¼š" + Arrays.toString(failMatrixArr));
 		}
 		newMatrixList.addAll(matrixList);
 		newMatrixList.add(failMatrixIdx, Arrays.toString(failMatrixArr).replace(",", "").replace("[", "").replace("]", ""));
@@ -92,7 +92,7 @@ public class Analysis extends Bean implements IProcessModule{
 		for(String a : newMatrixList) {
 			FileUtils.writeStringToFile(newMatrix, a + "\n", true);
 		}
-		System.out.println("[INFO] ´¦ÀíÍê³É£¬Éú³ÉÎÄ¼ş¡¾"+newMatrix.getAbsolutePath()+"¡¿");
+		System.out.println("[INFO] å¤„ç†å®Œæˆï¼Œç”Ÿæˆæ–‡ä»¶ã€"+newMatrix.getAbsolutePath()+"ã€‘");
 	}
 
 	public static String getFailMatrixArr(List<String> matrixList) {
@@ -104,7 +104,7 @@ public class Analysis extends Bean implements IProcessModule{
 		return null;
 	}
 	/**
-	 * ¸ñÊ½ ÀàÃû#ĞĞºÅ
+	 * æ ¼å¼ ç±»å#è¡Œå·
 
 	 */
 	public static List<String> getCompareFileList(File path)throws Exception{
@@ -141,7 +141,7 @@ public class Analysis extends Bean implements IProcessModule{
 			}
 		}));
 		if(javaFileList.size() != lithiumJavaFileList.size()) {
-			throw new Exception("Ä¿Â¼ÖĞÔ¼¼õÇ°µÄÎÄ¼şÊıÁ¿ÓëÔ¼¼õºóµÄÎÄ¼şÊıÁ¿²»Í¬£¬ÎŞ·¨±È½Ï£¡");
+			throw new Exception("ç›®å½•ä¸­çº¦å‡å‰çš„æ–‡ä»¶æ•°é‡ä¸çº¦å‡åçš„æ–‡ä»¶æ•°é‡ä¸åŒï¼Œæ— æ³•æ¯”è¾ƒï¼");
 		}
 		
 		List<String> srcList;
@@ -164,7 +164,7 @@ public class Analysis extends Bean implements IProcessModule{
 	}
 	
 	/**
-	 * »ñÈ¡±»Ô¼¼õÎÄ¼şµÄĞĞºÅ
+	 * è·å–è¢«çº¦å‡æ–‡ä»¶çš„è¡Œå·
 	 * @param srcFile
 	 * @param destFile
 	 * @return

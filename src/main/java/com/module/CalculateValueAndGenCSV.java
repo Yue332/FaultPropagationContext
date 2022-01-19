@@ -33,17 +33,9 @@ public class CalculateValueAndGenCSV extends Bean implements IProcessModule {
 	public void process(Runtime runTime) throws Exception {
 		File path = new File(spectrumPath);
 		if(!path.exists()) {
-			throw new Exception("[ERROR] Î´ÕÒµ½¡¾"+spectrumPath+"¡¿£¬Çë½«gzoltarÊä³öµÄÆµÆ×¼°Óï¾ä(spectraÎÄ¼şºÍmatrix)¸´ÖÆµ½¸ÃÄ¿Â¼ÏÂ");
+			throw new Exception("[ERROR] æœªæ‰¾åˆ°ã€"+spectrumPath+"ã€‘ï¼Œè¯·å°†gzoltarè¾“å‡ºçš„é¢‘è°±åŠè¯­å¥(spectraæ–‡ä»¶å’Œmatrix)å¤åˆ¶åˆ°è¯¥ç›®å½•ä¸‹");
 		}
-		File[] matrixList = path.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				if(name.startsWith("matrix")) {
-					return true;
-				}
-				return false;
-			}
-		});
+		File[] matrixList = path.listFiles((dir, name) -> name.startsWith("matrix"));
 		File spectra = new File(sprctraPath);
 		for(File matrix : matrixList) {
 			String type = Utils.getType(matrix.getName());
@@ -54,12 +46,12 @@ public class CalculateValueAndGenCSV extends Bean implements IProcessModule {
 
 	
 	public void readDatasAndCalculate(File spectra, File matrix, String type) throws Exception {
-		System.out.println("¿ªÊ¼¶ÁÈ¡ÆµÆ×¡¢Óï¾äÎÄ¼ş²¢¼ÆËã["+projectId+"]bugID["+bugId+"]µÄ»³ÒÉÖµ");
+		System.out.println("å¼€å§‹è¯»å–é¢‘è°±ã€è¯­å¥æ–‡ä»¶å¹¶è®¡ç®—["+projectId+"]bugID["+bugId+"]çš„æ€€ç–‘å€¼");
         List<String> codeLines = FileUtils.readLines(spectra, "UTF-8");
         List<String> testExecResults = FileUtils.readLines(matrix, "UTF-8");
-        System.out.println("¶ÁÈ¡Íê³É");
-        System.out.println("½«¶ÁÈ¡ĞÅÏ¢Ğ´Èë¶şÎ¬Êı×é");
-        //¾ØÕóĞÅÏ¢Ğ´Èë¶şÎ¬Êı×é
+        System.out.println("è¯»å–å®Œæˆ");
+        System.out.println("å°†è¯»å–ä¿¡æ¯å†™å…¥äºŒç»´æ•°ç»„");
+        //çŸ©é˜µä¿¡æ¯å†™å…¥äºŒç»´æ•°ç»„
         String[][] testExecResults2 = new String [testExecResults.size()][codeLines.size()+1];
         for (int i = 0; i < testExecResults.size(); i++) {
             String[] temps = testExecResults.get(i).split(" ");
@@ -67,38 +59,38 @@ public class CalculateValueAndGenCSV extends Bean implements IProcessModule {
                 testExecResults2[i][j] = temps[j];
             }
         }
-//        n11:¸²¸ÇÓï¾ä   + Í¨¹ı
-//        n10:¸²¸ÇÓï¾ä   + Ê§°Ü
-//        n01:Î´¸²¸ÇÓï¾ä + Í¨¹ı
-//        n00:Î´¸²¸ÇÓï¾ä + Ê§°Ü
+//        n11:è¦†ç›–è¯­å¥   + é€šè¿‡
+//        n10:è¦†ç›–è¯­å¥   + å¤±è´¥
+//        n01:æœªè¦†ç›–è¯­å¥ + é€šè¿‡
+//        n00:æœªè¦†ç›–è¯­å¥ + å¤±è´¥
 	    double[][] testExecInfo = new double[codeLines.size()][4];
 	    for (int i = 0; i < codeLines.size(); i++) {
 	        double n11 = 0, n10 = 0, n01 = 0, n00 = 0;
-	        for (int j = 0; j < testExecResults2.length; j++) {
-	            double temp = Integer.parseInt(testExecResults2[j][i]);
-	            String flag = testExecResults2[j][codeLines.size()];
-	            if(1 == temp && flag.equals("+")){
-	                n11 ++;
-	            }else if(1 == temp && flag.equals("-")){
-	                n10 ++;
-	            }else if(0 == temp && flag.equals("+")){
-	                n01 ++;
-	            }else if(0 == temp && flag.equals("-")){
-	                n00 ++;
-	            }
-	        }
+			for (String[] strings : testExecResults2) {
+				double temp = Integer.parseInt(strings[i]);
+				String flag = strings[codeLines.size()];
+				if (1 == temp && flag.equals("+")) {
+					n11++;
+				} else if (1 == temp && flag.equals("-")) {
+					n10++;
+				} else if (0 == temp && flag.equals("+")) {
+					n01++;
+				} else if (0 == temp && flag.equals("-")) {
+					n00++;
+				}
+			}
 	        testExecInfo[i][0]=n11;
 	        testExecInfo[i][1]=n10;
 	        testExecInfo[i][2]=n01;
 	        testExecInfo[i][3]=n00;
 	    }
-	    System.out.println("[INFO] Ğ´ÈëÍê³É£¬¿ªÊ¼¼ÆËã»³ÒÉÖµ");
+	    System.out.println("[INFO] å†™å…¥å®Œæˆï¼Œå¼€å§‹è®¡ç®—æ€€ç–‘å€¼");
 	    calculateValue(codeLines, testExecInfo, type);
 	}
 	
-	//¼ÆËã»³ÒÉÖµ²¢Éú³ÉcsvÎÄ¼ş
+	//è®¡ç®—æ€€ç–‘å€¼å¹¶ç”Ÿæˆcsvæ–‡ä»¶
 	public void calculateValue(List<String> codeLines, double[][] ints, String type) throws Exception {
-		ArrayList<List<BigDecimal>> suspValues = new ArrayList<List<BigDecimal>>();
+		ArrayList<List<BigDecimal>> suspValues = new ArrayList<>();
 		LinkedHashMap<String, IAnalysisFunc> funcMap = TFuncRegister.getRegistClass(config);
 		
         String[] titleLine = new String[funcMap.size() + 1];
@@ -118,11 +110,11 @@ public class CalculateValueAndGenCSV extends Bean implements IProcessModule {
 			try {
 				suspValues.add(func.onProcess(ints));
 			}catch (Exception e) {
-				throw new Exception("Ö´ĞĞ·½·¨["+clzName+"]Òì³££¡" + e.getMessage());
+				throw new Exception("æ‰§è¡Œæ–¹æ³•["+clzName+"]å¼‚å¸¸ï¼" + e.getMessage());
 			}
 		}
-        System.out.println("[INFO] Ê¹ÓÃ¹«Ê½£º" + funcBuilder.substring(0, funcBuilder.length() - 1).toString());
-        System.out.println("[INFO] ¿ªÊ¼Ğ´ÈëCSVÎÄ¼ş");
+        System.out.println("[INFO] ä½¿ç”¨å…¬å¼ï¼š" + funcBuilder.substring(0, funcBuilder.length() - 1).toString());
+        System.out.println("[INFO] å¼€å§‹å†™å…¥CSVæ–‡ä»¶");
         
         String csvName = spectrumPath + File.separator + super.projectId + "-" + super.bugId + "-" + "suspValue" + ("".equals(type) ? "" : "_" + type) + ".csv";
         File dest = new File(csvName);
@@ -141,7 +133,7 @@ public class CalculateValueAndGenCSV extends Bean implements IProcessModule {
                 }
             }
         }
-        System.out.println("[INFO] CSVÎÄ¼şÉú³ÉÍê³É£¡");
+        System.out.println("[INFO] CSVæ–‡ä»¶ç”Ÿæˆå®Œæˆï¼");
 	}
 
 	@Override

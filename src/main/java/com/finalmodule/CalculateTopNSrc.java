@@ -46,7 +46,7 @@ public class CalculateTopNSrc extends FinalBean implements IFinalProcessModule {
     @Override
     public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         int top = Integer.parseInt(config.getConfig(ConfigUtils.TOP_N_KEY));
-        // 遍历每个公式
+        // 閬嶅巻姣忎釜鍏紡
         for (String func : funcArr) {
             File outputFile = new File(output.replaceAll("@:PROJECT_PATH@", projectPath)
                     .replaceAll("@:TOP@", super.config.getConfig(ConfigUtils.TOP_N_KEY))
@@ -58,7 +58,7 @@ public class CalculateTopNSrc extends FinalBean implements IFinalProcessModule {
                         .replaceAll("@:PROJECT_ID@", projectId)
                         .replaceAll("@:BUG_ID@", bugId));
                 if (!buggyLineFile.exists()) {
-                    throw new Exception("[ERROR] 文件" + buggyLineFile.getAbsolutePath() + "不存在！");
+                    throw new Exception("[ERROR] 鏂囦欢" + buggyLineFile.getAbsolutePath() + "涓嶅瓨鍦紒");
                 }
                 // org/jfree/chart/imagemap/StandardToolTipTagFragmentGenerator.java#65#        return " title=\"" + toolTipText
                 // -> org.jfreee.chart.XXX 
@@ -70,9 +70,9 @@ public class CalculateTopNSrc extends FinalBean implements IFinalProcessModule {
 
                 File dataDepNewFile = new File(dataDep.replaceAll("@:BUG_ID@", bugId)
                         .replaceAll("@:FUNCID@", func));
-                System.out.println("[INFO] 开始读取文件：" + dataDepNewFile.getAbsolutePath());
+                System.out.println("[INFO] 寮�濮嬭鍙栨枃浠讹細" + dataDepNewFile.getAbsolutePath());
                 if (!dataDepNewFile.exists()) {
-                    throw new Exception("[ERROR] 文件" + dataDepNewFile.getAbsolutePath() + "不存在！");
+                    throw new Exception("[ERROR] 鏂囦欢" + dataDepNewFile.getAbsolutePath() + "涓嶅瓨鍦紒");
                 }
                 
                 // org.jfree.chart.imagemap.StandardToolTipTagFragmentGenerator#65,-1/65,0

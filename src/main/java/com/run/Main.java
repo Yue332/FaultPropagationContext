@@ -19,36 +19,41 @@ public class Main {
 //		String command2 = "./defects4j -p Chart -v 1b -w ";
 //	}
 	public static void main(String[] args) {
+		String osName = System.getProperty("os.name").toLowerCase();
+		if(osName.contains("windows")){
+			System.setProperty("user.home", System.getProperty("user.home") + File.separator + "Desktop");
+			System.out.println("å½“å‰ä¸ºwindowsç³»ç»Ÿï¼Œè®¾ç½®å®¶ç›®å½•ä¸º" + System.getProperty("user.home"));
+		}
 		
-		System.out.println("ÇëÊäÈëÅäÖÃÎÄ¼şÈ«Â·¾¶£¨ÊäÈë»Ø³µÔòÊ¹ÓÃÄ¬ÈÏÅäÖÃÎÄ¼ş£© :");
+		System.out.println("è¯·è¾“å…¥é…ç½®æ–‡ä»¶å…¨è·¯å¾„ï¼ˆè¾“å…¥å›è½¦åˆ™ä½¿ç”¨é»˜è®¤é…ç½®æ–‡ä»¶ï¼‰ :");
 		Scanner sc = new Scanner(System.in);
 		String configPath = sc.nextLine();
 		sc.close();
-		//Éú³ÉÄ¬ÈÏµÄÅäÖÃÎÄ¼ş Ä¬ÈÏÂ·¾¶Îª ¼ÒÄ¿Â¼/config.properties
+		//ç”Ÿæˆé»˜è®¤çš„é…ç½®æ–‡ä»¶ é»˜è®¤è·¯å¾„ä¸º å®¶ç›®å½•/config.properties
 		if("".equals(configPath)) {
 			configPath = ConfigUtils.DEF_CONFIG_FILE_PATH;
-			System.out.println("[INFO] Î´·¢ÏÖÅäÖÃÎÄ¼ş£¬Ê¹ÓÃÄ¬ÈÏÅäÖÃÎÄ¼ş ("+configPath+")¡£");
+			System.out.println("[INFO] æœªå‘ç°é…ç½®æ–‡ä»¶ï¼Œä½¿ç”¨é»˜è®¤é…ç½®æ–‡ä»¶ ("+configPath+")ã€‚");
 			if(!new File(ConfigUtils.DEF_CONFIG_FILE_PATH).exists()) {
-				System.out.println("[INFO] ÅäÖÃÎÄ¼ş²»´æÔÚ£¬¿ªÊ¼Éú³ÉÅäÖÃÎÄ¼ş¡£");
+				System.out.println("[INFO] é…ç½®æ–‡ä»¶ä¸å­˜åœ¨ï¼Œå¼€å§‹ç”Ÿæˆé…ç½®æ–‡ä»¶ã€‚");
 				try {
 					ConfigUtils.generateDefaultPropertyFile();
-					System.out.println("[INFO] ÅäÖÃÎÄ¼şÉú³ÉÍê³É£¡");
-					System.out.println("[!!!INFO!!!] ÇëÅäÖÃÍêÅäÖÃÎÄ¼şºóÔÙ´ÎÔËĞĞ³ÌĞò");
+					System.out.println("[INFO] é…ç½®æ–‡ä»¶ç”Ÿæˆå®Œæˆï¼");
+					System.out.println("[!!!INFO!!!] è¯·é…ç½®å®Œé…ç½®æ–‡ä»¶åå†æ¬¡è¿è¡Œç¨‹åº");
 					System.exit(0);
 				}catch(Exception e) {
-					System.out.println("[ERROR] ÅäÖÃÎÄ¼şÉú³ÉÒì³££¡" + e.getMessage());
+					System.out.println("[ERROR] é…ç½®æ–‡ä»¶ç”Ÿæˆå¼‚å¸¸ï¼" + e.getMessage());
 					e.printStackTrace();
 					System.exit(1);
 				}
 			}
 		}
 		
-		// ¶ÁÈ¡ÅäÖÃĞÅÏ¢
+		// è¯»å–é…ç½®ä¿¡æ¯
 		Configer config = new Configer(configPath);
 		try {
 			config.loadConfig();
 		} catch (Exception e) {
-			System.out.println("[ERROR] ÅäÖÃÎÄ¼ş¼ÓÔØÒì³££¡" + e.getMessage());
+			System.out.println("[ERROR] é…ç½®æ–‡ä»¶åŠ è½½å¼‚å¸¸ï¼" + e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -61,7 +66,7 @@ public class Main {
 		if(processModuleList != null && processModuleList.size() != 0) {
 			for(String bugId : bugIdArr) {
 //				config.setCurrentBugId(bugId);
-				System.out.println("[INFO] ¿ªÊ¼´¦Àíbug£º" + bugId);
+				System.out.println("[INFO] å¼€å§‹å¤„ç†bugï¼š" + bugId);
 				for(IProcessModule module : processModuleList) {
 					try {
 						module.setBugId(bugId);
@@ -70,48 +75,48 @@ public class Main {
 						module.process(runTime);
 					} catch (Exception e) {
 						failBugIdList.add(bugId);
-						failMsg.append("bug["+bugId+"]Ä£¿é["+module.getClass().getName()+"]Ö´ĞĞÒì³££¡Òì³£Ô­Òò£º" + Utils.getExceptionString(e)).append("\r\n");
-						System.out.println("[ERROR] Ä£¿é ¡¾"+module.getClass().getName()+"¡¿ Ö´ĞĞÒì³££¡" + e.getMessage());
+						failMsg.append("bug["+bugId+"]æ¨¡å—["+module.getClass().getName()+"]æ‰§è¡Œå¼‚å¸¸ï¼å¼‚å¸¸åŸå› ï¼š" + Utils.getExceptionString(e)).append("\r\n");
+						System.out.println("[ERROR] æ¨¡å— ã€"+module.getClass().getName()+"ã€‘ æ‰§è¡Œå¼‚å¸¸ï¼" + e.getMessage());
 						e.printStackTrace();
 						System.exit(1);
 					}
 				}
-				System.out.println("[INFO] bug¡¾"+bugId+"¡¿´¦ÀíÍê³É£¡");
+				System.out.println("[INFO] bugã€"+bugId+"ã€‘å¤„ç†å®Œæˆï¼");
 			}
 		}
-		// ×îÖÕ´¦ÀíÄ£¿é
+		// æœ€ç»ˆå¤„ç†æ¨¡å—
 		List<IFinalProcessModule> fianlProcessModuleList = config.getFinalProcessModuleList();
 		StringBuilder finalProcessLog = new StringBuilder();
 		for(IFinalProcessModule module : fianlProcessModuleList) {
-			System.out.println("[INFO] ¿ªÊ¼Ö´ĞĞÄ£¿é" + module.getClass().getName());
-			finalProcessLog.append("Ä£¿é").append(module.getClass().getName()).append("Ö´ĞĞÈÕÖ¾£º\r\n");
+			System.out.println("[INFO] å¼€å§‹æ‰§è¡Œæ¨¡å—" + module.getClass().getName());
+			finalProcessLog.append("æ¨¡å—").append(module.getClass().getName()).append("æ‰§è¡Œæ—¥å¿—ï¼š\r\n");
 			try {
 				module.setConfig(config);
 				module.setFailBugId(failBugIdList);
 				module.onPrepare();
 				module.process(runTime, finalProcessLog);
 			} catch (Exception e) {
-				failMsg.append("×îÖÕÄ£¿é¡¾"+module.getClass().getName()+"¡¿Ö´ĞĞÒì³££¡Òì³£Ô­Òò£º" + Utils.getExceptionString(e)).append("\r\n");
-				System.out.println("[ERROR] ×îÖÕÄ£¿é¡¾"+module.getClass().getName()+"¡¿Ö´ĞĞÒì³££¡" + e.getMessage());
+				failMsg.append("æœ€ç»ˆæ¨¡å—ã€"+module.getClass().getName()+"ã€‘æ‰§è¡Œå¼‚å¸¸ï¼å¼‚å¸¸åŸå› ï¼š" + Utils.getExceptionString(e)).append("\r\n");
+				System.out.println("[ERROR] æœ€ç»ˆæ¨¡å—ã€"+module.getClass().getName()+"ã€‘æ‰§è¡Œå¼‚å¸¸ï¼" + e.getMessage());
 				e.printStackTrace();
 			}
-			System.out.println("[INFO] Ä£¿é" + module.getClass().getName() + "Ö´ĞĞ½áÊø");
+			System.out.println("[INFO] æ¨¡å—" + module.getClass().getName() + "æ‰§è¡Œç»“æŸ");
 		}
 		long endTime = System.currentTimeMillis();
 		
 		String failFilePath = config.getConfig(ConfigUtils.FAIL_FILE_PATH_KEY);
 		if(!"".contentEquals(failFilePath)) {
-			System.out.println("[INFO] Ê§°ÜĞÅÏ¢²»Îª¿Õ£¡Ğ´ÈëÊ§°ÜÎÄ¼ş");
+			System.out.println("[INFO] å¤±è´¥ä¿¡æ¯ä¸ä¸ºç©ºï¼å†™å…¥å¤±è´¥æ–‡ä»¶");
 			File failFile = new File(failFilePath);
 			try {
 				FileUtils.writeStringToFile(failFile, failMsg + "\r\n" + finalProcessLog, false);
 			} catch (Exception e) {
-				System.out.println("[WARNING] Ê§°ÜĞÅÏ¢Ğ´ÈëÒì³££¡" + e.getMessage());
+				System.out.println("[WARNING] å¤±è´¥ä¿¡æ¯å†™å…¥å¼‚å¸¸ï¼" + e.getMessage());
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Ö´ĞĞÊ±¼ä£º" + (endTime - startTime) + "ms");
-		System.out.println("[INFO] ËùÓĞÄ£¿éÖ´ĞĞÍê³É£¬³ÌĞò½áÊø£¡");
+		System.out.println("æ‰§è¡Œæ—¶é—´ï¼š" + (endTime - startTime) + "ms");
+		System.out.println("[INFO] æ‰€æœ‰æ¨¡å—æ‰§è¡Œå®Œæˆï¼Œç¨‹åºç»“æŸï¼");
 	}
 
 }

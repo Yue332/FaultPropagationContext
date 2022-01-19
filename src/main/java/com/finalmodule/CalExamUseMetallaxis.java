@@ -35,9 +35,9 @@ public class CalExamUseMetallaxis extends FinalBean implements IFinalProcessModu
         List<FuncSuspValue> funcSuspValueList = findUseableSuspValue(project, bugIdArr, log);
         String[] sortFuncArr = sortFuncCustom;
         if (sortFuncArr == null || sortFuncArr.length == 0 || (sortFuncArr.length == 1 && "all".equals(sortFuncArr[0]))) {
-            System.out.println("[INFO] Î´ÅäÖÃÅÅĞò¹«Ê½»òÅäÖÃÎªall£¬Ê¹ÓÃ»³ÒÉ¶ÈÎÄ¼şÖĞ¹«Ê½½»¼¯½øĞĞÅÅĞò");
+            System.out.println("[INFO] æœªé…ç½®æ’åºå…¬å¼æˆ–é…ç½®ä¸ºallï¼Œä½¿ç”¨æ€€ç–‘åº¦æ–‡ä»¶ä¸­å…¬å¼äº¤é›†è¿›è¡Œæ’åº");
             sortFuncArr = getSortFuncs(funcSuspValueList);
-            System.out.println("[INFO] ÅÅĞò¹«Ê½Îª£º" + Arrays.toString(sortFuncArr));
+            System.out.println("[INFO] æ’åºå…¬å¼ä¸ºï¼š" + Arrays.toString(sortFuncArr));
         }
         Map<String, Map<String, BigDecimal>> finalMap = new HashMap<>(bugIdArr.length);
         for (FuncSuspValue suspValue: funcSuspValueList) {
@@ -99,7 +99,7 @@ public class CalExamUseMetallaxis extends FinalBean implements IFinalProcessModu
                 list.add(new FuncSuspValue(project, bug));
             } catch (Exception e) {
                 if (e instanceof SuspValueNotFoundException) {
-                    log.append("ÏîÄ¿[").append(project).append("]bug[").append(bug).append("]Î´ÕÒµ½»³ÒÉ¶ÈÎÄ¼ş£¬Ìø¹ı£¡");
+                    log.append("é¡¹ç›®[").append(project).append("]bug[").append(bug).append("]æœªæ‰¾åˆ°æ€€ç–‘åº¦æ–‡ä»¶ï¼Œè·³è¿‡ï¼");
                     continue;
                 }
                 throw e;

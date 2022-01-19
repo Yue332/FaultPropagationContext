@@ -38,7 +38,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
             int failCount = Utils.getFailingTestArray(runTime, projectPath, project, bug).length;
 
             String middleParamsFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator +
-                    project + File.separator + bug + File.separator + "ÎªÁËºóĞø¼ÆËãµÄÖĞ¼ä±äÁ¿µÄÖµ.csv";
+                    project + File.separator + bug + File.separator + "ä¸ºäº†åç»­è®¡ç®—çš„ä¸­é—´å˜é‡çš„å€¼.csv";
             List<MiddleParams> middleParamList = new AllMiddleParams(middleParamsFilePath).getMiddleParams();
             double[][] martix = getMartix(middleParamList, passCount, failCount, project, bug);
 
@@ -47,8 +47,8 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                 try {
                     processOne(project, bug, outputMap, analysisFunc, middleParamList, martix);
                 } catch (Exception e) {
-                    System.out.println("[WARNING] ÏîÄ¿["+project+"]£¬bug["+bug+"]¹«Ê½["+analysisFunc.getName()+"]´¦ÀíÒì³££¡Ô­Òò£º\r\n" + Utils.getExceptionString(e));
-                    processLog.append("ÏîÄ¿:").append(project).append("£¬bug:").append(bug).append("¹«Ê½").append(analysisFunc.getName()).append("´¦ÀíÒì³££¡Ô­Òò£º").append(Utils.getExceptionString(e)).append("\r\n");
+                    System.out.println("[WARNING] é¡¹ç›®["+project+"]ï¼Œbug["+bug+"]å…¬å¼["+analysisFunc.getName()+"]å¤„ç†å¼‚å¸¸ï¼åŸå› ï¼š\r\n" + Utils.getExceptionString(e));
+                    processLog.append("é¡¹ç›®:").append(project).append("ï¼Œbug:").append(bug).append("å…¬å¼").append(analysisFunc.getName()).append("å¤„ç†å¼‚å¸¸ï¼åŸå› ï¼š").append(Utils.getExceptionString(e)).append("\r\n");
                 }
             }
             StringBuilder header = new StringBuilder("element,");
@@ -73,7 +73,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
                     project + File.separator + project + "-" + bug + "-MetallaxisSuspValue.csv";
             File outputFile = new File(outputFilePath);
             if(StringUtils.isEmpty(finalResult)){
-                System.out.println("[WARNING] ÏîÄ¿["+project+"]bug["+bug+"]»³ÒÉ¶ÈÎª¿Õ£¬Ìø¹ı£¨Èç´æÔÚÔ­ÎÄ¼ş£¬ÔòÉ¾³ı£©!");
+                System.out.println("[WARNING] é¡¹ç›®["+project+"]bug["+bug+"]æ€€ç–‘åº¦ä¸ºç©ºï¼Œè·³è¿‡ï¼ˆå¦‚å­˜åœ¨åŸæ–‡ä»¶ï¼Œåˆ™åˆ é™¤ï¼‰!");
                 outputFile.deleteOnExit();
                 continue;
             }
@@ -89,7 +89,7 @@ public class MetallaxisSuspValue extends FinalBean implements IFinalProcessModul
 
         String reportFilePath = System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bug + File.separator + "result.csv";
         List<CalMUSE.MutatorReport> reportList = CalMUSE.MutatorReport.getMutatorReportList(reportFilePath);
-        //°´Àà+ĞĞºÅ·Ö×é
+        //æŒ‰ç±»+è¡Œå·åˆ†ç»„
         Map<String, List<CalMUSE.MutatorReport>> groupByMap = reportList.stream().collect(Collectors.groupingBy(line -> line.getMutatedClass() + "#" + line.getLineNumber()));
         for (Map.Entry<String, List<CalMUSE.MutatorReport>> entry : groupByMap.entrySet()) {
             String line = entry.getKey();

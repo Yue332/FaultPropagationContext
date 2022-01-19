@@ -15,7 +15,7 @@ public class FinalMFR extends FinalBean implements IFinalProcessModule {
     public void process(Runtime runTime, StringBuilder processLog) throws Exception {
         File outputFile = getOutputFile();
         for(File project : getMFRProjectPath()){
-        	System.out.println("[DEBUG] ¿ªÊ¼´¦Àí" + project.getName());
+        	System.out.println("[DEBUG] å¼€å§‹å¤„ç†" + project.getName());
             File[] mfrFiles = getMFRFiles(project);
             for(File mfrFile : mfrFiles){
                 String[] ret = getAvageAR(project.getName(), mfrFile);
@@ -35,7 +35,7 @@ public class FinalMFR extends FinalBean implements IFinalProcessModule {
         String path = System.getProperty("user.home") + File.separator + "MFR" + File.separator;
         File f = new File(path);
         if(!f.exists()){
-            throw new Exception("Ä¿Â¼["+path+"]²»´æÔÚ£¬ÇëÏÈÊ¹ÓÃMFRÉú³É");
+            throw new Exception("ç›®å½•["+path+"]ä¸å­˜åœ¨ï¼Œè¯·å…ˆä½¿ç”¨MFRç”Ÿæˆ");
         }
         File[] projects = f.listFiles(new FileFilter() {
 			@Override
@@ -44,7 +44,7 @@ public class FinalMFR extends FinalBean implements IFinalProcessModule {
 			}
 		});
         if(projects == null || projects.length == 0){
-            throw new Exception("Ä¿Â¼["+path+"]ÏÂÃ»ÓĞÕÒµ½ÏîÄ¿µÄÄ¿Â¼£¬Çë¼ì²é£¡");
+            throw new Exception("ç›®å½•["+path+"]ä¸‹æ²¡æœ‰æ‰¾åˆ°é¡¹ç›®çš„ç›®å½•ï¼Œè¯·æ£€æŸ¥ï¼");
         }
         return projects;
     }
@@ -59,7 +59,7 @@ public class FinalMFR extends FinalBean implements IFinalProcessModule {
 			}
 		});
         if(mfrFiles == null || mfrFiles.length == 0){
-            throw new Exception("Ä¿Â¼["+mfrProjectPath.getAbsolutePath()+"]ÏÂÃ»ÓĞÕÒµ½MFRÏà¹ØÎÄ¼ş£¬Çë¼ì²é£¡");
+            throw new Exception("ç›®å½•["+mfrProjectPath.getAbsolutePath()+"]ä¸‹æ²¡æœ‰æ‰¾åˆ°MFRç›¸å…³æ–‡ä»¶ï¼Œè¯·æ£€æŸ¥ï¼");
         }
         return mfrFiles;
     }
@@ -70,19 +70,19 @@ public class FinalMFR extends FinalBean implements IFinalProcessModule {
      * @throws Exception
      */
     private String[] getAvageAR(String project, File mfrFile)throws Exception{
-        System.out.println("[INFO] ¿ªÊ¼¼ÆËãÏîÄ¿["+project+"]["+mfrFile.getName()+"]µÄÆ½¾ùARÖµ");
+        System.out.println("[INFO] å¼€å§‹è®¡ç®—é¡¹ç›®["+project+"]["+mfrFile.getName()+"]çš„å¹³å‡ARå€¼");
         String[] ret = new String[2];
         ret[0] = mfrFile.getName().replace("MFR-", "").replace(".csv", "");
         List<String> list = FileUtils.readLines(mfrFile, "utf-8");
         list.remove(0);
         if(list.size() == 0){
-            throw new Exception("ÎÄ¼ş["+mfrFile.getAbsolutePath()+"]Îª¿Õ£¬Çë¼ì²é£¡");
+            throw new Exception("æ–‡ä»¶["+mfrFile.getAbsolutePath()+"]ä¸ºç©ºï¼Œè¯·æ£€æŸ¥ï¼");
         }
         BigDecimal sumAR = new BigDecimal("0");
         for(String line : list){
             sumAR = sumAR.add(new BigDecimal(line.split(",")[1]));
         }
-        System.out.println("[INFO] ["+mfrFile.getName()+"]µÄARÖµ×ÜºÍÎª£º" + sumAR.toPlainString());
+        System.out.println("[INFO] ["+mfrFile.getName()+"]çš„ARå€¼æ€»å’Œä¸ºï¼š" + sumAR.toPlainString());
         ret[1] = sumAR.divide(new BigDecimal(String.valueOf(list.size())), IAnalysisFunc.scale, IAnalysisFunc.roundingMode).toPlainString();
         return ret;
     }

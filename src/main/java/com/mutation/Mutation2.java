@@ -36,7 +36,7 @@ public class Mutation2 extends FinalBean implements IFinalProcessModule {
 					}
 				});
 				File newestFile = getNewestReportDir(dirList);
-				System.out.println("[DEBUG] »ñÈ¡×îĞÂµÄ±¨¸æÎÄ¼şÂ·¾¶£º" + newestFile.getAbsolutePath());
+				System.out.println("[DEBUG] è·å–æœ€æ–°çš„æŠ¥å‘Šæ–‡ä»¶è·¯å¾„ï¼š" + newestFile.getAbsolutePath());
 				File outputFile = new File(output.replace("@:PROJECT_ID@", projectId).replace("@:BUG_ID@", bugId));
 				FileUtils.writeStringToFile(outputFile, "lineNumber,mutatedClass,mutator,status,killingTests,succeedingTests\r\n", false);
 				SAXBuilder builder = new SAXBuilder();

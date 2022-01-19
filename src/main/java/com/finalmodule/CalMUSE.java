@@ -33,7 +33,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
 			for(String bugId : bugIds) {
 				File resultCsvFile = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "result.csv");
 				if(!resultCsvFile.exists()) {
-					throw new Exception("[ERROR] ÎÄ¼ş"+resultCsvFile.getAbsolutePath()+"²»´æÔÚ£¡");
+					throw new Exception("[ERROR] æ–‡ä»¶"+resultCsvFile.getAbsolutePath()+"ä¸å­˜åœ¨ï¼");
 				}
 				String[] failingTests = Utils.getFailingTestArray(runTime, super.config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY), project, bugId);
 				System.out.println("[DEBUGGER] failingTest : " + Arrays.toString(failingTests));
@@ -54,13 +54,13 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
         int failingTestsNum = failingTests.length;
         try {
             List<String> csvList = FileUtils.readLines(resultCsvFile, "UTF-8");
-            // È¥µô±íÍ·
+            // å»æ‰è¡¨å¤´
             csvList.remove(0);
-            //×ª»»Îª¶ÔÏóµÄ·½Ê½
+            //è½¬æ¢ä¸ºå¯¹è±¡çš„æ–¹å¼
             List<MutatorReport> reportList = MutatorReport.getMutatorReportList(csvList);
-            //¸ù¾İ±äÒìÌåmutatorÁĞ·Ö×é
+            //æ ¹æ®å˜å¼‚ä½“mutatoråˆ—åˆ†ç»„
             Map<String, List<MutatorReport>> groupByMap = reportList.stream().collect(Collectors.groupingBy(MutatorReport::getMutator));
-            //Ã¿¸ömutator¶ÔÓ¦µÄtotalKillingTests
+            //æ¯ä¸ªmutatorå¯¹åº”çš„totalKillingTests
             Map<String, BigDecimal> totalKillingTestsMap = new HashMap<>(groupByMap.size());
             Map<String, BigDecimal> totalSucceedingTestsMap = new HashMap<>(groupByMap.size());
             int totalPasstoFailTestsNum = 0;
@@ -119,7 +119,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
     }
 
     private void outElementMuse(Map<String, BigDecimal> suspLineNumberMap, String project, String bugId) throws IOException {
-        File file = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "MUSE¼ÆËãµÄÓï¾äµÄ¿ÉÒÉÖµ.csv");
+        File file = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "MUSEè®¡ç®—çš„è¯­å¥çš„å¯ç–‘å€¼.csv");
         FileUtils.writeStringToFile(file, "element,MUSE\r\n", "utf-8", false);
         StringBuilder result = new StringBuilder();
         for (Map.Entry<String, BigDecimal> entry : suspLineNumberMap.entrySet()){
@@ -133,7 +133,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
     private void outTmpParams(Map<String, BigDecimal> totalKillingTestsMap, Map<String, BigDecimal> totalSucceedingTestsMap,
                                      int totalPasstoFailTestsNum, int totalFailtoPassTestsNum,
                                      String project, String bugId) throws IOException {
-        File file = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "ÎªÁËºóĞø¼ÆËãµÄÖĞ¼ä±äÁ¿µÄÖµ.csv");
+        File file = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "ä¸ºäº†åç»­è®¡ç®—çš„ä¸­é—´å˜é‡çš„å€¼.csv");
         FileUtils.writeStringToFile(file, "mutator,totalKillingTests(t_p2f (m)),totalSucceedingTests(t_f2p (m))\r\n", "utf-8", false);
         StringBuilder result = new StringBuilder();
         for(Map.Entry<String, BigDecimal> entry : totalKillingTestsMap.entrySet()){
@@ -148,7 +148,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
     }
 
     private void outMutator(Map<String, BigDecimal> museMap, String project, String bugId) throws IOException {
-        File file = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "±äÒìÌåµÄ¿ÉÒÉÖµ.csv");
+        File file = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bugId + File.separator + "å˜å¼‚ä½“çš„å¯ç–‘å€¼.csv");
         FileUtils.writeStringToFile(file, "mutator,suspofMutator_MUSE\r\n", "utf-8", false);
         StringBuilder result = new StringBuilder();
         for(Map.Entry<String, BigDecimal> entry : museMap.entrySet()){
@@ -219,7 +219,7 @@ public class CalMUSE extends FinalBean implements IFinalProcessModule{
                 this.killingTests = arr[4].split("\\|");
                 this.succeedingTests = arr[5].split("\\|");
             }catch (Exception e){
-                System.out.println("[ERROR] ³õÊ¼»¯±äÒì±¨¸æÒì³££¬ĞĞ£º" + line);
+                System.out.println("[ERROR] åˆå§‹åŒ–å˜å¼‚æŠ¥å‘Šå¼‚å¸¸ï¼Œè¡Œï¼š" + line);
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }

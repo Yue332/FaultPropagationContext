@@ -34,25 +34,25 @@ public class CalculateExam extends Bean implements IProcessModule {
 			BigDecimal sum = new BigDecimal("0");
 			List<String> cantUseId = new ArrayList<String>();
 			for(String bugId : this.allBugIdArr) {
-				System.out.println("[INFO] ¿ªÊ¼¼ÆËãbug¡¾"+bugId+"¡¿µÄµÃ·Ö");
+				System.out.println("[INFO] å¼€å§‹è®¡ç®—bugã€"+bugId+"ã€‘çš„å¾—åˆ†");
 				List<String> data = readAndLableData(bugId);
 				BigDecimal score = readAndMetric(data, iFuncIdx);
 	            if (score.compareTo(new BigDecimal("1")) != 0){
 	                count ++;
-	                //System.out.println(identifier+"ÏîÄ¿"+i+"´íÎó°æ±¾"+formName+"¹«Ê½"+metricName+"µÃ·Ö£º:"+score);
+	                //System.out.println(identifier+"é¡¹ç›®"+i+"é”™è¯¯ç‰ˆæœ¬"+formName+"å…¬å¼"+metricName+"å¾—åˆ†ï¼š:"+score);
 //	                sum += score;
 	                sum = sum.add(score);
 	            }else {
-	                //ÔİÊ±²»¿ÉÓÃ´íÎó°æ±¾
+	                //æš‚æ—¶ä¸å¯ç”¨é”™è¯¯ç‰ˆæœ¬
 	                cantUseId.add(bugId);
-	                System.out.print("[INFO] ÔİÊ±²»¿ÉÓÃµÄbugid£º" + bugId);
+	                System.out.print("[INFO] æš‚æ—¶ä¸å¯ç”¨çš„bugidï¼š" + bugId);
 	            
 	            }
-	            System.out.println("[INFO] bug¡¾"+bugId+"¡¿µÃ·ÖÎª["+score.toPlainString()+"]");
+	            System.out.println("[INFO] bugã€"+bugId+"ã€‘å¾—åˆ†ä¸º["+score.toPlainString()+"]");
 			}
 			
-	        outputMsg.append("ÏîÄ¿¡¾"+super.projectId+"¡¿¿ÉÓÃ°æ±¾Êı£¨È±Ïİ¸öÊı£©£º" + count).append("\r\n");
-	        outputMsg.append("¹«Ê½¡¾"+funcArr[iFuncIdx]+"¡¿£¬¶ÈÁ¿Ä£¿é¡¾"+CalculateExam.class.getName()+"¡¿£¬ÏîÄ¿Æ½¾ùµÃ·Ö£º" + sum.divide(new BigDecimal(String.valueOf(count)), IAnalysisFunc.scale, IAnalysisFunc.roundingMode).toPlainString()).append("\r\n");
+	        outputMsg.append("é¡¹ç›®ã€"+super.projectId+"ã€‘å¯ç”¨ç‰ˆæœ¬æ•°ï¼ˆç¼ºé™·ä¸ªæ•°ï¼‰ï¼š" + count).append("\r\n");
+	        outputMsg.append("å…¬å¼ã€"+funcArr[iFuncIdx]+"ã€‘ï¼Œåº¦é‡æ¨¡å—ã€"+CalculateExam.class.getName()+"ã€‘ï¼Œé¡¹ç›®å¹³å‡å¾—åˆ†ï¼š" + sum.divide(new BigDecimal(String.valueOf(count)), IAnalysisFunc.scale, IAnalysisFunc.roundingMode).toPlainString()).append("\r\n");
 	        outputMsg.append("---------------------").append("\r\n");
 		}
 //		System.out.println("[INFO] " + outputMsg.toString());
@@ -74,16 +74,16 @@ public class CalculateExam extends Bean implements IProcessModule {
     private List<String> readAndLableData(String bugId) throws Exception {
         File suspValueFile = new File(suspValueCsvPath.replaceAll("@:BUG_ID@", bugId));
         if(!suspValueFile.exists()) {
-        	throw new Exception("[ERROR] ÕÒ²»µ½ÎÄ¼ş¡¾"+suspValueFile.getAbsolutePath()+"¡¿£¬ÇëÊ¹ÓÃgzoltarÉú³É²¢½«ÎÄ¼ş·ÅÖÃÔÚÄ¿Â¼¡¾"+suspValueFile.getParent()+"¡¿ÖĞ!");
+        	throw new Exception("[ERROR] æ‰¾ä¸åˆ°æ–‡ä»¶ã€"+suspValueFile.getAbsolutePath()+"ã€‘ï¼Œè¯·ä½¿ç”¨gzoltarç”Ÿæˆå¹¶å°†æ–‡ä»¶æ”¾ç½®åœ¨ç›®å½•ã€"+suspValueFile.getParent()+"ã€‘ä¸­!");
         }
         File labelFile = new File(labelCsvPath.replaceAll("@:BUG_ID@", bugId));
         if(!labelFile.exists()) {
-        	throw new Exception("[ERROR] ÕÒ²»µ½ÎÄ¼ş¡¾"+labelFile.getAbsolutePath()+"¡¿£¬ÇëÊ¹ÓÃlabelÉú³É²¢½«ÎÄ¼ş·ÅÖÃÔÚÄ¿Â¼¡¾"+labelFile.getParent()+"¡¿ÖĞ!");
+        	throw new Exception("[ERROR] æ‰¾ä¸åˆ°æ–‡ä»¶ã€"+labelFile.getAbsolutePath()+"ã€‘ï¼Œè¯·ä½¿ç”¨labelç”Ÿæˆå¹¶å°†æ–‡ä»¶æ”¾ç½®åœ¨ç›®å½•ã€"+labelFile.getParent()+"ã€‘ä¸­!");
         }
         List<String> data = FileUtils.readLines(suspValueFile,"UTF-8");
         data.remove(0); // remove title line
         List<String> label = FileUtils.readLines(labelFile,"UTF-8");
-        //½«±êÇ©·ÅÔÚÊı¾İ×îºó(ÓÃ,·Ö¸ô)
+        //å°†æ ‡ç­¾æ”¾åœ¨æ•°æ®æœ€å(ç”¨,åˆ†éš”)
         for (int i = 0, length = data.size(); i < length; i++) {
 //        	System.out.println("[DEBUG] data.size() = " + length + " i = " + i);
             String temp = StringUtils.substringAfter(data.get(i),",") +","+ StringUtils.substringAfter(label.get(i),",");
@@ -96,7 +96,7 @@ public class CalculateExam extends Bean implements IProcessModule {
     private BigDecimal readAndMetric(List<String> data, int funcIndex) {
         for (int i = 0; i < data.size(); i++) {
             for (int j = i+1; j < data.size(); j++) {
-                //Ê¹ÓÃÕıÔò±í´ïÊ½»ñÈ¡µÚiÁĞµÄÖµ,·Å½øĞÂÊı×é°É
+                //ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼è·å–ç¬¬iåˆ—çš„å€¼,æ”¾è¿›æ–°æ•°ç»„å§
                 //double valueA = Double.parseDouble(StringUtils.substringBefore(data.get(i),","));
                 //double valueB = Double.parseDouble(StringUtils.substringBefore(data.get(j),","));
                 String[] tempString = data.get(i).split("\\,");
@@ -110,16 +110,16 @@ public class CalculateExam extends Bean implements IProcessModule {
                 if(valueA.compareTo(valueB) < 0){
                     String temp = data.get(i);
                     data.remove(i);
-                    data.add(i,data.get(j-1));//removeÖ®ºó£¬ÕûÌåsize-1
+                    data.add(i,data.get(j-1));//removeä¹‹åï¼Œæ•´ä½“size-1
                     data.remove(j);
                     data.add(j,temp);
                 }
-                //Çó×î¼ÑºÍ×î²îĞèÒª
+                //æ±‚æœ€ä½³å’Œæœ€å·®éœ€è¦
                 /*
                 if((valueA == valueB) && (labelA < labelB)){
                     String temp = data.get(i);
                     data.remove(i);
-                    data.add(i,data.get(j-1));//removeÖ®ºó£¬ÕûÌåsize-1
+                    data.add(i,data.get(j-1));//removeä¹‹åï¼Œæ•´ä½“size-1
                     data.remove(j);
                     data.add(j,temp);
                 }
@@ -145,17 +145,17 @@ public class CalculateExam extends Bean implements IProcessModule {
         // double[] score=new double[2];
 
         /*
-        int count = 0;  //²é¿´µ½´ï´íÎóÓï¾äÇ°,ÓĞ¶àÉÙÓï¾ä
-        int label = 0;  //ÅĞ¶ÏÊÇ·ñÊÇ´íÎóÓï¾ä
-        double fault_susValue = 0;  //Èç¹ûÊÇ´íÎóÓï¾ä,»ñÈ¡Æä»³ÒÉÖµ
-        int sameSusValue_count = 0; //ÏàÍ¬»³ÒÉÖµ,ÓĞ¶àÉÙÓï¾ä
-        int sameSusValueAndLabel_count =0;  //ÏàÍ¬»³ÒÉÖµºÍ±êÇ©,ÓĞ¶àÉÙÓï¾ä
-        double best = 0.0 ,worse = 0.0;     //×îÓÅºÍ×î²î
-        boolean flag = true;    //ÅĞ¶ÏÊÇ·ñµÚÒ»´ÎÓöµ½
+        int count = 0;  //æŸ¥çœ‹åˆ°è¾¾é”™è¯¯è¯­å¥å‰,æœ‰å¤šå°‘è¯­å¥
+        int label = 0;  //åˆ¤æ–­æ˜¯å¦æ˜¯é”™è¯¯è¯­å¥
+        double fault_susValue = 0;  //å¦‚æœæ˜¯é”™è¯¯è¯­å¥,è·å–å…¶æ€€ç–‘å€¼
+        int sameSusValue_count = 0; //ç›¸åŒæ€€ç–‘å€¼,æœ‰å¤šå°‘è¯­å¥
+        int sameSusValueAndLabel_count =0;  //ç›¸åŒæ€€ç–‘å€¼å’Œæ ‡ç­¾,æœ‰å¤šå°‘è¯­å¥
+        double best = 0.0 ,worse = 0.0;     //æœ€ä¼˜å’Œæœ€å·®
+        boolean flag = true;    //åˆ¤æ–­æ˜¯å¦ç¬¬ä¸€æ¬¡é‡åˆ°
 
         for (int i = 0; i < data.size(); i++) {
             label = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
-            if(label != 1){ //´íÎóÓï¾ä
+            if(label != 1){ //é”™è¯¯è¯­å¥
                 count++;
             }
             if(label == 1 && flag == true){
@@ -165,7 +165,7 @@ public class CalculateExam extends Bean implements IProcessModule {
                 for (int j = i; j < data.size(); j++) {
                     double temp = Double.parseDouble(data.get(j).split("\\,")[col]);
                     //double temp = Double.parseDouble(StringUtils.substringBefore(data.get(j),","));
-                    if(temp == fault_susValue){ //»³ÒÉÖµÏàÍ¬
+                    if(temp == fault_susValue){ //æ€€ç–‘å€¼ç›¸åŒ
                         sameSusValue_count ++;
                         int tempLabel =  Integer.parseInt(StringUtils.substringAfterLast(data.get(j),","));
                         if(tempLabel == 1){
@@ -173,7 +173,7 @@ public class CalculateExam extends Bean implements IProcessModule {
                         }
                     }
                 }
-                break; // µ½´ïµÚÒ»¸ö´íÎóÓï¾äÎ»ÖÃ,Ìø³ö
+                break; // åˆ°è¾¾ç¬¬ä¸€ä¸ªé”™è¯¯è¯­å¥ä½ç½®,è·³å‡º
             }
         }
         best = (float)count / data.size();
@@ -181,11 +181,11 @@ public class CalculateExam extends Bean implements IProcessModule {
         score[0] = best;
         score[1] = worse;
         */
-        int count = 0;  //²é¿´µ½´ï´íÎóÓï¾äÇ°,ÓĞ¶àÉÙÓï¾ä
-        int label = 0;  //ÅĞ¶ÏÊÇ·ñÊÇ´íÎóÓï¾ä
+        int count = 0;  //æŸ¥çœ‹åˆ°è¾¾é”™è¯¯è¯­å¥å‰,æœ‰å¤šå°‘è¯­å¥
+        int label = 0;  //åˆ¤æ–­æ˜¯å¦æ˜¯é”™è¯¯è¯­å¥
         for (int i = 0; i < data.size(); i++) {
             label = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
-            if(label != 1) count++; //´íÎóÓï¾ä
+            if(label != 1) count++; //é”™è¯¯è¯­å¥
             if(label == 1) break;
         }
         

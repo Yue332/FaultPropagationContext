@@ -52,7 +52,7 @@ public class MyMain {
 		}
 //		System.out.println("java.class.path = " + Arrays.toString(System.getProperty("java.class.path").split(File.pathSeparator)));
 		setJar2Path(path, projectId, bugId);
-		// closure ĞèÒªÈ¡ libÏÂµÄjar°ü ºÍ build/libÏÂµÄrhino.jar
+		// closure éœ€è¦å– libä¸‹çš„jaråŒ… å’Œ build/libä¸‹çš„rhino.jar
 		if("Closure".equals(projectId)) {
 			File dir = new File(projectPath + File.separator + "lib" + File.separator);
 			File[] jarList = dir.listFiles(new FilenameFilter() {
@@ -97,7 +97,7 @@ public class MyMain {
 	}
 	
 	public static String analysis(StringBuilder info, String clzName, int lineNum) {
-		SootClass baseClz = Scene.v().loadClassAndSupport(clzName);//¼ÓÔØ´ı·ÖÎöµÄÀà
+		SootClass baseClz = Scene.v().loadClassAndSupport(clzName);//åŠ è½½å¾…åˆ†æçš„ç±»
 		Scene.v().loadNecessaryClasses();
 		List<SootClass> clzList = new ArrayList<SootClass>();
 		clzList.add(baseClz);
@@ -121,16 +121,16 @@ public class MyMain {
 				for(Unit unit : body.getUnits()) {
 					if(lineNum == getLineNumber(unit)) {
 						canFindMethod = true;
-//						System.out.println("[INFO] Àà["+clzName+"]ĞĞºÅ["+lineNum+"]¶ÔÓ¦·½·¨Îª["+method.getName()+"]");
-						info.append("[INFO] Àà["+clz.getName()+"]ĞĞºÅ["+lineNum+"]¶ÔÓ¦·½·¨Îª["+method.getName()+"]").append("\r\n");
+//						System.out.println("[INFO] ç±»["+clzName+"]è¡Œå·["+lineNum+"]å¯¹åº”æ–¹æ³•ä¸º["+method.getName()+"]");
+						info.append("[INFO] ç±»["+clz.getName()+"]è¡Œå·["+lineNum+"]å¯¹åº”æ–¹æ³•ä¸º["+method.getName()+"]").append("\r\n");
 						return clz.getName() + "," + method.getName();
 					}
 				}
 			}
 		}
 		if(!canFindMethod) {
-//				System.out.println("[WARING] Àà["+clzName+"]ĞĞºÅ["+lineNum+"]Î´ÕÒµ½¶ÔÓ¦·½·¨£¡£¡£¡");
-			info.append("Àà["+clzName+"]ĞĞºÅ["+lineNum+"]Î´ÕÒµ½¶ÔÓ¦·½·¨£¡£¡£¡").append("\r\n");
+//				System.out.println("[WARING] ç±»["+clzName+"]è¡Œå·["+lineNum+"]æœªæ‰¾åˆ°å¯¹åº”æ–¹æ³•ï¼ï¼ï¼");
+			info.append("ç±»["+clzName+"]è¡Œå·["+lineNum+"]æœªæ‰¾åˆ°å¯¹åº”æ–¹æ³•ï¼ï¼ï¼").append("\r\n");
 		}
 		return null;
 	}
@@ -138,25 +138,25 @@ public class MyMain {
 	public static List<String> doMyAnalysis(String clzName, int lineNum) {
 		Map<SootMethod, List<Value>> m = new HashMap<>();
 		List<Value> memberParamList = new ArrayList<>();
-		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//¼ÓÔØ´ı·ÖÎöµÄÀà
+		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//åŠ è½½å¾…åˆ†æçš„ç±»
 		Scene.v().loadNecessaryClasses();
 		List<SootMethod> betweenClzMethodList = new ArrayList<>();
 		for(SootMethod method : sootClass.getMethods()) {
 			if(method.isAbstract()) {
-//				System.out.println("[INFO] method : ["+method.toString()+"]Îª³éÏó·½·¨£¬ÎŞ·¨·ÖÎö£¡£¡£¡");
+//				System.out.println("[INFO] method : ["+method.toString()+"]ä¸ºæŠ½è±¡æ–¹æ³•ï¼Œæ— æ³•åˆ†æï¼ï¼ï¼");
 				continue;
 			}
 			Body body = method.retrieveActiveBody();
 			for(Unit unit : body.getUnits()) {
 				if(lineNum == getLineNumber(unit)) {
 					if(unit instanceof JNopStmt) {
-//						System.out.println(String.format("unit [%s] ÎªJNopStmt£¬²»×ö´¦Àí", unit.toString()));
+//						System.out.println(String.format("unit [%s] ä¸ºJNopStmtï¼Œä¸åšå¤„ç†", unit.toString()));
 						continue;
 					}else if(method.getReturnType() instanceof VoidType && unit.toString().equals("return")) {
-//						System.out.println("unit ["+unit.toString()+"] Îªreturn£¬²»×ö´¦Àí");
+//						System.out.println("unit ["+unit.toString()+"] ä¸ºreturnï¼Œä¸åšå¤„ç†");
 						continue;
 					}
-//					System.out.println("unit ["+unit.toString()+"]¶ÔÓ¦Ô´´úÂëĞĞºÅ["+lineNum+"]");
+//					System.out.println("unit ["+unit.toString()+"]å¯¹åº”æºä»£ç è¡Œå·["+lineNum+"]");
 					
 					Bean b = new Bean(sootClass, method, unit);
 					b.analysis();
@@ -171,7 +171,7 @@ public class MyMain {
 						MyMain.addList(memberParamList, v);
 					}
 
-					//Àà¼ä·ÖÎö
+					//ç±»é—´åˆ†æ
 					betweenClzMethodList.addAll(b.otherClzMethodList);
 				}
 			}
@@ -184,40 +184,40 @@ public class MyMain {
 //		System.out.println("-----------------------");
 //		System.out.println(memberParamList.toString());
 		GetLineNumberBean b = new GetLineNumberBean(sootClass, m, memberParamList);
-//		System.out.println("ĞĞºÅ£º" + b.get().toString());
+//		System.out.println("è¡Œå·ï¼š" + b.get().toString());
 		
 		return b.get();
 	}
 
 	/**
-	 * Àà¼ä·ÖÎö
+	 * ç±»é—´åˆ†æ
 	 * @param clzName
 	 * @param lineNum
 	 * @return
 	 */
 	public static List<Map<String, Integer>> analysisBetweenClz(String clzName, int lineNum){
-		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//¼ÓÔØ´ı·ÖÎöµÄÀà
+		SootClass sootClass = Scene.v().loadClassAndSupport(clzName);//åŠ è½½å¾…åˆ†æçš„ç±»
 		Scene.v().loadNecessaryClasses();
 		List<SootMethod> betweenClzMethodList = new ArrayList<>();
 		for(SootMethod method : sootClass.getMethods()) {
 			if(method.isAbstract()) {
-				System.out.println("[INFO] method : ["+ method +"]Îª³éÏó·½·¨£¬ÎŞ·¨·ÖÎö£¡£¡£¡");
+				System.out.println("[INFO] method : ["+ method +"]ä¸ºæŠ½è±¡æ–¹æ³•ï¼Œæ— æ³•åˆ†æï¼ï¼ï¼");
 				continue;
 			}
 			Body body = method.retrieveActiveBody();
 			for(Unit unit : body.getUnits()) {
 				if(lineNum == getLineNumber(unit)) {
 					if(unit instanceof JNopStmt) {
-						System.out.println(String.format("unit [%s] ÎªJNopStmt£¬²»×ö´¦Àí", unit));
+						System.out.println(String.format("unit [%s] ä¸ºJNopStmtï¼Œä¸åšå¤„ç†", unit));
 						continue;
 					}else if(method.getReturnType() instanceof VoidType && unit.toString().equals("return")) {
-						System.out.println("unit ["+ unit +"] Îªreturn£¬²»×ö´¦Àí");
+						System.out.println("unit ["+ unit +"] ä¸ºreturnï¼Œä¸åšå¤„ç†");
 						continue;
 					}
-					System.out.println("unit ["+ unit +"]¶ÔÓ¦Ô´´úÂëĞĞºÅ["+lineNum+"]");
+					System.out.println("unit ["+ unit +"]å¯¹åº”æºä»£ç è¡Œå·["+lineNum+"]");
 					Bean b = new Bean(sootClass, method, unit);
 					b.analysis();
-					//Àà¼ä·ÖÎö
+					//ç±»é—´åˆ†æ
 					betweenClzMethodList.addAll(b.otherClzMethodList);
 				}
 			}
@@ -242,7 +242,7 @@ public class MyMain {
 		int idx = 0;
 		for(Value v : list) {
 			if(v instanceof Constant) {
-//				System.out.println("²ÎÊı["+v.toString()+"]Îª³£Á¿£¬²»½øĞĞ·ÖÎö");
+//				System.out.println("å‚æ•°["+v.toString()+"]ä¸ºå¸¸é‡ï¼Œä¸è¿›è¡Œåˆ†æ");
 			}else {
 				l.add(idx);
 			}
@@ -283,7 +283,7 @@ public class MyMain {
 	}
 
 
-	//ĞèÒªÒıÓÃ¶îÍâjar°üÏîÄ¿¼¯ºÏ£¬Èç¹û»¹ÓĞÔÙ¼ÌĞøÌí¼Ó
+	//éœ€è¦å¼•ç”¨é¢å¤–jaråŒ…é¡¹ç›®é›†åˆï¼Œå¦‚æœè¿˜æœ‰å†ç»§ç»­æ·»åŠ 
 	public static List<String> DEAL_LIST = Arrays.asList(new String[] {"Mockito","Math","Time","Gson"});
 	
 	public static void setJar2Path(StringBuilder path, String projectId, String bugId)throws Exception{
@@ -292,7 +292,7 @@ public class MyMain {
 		}
 		File dir = new File(System.getProperty("user.home") + File.separator + "libs" + File.separator + projectId);
 		if(!dir.exists()) {
-			throw new Exception("[ERROR] ÏîÄ¿"+projectId+"ĞèÒª¶îÍâjar°ü£¬Çë½«jar°ü·ÅÖÁÄ¿Â¼£º" + dir.getAbsolutePath());
+			throw new Exception("[ERROR] é¡¹ç›®"+projectId+"éœ€è¦é¢å¤–jaråŒ…ï¼Œè¯·å°†jaråŒ…æ”¾è‡³ç›®å½•ï¼š" + dir.getAbsolutePath());
 		}
 		File[] jarList = dir.listFiles(new FilenameFilter() {
 			@Override

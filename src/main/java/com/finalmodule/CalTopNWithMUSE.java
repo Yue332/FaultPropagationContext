@@ -36,10 +36,10 @@ public class CalTopNWithMUSE extends FinalBean implements IFinalProcessModule {
 
     public void processOneBug(File outputFile, String projectPath, String project, String bug, int top)throws Exception{
         List<ElementMuse> museList = ElementMuse.buildList(project, bug);
-        // °´museµÄÖµµ¹ĞòÅÅ
+        // æŒ‰museçš„å€¼å€’åºæ’
         museList.sort(Comparator.comparingDouble(ElementMuse::getMuse).reversed());
         int realTop = Math.min(museList.size(), top);
-        // ½ØÈ¡Ç°topĞĞ
+        // æˆªå–å‰topè¡Œ
         museList = museList.subList(0, realTop);
         List<String> museElementList = new ArrayList<>(museList.size());
         museList.forEach(muse -> museElementList.add(muse.getElement()));

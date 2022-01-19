@@ -25,7 +25,7 @@ public class MoveFile extends LithiumSlicer implements IProcessModule {
 				.replaceAll("@:BUG_ID@", bugId)
 				.replaceAll("@:LITHIUM_SLICER_HOME@", config.getConfig(ConfigUtils.PRO_LITHIUM_SLICER_HOME_KEY)));
 		if(!logFilePath.exists()) {
-			throw new Exception("[ERROR] °æ"+logFilePath.getAbsolutePath()+"°ø not exists! please check lithium-slicer command execute success!");
+			throw new Exception("[ERROR] „Äê"+logFilePath.getAbsolutePath()+"„Äë not exists! please check lithium-slicer command execute success!");
 		}
 		List<File> lithiumFileList = getLithiumFileList(logFilePath);
 		if(lithiumFileList.size() == 0) {
@@ -34,7 +34,7 @@ public class MoveFile extends LithiumSlicer implements IProcessModule {
 		String srcFilePath;
 		for(File lithiumFile : lithiumFileList) {
 			srcFilePath = getSrcFullPathBylithiumFile(lithiumFile);
-			System.out.println("[INFO] copy file °æ"+lithiumFile+"°ø ----> °æ"+srcFilePath+"°ø");
+			System.out.println("[INFO] copy file „Äê"+lithiumFile+"„Äë ----> „Äê"+srcFilePath+"„Äë");
 //			FileUtils.copyFile(lithiumFile, new File(srcFilePath));
 		}
 	}
@@ -56,9 +56,9 @@ public class MoveFile extends LithiumSlicer implements IProcessModule {
 				}
 			}
 			if(!isStartWithPackage) {
-				throw new Exception("[ERROR] there is no 'package' in file °æ"+lithiumFile.getAbsolutePath()+"°ø cannot get src file path!");
+				throw new Exception("[ERROR] there is no 'package' in file „Äê"+lithiumFile.getAbsolutePath()+"„Äë cannot get src file path!");
 			}
-			System.out.println("[INFO] read °æ"+line+"°ø from file °æ"+lithiumFile.getAbsolutePath()+"°ø");
+			System.out.println("[INFO] read „Äê"+line+"„Äë from file „Äê"+lithiumFile.getAbsolutePath()+"„Äë");
 			line = line.substring(8).replaceAll(";", "").replaceAll("[.]", "/") + "/";
 			String srcPath = Utils.getSourcePathByProjectID(this.projectId);
 			return this.projectPath + File.separator + srcPath + File.separator + line + lithiumFile.getName().replace("lithium_", "");

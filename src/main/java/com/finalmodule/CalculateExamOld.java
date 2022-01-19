@@ -49,7 +49,7 @@ public class CalculateExamOld extends FinalBean implements IFinalProcessModule {
         for(String bugId : this.allBugIdArr){
             File buggyLineFile = new File(this.buggyLinePath.replaceAll("@:BUG_ID@", bugId));
             if(!buggyLineFile.exists()){
-                throw new Exception("[ERROR] ÎÄ¼ş["+buggyLineFile.getAbsolutePath()+"]²»´æÔÚ£¡");
+                throw new Exception("[ERROR] æ–‡ä»¶["+buggyLineFile.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
             }
             List<String> tmpList = org.apache.commons.io.FileUtils.readLines(buggyLineFile);
             List<BuggyLine> buggyLineBeanList = BuggyLine.getBuggyLineList(tmpList);
@@ -58,7 +58,7 @@ public class CalculateExamOld extends FinalBean implements IFinalProcessModule {
 
             File suspValueFile = new File(suspValueCsvPath.replaceAll("@:BUG_ID@", bugId));
             if(!suspValueFile.exists()){
-                throw new Exception("[ERROR] ÎÄ¼ş["+suspValueFile.getAbsolutePath()+"]²»´æÔÚ£¡");
+                throw new Exception("[ERROR] æ–‡ä»¶["+suspValueFile.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
             }
             List<String> suspValueList = FileUtils.readLines(suspValueFile, "utf-8");
             suspValueList.remove(0);
@@ -68,7 +68,7 @@ public class CalculateExamOld extends FinalBean implements IFinalProcessModule {
                 List<SuspValueBean> suspValueBeanList = SuspValueBean.getBeanList(suspValueList, i);
                 Collections.sort(suspValueBeanList);
                 int n = 0;
-//                System.out.println("[DEBUG] °´µÚ["+(i+1)+"]¸ö¹«Ê½µ¹ĞòÅÅĞò½á¹û(Ç°10):");
+//                System.out.println("[DEBUG] æŒ‰ç¬¬["+(i+1)+"]ä¸ªå…¬å¼å€’åºæ’åºç»“æœ(å‰10):");
 //                for(int idx = 0, length = Math.min(10, suspValueBeanList.size()); idx < length; idx ++) {
 //                	System.out.println("[DEBUG] " + suspValueBeanList.get(idx).getLine());
 //                }

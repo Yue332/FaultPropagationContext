@@ -1,9 +1,8 @@
 package com.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Constructor;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,23 +34,24 @@ public class Configer {
 	public void loadConfig()throws Exception{
 		File file = new File(configFilePath);
 		if(!file.exists()) {
-			throw new Exception("[ERROR] ÅäÖÃÎÄ¼ş ¡¾"+configFilePath+"¡¿ ²»´æÔÚ£¡");
+			throw new Exception("[ERROR] é…ç½®æ–‡ä»¶ ã€"+configFilePath+"ã€‘ ä¸å­˜åœ¨ï¼");
 		}
 		Properties pro = new Properties();
 		InputStream in = null;
 		try {
-        	in = new FileInputStream(file);
-        	pro.load(in);
+			in = new FileInputStream(file);
+			BufferedReader bf = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        	pro.load(bf);
         	this.configMap = (Map) pro;
         	if(this.configMap.size() == 0) {
-        		throw new Exception("[ERROR] ÅäÖÃÎÄ¼şÎŞÊôĞÔ£¡");
+        		throw new Exception("[ERROR] é…ç½®æ–‡ä»¶æ— å±æ€§ï¼");
         	}
-        	// ¶ÁÈ¡ÅäÖÃÀïµÄÄ£¿é£¬²¢ÊµÀı»¯
+        	// è¯»å–é…ç½®é‡Œçš„æ¨¡å—ï¼Œå¹¶å®ä¾‹åŒ–
         	String[] processModuleArray = configMap.get(ConfigUtils.PRO_PROCESS_MODULE_KEY).split(",");
         	for(String processModule : processModuleArray) {
-        		System.out.println("[DEBUG] ¿ªÊ¼¼ÓÔØ´¦ÀíÄ£¿é : " + processModule);
+        		System.out.println("[DEBUG] å¼€å§‹åŠ è½½å¤„ç†æ¨¡å— : " + processModule);
         		if("".equals(processModule)) {
-        			System.out.println("[INFO] ´¦ÀíÄ£¿éÎª¿Õ£¬²»¼ÓÔØ£¡");
+        			System.out.println("[INFO] å¤„ç†æ¨¡å—ä¸ºç©ºï¼Œä¸åŠ è½½ï¼");
         			continue;
         		}
 				Class clz = Class.forName(processModule);
@@ -61,35 +61,35 @@ public class Configer {
 				if(obj instanceof IProcessModule) {
 					processModuleList.add((IProcessModule) obj);
 				}else {
-					throw new Exception("´¦ÀíÄ£¿é ¡¾"+processModule+"¡¿ ±ØĞëÊµÏÖ½Ó¿ÚÀà£º " + IProcessModule.class.getName());
+					throw new Exception("å¤„ç†æ¨¡å— ã€"+processModule+"ã€‘ å¿…é¡»å®ç°æ¥å£ç±»ï¼š " + IProcessModule.class.getName());
 				}
         	}
-        	// ¶ÁÈ¡ÅäÖÃÎÄ¼şÖĞµÄ×îÖÕÄ£¿é£¨ËùÓĞÄ£¿éÖ´ĞĞ½áÊøºó£¬²ÅÖ´ĞĞµÄÄ£¿é£©£¬²¢ÊµÀı»¯
+        	// è¯»å–é…ç½®æ–‡ä»¶ä¸­çš„æœ€ç»ˆæ¨¡å—ï¼ˆæ‰€æœ‰æ¨¡å—æ‰§è¡Œç»“æŸåï¼Œæ‰æ‰§è¡Œçš„æ¨¡å—ï¼‰ï¼Œå¹¶å®ä¾‹åŒ–
         	String[] finalProcessModuleArray = configMap.get(ConfigUtils.PRO_FINAL_PROCESS_MODULE_KEY).split(",");
         	for(String module : finalProcessModuleArray) {
         		if("".equals(module)) {
         			continue;
         		}
-        		System.out.println("[DEBUG] ¿ªÊ¼¼ÓÔØ×îÖÕ´¦ÀíÄ£¿é£º" + module);
+        		System.out.println("[DEBUG] å¼€å§‹åŠ è½½æœ€ç»ˆå¤„ç†æ¨¡å—ï¼š" + module);
         		Class clz = Class.forName(module);
         		Object obj = clz.newInstance();
         		if(obj instanceof IFinalProcessModule) {
         			this.finalProcessModuleList.add((IFinalProcessModule) obj);
         		}else {
-        			throw new Exception("´¦ÀíÄ£¿é ¡¾"+module+"¡¿ ±ØĞëÊµÏÖ½Ó¿ÚÀà£º " + IFinalProcessModule.class.getName());
+        			throw new Exception("å¤„ç†æ¨¡å— ã€"+module+"ã€‘ å¿…é¡»å®ç°æ¥å£ç±»ï¼š " + IFinalProcessModule.class.getName());
         		}
         	}
         	
-        	// ¶ÁÈ¡ÅäÖÃ»ò´Ó4jÖĞÉú³ÉĞèÒª´¦ÀíµÄbugid
+        	// è¯»å–é…ç½®æˆ–ä»4jä¸­ç”Ÿæˆéœ€è¦å¤„ç†çš„bugid
         	String projectId = configMap.get(ConfigUtils.PRO_PROJECT_ID_KEY);
-        	if(!projectId.contains(",")) {// ÏîÄ¿IDÈç¹û°üº¬¶ººÅ£¬ËµÃ÷ÊÇ¶à¸öÏîÄ¿£¬´ËÊ±²»¼ÓÔØbugid
+        	if(!projectId.contains(",")) {// é¡¹ç›®IDå¦‚æœåŒ…å«é€—å·ï¼Œè¯´æ˜æ˜¯å¤šä¸ªé¡¹ç›®ï¼Œæ­¤æ—¶ä¸åŠ è½½bugid
         		this.bugIdArr = configMap.get(ConfigUtils.PRO_BUG_ID_KEY).split(",");
 //        	System.out.println("[DEBUG] bugidArr = " + Arrays.toString(this.bugIdArr));
         		if(this.bugIdArr.length == 0 || "".equals(this.bugIdArr[0])) {
-        			System.out.println("[INFO] ÅäÖÃÎÄ¼şÖĞÎ´ÅäÖÃBUG_ID£¬Ê¹ÓÃÈ«²¿bugid");
+        			System.out.println("[INFO] é…ç½®æ–‡ä»¶ä¸­æœªé…ç½®BUG_IDï¼Œä½¿ç”¨å…¨éƒ¨bugid");
         			String d4jHome = configMap.get(ConfigUtils.PRO_D4J_HOME_KEY);
         			this.bugIdArr = ConfigUtils.getAllBugIdByD4J(d4jHome, projectId);
-        			System.out.println("[INFO] ÏîÄ¿¡¾"+projectId+"¡¿ÖĞ°üº¬bug£º" + Arrays.toString(this.bugIdArr));
+        			System.out.println("[INFO] é¡¹ç›®ã€"+projectId+"ã€‘ä¸­åŒ…å«bugï¼š" + Arrays.toString(this.bugIdArr));
         		}
         		
         	}

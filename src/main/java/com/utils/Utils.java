@@ -218,12 +218,12 @@ public class Utils {
 	public static List<SortBean> getSuspValueListAfterSort(String suspValuePath, int funcIdx)throws Exception{
 		File suspValueFile = new File(suspValuePath);
 		if(!suspValueFile.exists()) {
-			throw new Exception("[ERROR] ÎÄ¼ş¡¾"+suspValueFile.getName()+"¡¿²»´æÔÚ£¬Çë½«ÎÄ¼ş·ÅÈëÄ¿Â¼¡¾"+suspValueFile.getParent()+"¡¿ÖĞºóÖØÊÔ£¡");
+			throw new Exception("[ERROR] æ–‡ä»¶ã€"+suspValueFile.getName()+"ã€‘ä¸å­˜åœ¨ï¼Œè¯·å°†æ–‡ä»¶æ”¾å…¥ç›®å½•ã€"+suspValueFile.getParent()+"ã€‘ä¸­åé‡è¯•ï¼");
 		}
 		List<String> suspValueStrList = FileUtils.readLines(suspValueFile);
 		suspValueStrList.remove(0);
 		int size = suspValueStrList.size();
-		// °´»³ÒÉ¶Èµ¹ĞòÅÅĞò
+		// æŒ‰æ€€ç–‘åº¦å€’åºæ’åº
 		List<SortBean> list = new ArrayList<SortBean>(size);
 		for(String s : suspValueStrList) {
 			list.add(new SortBean(s, funcIdx + 1));
@@ -267,7 +267,7 @@ public class Utils {
 		return list.toArray(tmp);
 	}
 
-	//½»¼¯(×¢Òâ½á¹û¼¯ÖĞÈôÊ¹ÓÃLinkedListÌí¼Ó£¬ÔòĞèÒªÅĞ¶ÏÊÇ·ñ°üº¬¸ÃÔªËØ£¬·ñÔòÆäÖĞ»á°üº¬ÖØ¸´µÄÔªËØ)
+	//äº¤é›†(æ³¨æ„ç»“æœé›†ä¸­è‹¥ä½¿ç”¨LinkedListæ·»åŠ ï¼Œåˆ™éœ€è¦åˆ¤æ–­æ˜¯å¦åŒ…å«è¯¥å…ƒç´ ï¼Œå¦åˆ™å…¶ä¸­ä¼šåŒ…å«é‡å¤çš„å…ƒç´ )
 	public static String[] intersect(String[] arr1, String[] arr2){
 		List<String> l = new LinkedList<>();
 		Set<String> common = new HashSet<>();

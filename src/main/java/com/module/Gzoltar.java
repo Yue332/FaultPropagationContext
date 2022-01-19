@@ -25,7 +25,7 @@ public class Gzoltar extends Bean implements IProcessModule{
 				.replaceAll("@:OUTPUT_DIR@", this.outputDir)
 				.replaceAll("@:TOOL@", this.tool));
 		if(!"0".equals(msg[0])) {
-			//gzoltar Ö´ĞĞ×îºóÑ¹ËõÃüÁîÊ±Ò»¶¨»á±¨´í£¬ÕâÀïÖ»ÊÇÌáÊ¾³öÀ´
+			//gzoltar æ‰§è¡Œæœ€åå‹ç¼©å‘½ä»¤æ—¶ä¸€å®šä¼šæŠ¥é”™ï¼Œè¿™é‡Œåªæ˜¯æç¤ºå‡ºæ¥
 			System.out.println("[WARNING] gzoltar job.sh execute fail!");
 //			throw new Exception("[ERROR] gzoltar job.sh execute fail!");
 		}

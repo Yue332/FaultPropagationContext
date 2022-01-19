@@ -26,16 +26,16 @@ public class MFR extends FinalBean implements IFinalProcessModule {
                     File buggyMethod = new File(System.getProperty("user.home") + File.separator +
                             "BuggyMethod" + File.separator + projectId + "-" + bugId + ".buggy.methods");
                     if(!buggyMethod.exists()){
-//                        throw new Exception("bugid["+bugId+"]ÎÄ¼ş["+buggyMethod.getAbsolutePath()+"]²»´æÔÚ£¡");
-                    	System.out.println("[WARNING] project["+projectId+"]bugid["+bugId+"]func["+func+"] buggyMethodÎÄ¼ş²»´æÔÚ£¡");
-                    	info.append("project["+projectId+"]bugid["+bugId+"]func["+func+"]ÎÄ¼ş["+buggyMethod.getAbsolutePath()+"]²»´æÔÚ£¡").append("\r\n");
+//                        throw new Exception("bugid["+bugId+"]æ–‡ä»¶["+buggyMethod.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
+                    	System.out.println("[WARNING] project["+projectId+"]bugid["+bugId+"]func["+func+"] buggyMethodæ–‡ä»¶ä¸å­˜åœ¨ï¼");
+                    	info.append("project["+projectId+"]bugid["+bugId+"]func["+func+"]æ–‡ä»¶["+buggyMethod.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼").append("\r\n");
                     	continue;
                     }
                     List<String> buggyMethodList = FileUtils.readLines(buggyMethod, "utf-8");
                     buggyMethodList.remove(0);
                     File suspMethod = new File(System.getProperty("user.home") + File.separator + "methodSuspValue" + File.separator + projectId + "-" + bugId + "-" + func + "-method-suspValue.csv");
                     if(!suspMethod.exists()){
-                        throw new Exception("methodSuspValueÎÄ¼ş["+suspMethod.getAbsolutePath()+"]²»´æÔÚ£¡");
+                        throw new Exception("methodSuspValueæ–‡ä»¶["+suspMethod.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
                     }
                     List<String> suspMethodList = FileUtils.readLines(suspMethod, "utf-8");
                     suspMethodList.remove(0);
@@ -52,12 +52,12 @@ public class MFR extends FinalBean implements IFinalProcessModule {
                         }
                     }
                     if(nList.size() == 0){
-                    	info.append("project["+projectId+"]bugid["+bugId+"]func["+func+"]buggyMethodÎª¿Õ£¡").append("\r\n");
+                    	info.append("project["+projectId+"]bugid["+bugId+"]func["+func+"]buggyMethodä¸ºç©ºï¼").append("\r\n");
                     	continue;
-//                        throw new Exception("¼ÆËã³ön=0£¬ÎÄ¼ş["+suspMethod.getAbsolutePath()+"]ÖĞÎ´ÕÒµ½ÓëbuggymethodÎÄ¼ş["+buggyMethod.getAbsolutePath()+"]¶ÔÓ¦µÄÖµ");
+//                        throw new Exception("è®¡ç®—å‡ºn=0ï¼Œæ–‡ä»¶["+suspMethod.getAbsolutePath()+"]ä¸­æœªæ‰¾åˆ°ä¸buggymethodæ–‡ä»¶["+buggyMethod.getAbsolutePath()+"]å¯¹åº”çš„å€¼");
                     }
                     if(nList.size() != faultList.size()){
-                        throw new Exception("nµÄÊıÁ¿ÓëfaultµÄÊıÁ¿²»Ò»ÖÂ£¡");
+                        throw new Exception("nçš„æ•°é‡ä¸faultçš„æ•°é‡ä¸ä¸€è‡´ï¼");
                     }
                     BigDecimal sum = new BigDecimal("0");
                     System.out.println("nlist:" + nList.toString() + "\r\n faultList:" + faultList.toString());

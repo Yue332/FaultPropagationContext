@@ -74,21 +74,21 @@ public class LithiumSlicer extends Bean implements IProcessModule{
        File[] flist = file1.listFiles();   
        for (File f : flist) {  
            if(f.isFile()){  
-               copyFile2(f.getPath(),f2 + File.separator + f.getName()); //µ÷ÓÃ¸´ÖÆÎÄ¼şµÄ·½·¨  
-//               System.out.println("Ô­Â·¾¶["+f.getPath()+"] ±»¸´ÖÆÂ·¾¶["+f2+"/"+f.getName()+"]");
+               copyFile2(f.getPath(),f2 + File.separator + f.getName()); //è°ƒç”¨å¤åˆ¶æ–‡ä»¶çš„æ–¹æ³•  
+//               System.out.println("åŸè·¯å¾„["+f.getPath()+"] è¢«å¤åˆ¶è·¯å¾„["+f2+"/"+f.getName()+"]");
            }else if(f.isDirectory()){  
-               copyFile1(f.getPath(),f2 + File.separator + f.getName()); //µ÷ÓÃ¸´ÖÆÎÄ¼ş¼ĞµÄ·½·¨ 
-//               System.out.println("Ô­Â·¾¶["+f.getPath()+"] ±»¸´ÖÆÂ·¾¶["+f2+"/"+f.getName()+"]");
+               copyFile1(f.getPath(),f2 + File.separator + f.getName()); //è°ƒç”¨å¤åˆ¶æ–‡ä»¶å¤¹çš„æ–¹æ³• 
+//               System.out.println("åŸè·¯å¾„["+f.getPath()+"] è¢«å¤åˆ¶è·¯å¾„["+f2+"/"+f.getName()+"]");
            }  
        }      
 	 }  
 	 
 	   /**
-	    * ¸´ÖÆÎÄ¼ş¼Ğ
+	    * å¤åˆ¶æ–‡ä»¶å¤¹
 	    * @throws IOException 
 	    */
    public static void copyFile1(String f1,String f2) throws IOException{
-       //´´½¨ÎÄ¼ş¼Ğ
+       //åˆ›å»ºæ–‡ä»¶å¤¹
        File file=new File(f2);
        if(!file.exists()){
            file.mkdirs();
@@ -97,7 +97,7 @@ public class LithiumSlicer extends Bean implements IProcessModule{
    }
 	     
    /** 
-    * ¸´ÖÆÎÄ¼ş
+    * å¤åˆ¶æ–‡ä»¶
    * @throws IOException 
     */  
    public static void copyFile2(String f1, String f2) throws IOException {  

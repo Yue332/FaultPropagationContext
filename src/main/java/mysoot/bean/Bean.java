@@ -19,8 +19,8 @@ public class Bean {
 	private SootClass sootClass;
 	private SootMethod sootMethod;
 	private Unit unit;
-	private Map<SootMethod, List<Value>> map; // ĞèÒª·ÖÎöµÄ·½·¨-²ÎÊıÁĞ±í
-	private List<Value> memberParamList;// ³ÉÔ±±äÁ¿
+	private Map<SootMethod, List<Value>> map; // éœ€è¦åˆ†æçš„æ–¹æ³•-å‚æ•°åˆ—è¡¨
+	private List<Value> memberParamList;// æˆå‘˜å˜é‡
 	public List<SootMethod> otherClzMethodList;
 	
 	public Bean(SootClass sootClass, SootMethod sootMethod, Unit unit) {
@@ -75,13 +75,13 @@ public class Bean {
 	}
 	
 	public void analysis() {
-		System.out.println(unit + "Îª" + unit.getClass().getName() + "Óï¾ä");
+		System.out.println(unit + "ä¸º" + unit.getClass().getName() + "è¯­å¥");
 		if(this.unit instanceof JAssignStmt) {
 			analysisJAssignStmt();
 		}else if(this.unit instanceof JReturnStmt) {
 			analysisJReturnStmt();
 		}else if(this.unit instanceof JIdentityStmt) {
-			// ³ÉÔ±±äÁ¿
+			// æˆå‘˜å˜é‡
 			analysisJIdentityStmt();
 		}else if(this.unit instanceof JInvokeStmt) {
 			analysisJInvokeStmt();
@@ -93,7 +93,7 @@ public class Bean {
 		List<ValueBox> useBoxList = stmt.getUseBoxes();
 		for(ValueBox useBox : useBoxList) {
 			Value v = useBox.getValue();
-			if(v instanceof ThisRef) {// ±¾ÀàÊµÀı»¯¶ÔÏó
+			if(v instanceof ThisRef) {// æœ¬ç±»å®ä¾‹åŒ–å¯¹è±¡
 				continue;
 			}
 			
@@ -108,11 +108,11 @@ public class Bean {
 	
 	private void analysisJAssignStmt() {
 		JAssignStmt stmt = (JAssignStmt) unit;
-		if(!stmt.containsInvokeExpr()) {// ²»µ÷ÓÃ·½·¨
+		if(!stmt.containsInvokeExpr()) {// ä¸è°ƒç”¨æ–¹æ³•
 			List<ValueBox> boxList = stmt.getUseAndDefBoxes();
 			for(ValueBox box : boxList) {
 				Value v = box.getValue();
-				if(v instanceof JInstanceFieldRef) { // ³ÉÔ±±äÁ¿
+				if(v instanceof JInstanceFieldRef) { // æˆå‘˜å˜é‡
 					MyMain.addList(this.memberParamList, v);
 					continue;
 				}
@@ -132,7 +132,7 @@ public class Bean {
 		JReturnStmt stmt = (JReturnStmt) unit;
 		Value v = stmt.getOpBox().getValue();
 		if(v instanceof Constant) {
-			System.out.println("Óï¾ä ["+unit+"] ·µ»ØµÄÎª³£Á¿£¬²»·ÖÎö");
+			System.out.println("è¯­å¥ ["+unit+"] è¿”å›çš„ä¸ºå¸¸é‡ï¼Œä¸åˆ†æ");
 			return;
 		}
 
@@ -143,7 +143,7 @@ public class Bean {
 			for(ValueBox defBox : defBoxList) {
 				Value value = defBox.getValue();
 				if(value.equals(v)) {
-					System.out.println("±äÁ¿["+ value +"]ÔÚ["+ u +"]±»¶¨Òå¡£Ô´´úÂëĞĞºÅ["+MyMain.getLineNumber(u)+"]");
+					System.out.println("å˜é‡["+ value +"]åœ¨["+ u +"]è¢«å®šä¹‰ã€‚æºä»£ç è¡Œå·["+MyMain.getLineNumber(u)+"]");
 					defUnitList.add(u);
 				}
 			}
@@ -151,7 +151,7 @@ public class Bean {
 			for(ValueBox useBox : useBoxList) {
 				Value value = useBox.getValue();
 				if(value.equals(v)) {
-					System.out.println("±äÁ¿["+ value +"]ÔÚ["+ u +"]±»Ê¹ÓÃ¡£Ô´´úÂëĞĞºÅ["+MyMain.getLineNumber(u)+"]");
+					System.out.println("å˜é‡["+ value +"]åœ¨["+ u +"]è¢«ä½¿ç”¨ã€‚æºä»£ç è¡Œå·["+MyMain.getLineNumber(u)+"]");
 					this.addMap(this.sootMethod, value);
 				}
 			}
@@ -165,16 +165,16 @@ public class Bean {
 				}else if(value instanceof JimpleLocal) {
 					JimpleLocal j = (JimpleLocal) value;
 					if(j.getType().toString().equals(this.sootClass.getType().toString())) {
-						System.out.println("±äÁ¿["+ j +"]Îª¸ÃÀàÊµÀı»¯¶ÔÏó£¬²»½øĞĞ·ÖÎö");
+						System.out.println("å˜é‡["+ j +"]ä¸ºè¯¥ç±»å®ä¾‹åŒ–å¯¹è±¡ï¼Œä¸è¿›è¡Œåˆ†æ");
 						continue;
 					}
 					this.addMap(this.sootMethod, value);
 				}else if(value instanceof JInstanceFieldRef) {
 					JInstanceFieldRef j = (JInstanceFieldRef) value;
-					System.out.println("±äÁ¿["+ j +"]Îª³ÉÔ±±äÁ¿£¬ÁíĞĞ·ÖÎö");
+					System.out.println("å˜é‡["+ j +"]ä¸ºæˆå‘˜å˜é‡ï¼Œå¦è¡Œåˆ†æ");
 					MyMain.addList(memberParamList, value);
 				}else {
-					System.out.println("±äÁ¿ÀàĞÍ["+ value.getClass().getName() +"]Î´ÊµÏÖ´¦ÀíÂß¼­");
+					System.out.println("å˜é‡ç±»å‹["+ value.getClass().getName() +"]æœªå®ç°å¤„ç†é€»è¾‘");
 				}
 			}
 		}
@@ -194,24 +194,24 @@ public class Bean {
 				this.addMap(sootMethod, v);
 			}
 		}
-		// µ÷ÓÃ·½·¨
+		// è°ƒç”¨æ–¹æ³•
 		SootMethod callMethod = exp.getMethod();
-		// ±¾ÀàµÄ·½·¨²Å´¦Àí
+		// æœ¬ç±»çš„æ–¹æ³•æ‰å¤„ç†
 		if(!callMethod.getDeclaringClass().equals(this.sootClass)) {
-			System.out.println("Óï¾ä["+unit.toString()+"]µ÷ÓÃÁË·Ç±¾ÀàµÄ·½·¨£¬·ÅÈëÀà¼ämap");
+			System.out.println("è¯­å¥["+unit.toString()+"]è°ƒç”¨äº†éæœ¬ç±»çš„æ–¹æ³•ï¼Œæ”¾å…¥ç±»é—´map");
 			// TODO:
 			this.otherClzMethodList.add(callMethod);
 			return;
 		}
 		if(callMethod.isAbstract()) {
-			System.out.println("·½·¨["+ callMethod +"]Îª³éÏó·½·¨£¬²»·ÖÎö");
+			System.out.println("æ–¹æ³•["+ callMethod +"]ä¸ºæŠ½è±¡æ–¹æ³•ï¼Œä¸åˆ†æ");
 			return;
 		}
 		List<Integer> argsIdxList = new ArrayList<>();
 		int idx = 0;
 		for(Value v : argList) {
 			if(v instanceof Constant) {
-				System.out.println("µ÷ÓÃ["+ callMethod +"]·½·¨´«ÈëµÄ²ÎÊı["+ v +"]Îª³£Á¿£¬²»·ÖÎö");
+				System.out.println("è°ƒç”¨["+ callMethod +"]æ–¹æ³•ä¼ å…¥çš„å‚æ•°["+ v +"]ä¸ºå¸¸é‡ï¼Œä¸åˆ†æ");
 				idx ++;
 				continue;
 			}
@@ -228,7 +228,7 @@ public class Bean {
 			}
 		}
 		if(paramNamesTag == null) {
-			System.out.println("[£¡£¡£¡ERROR£¡£¡£¡] ·½·¨["+ callMethod +"]²»°üº¬ParamNamesTag±êÇ©£¬ÎŞ·¨·ÖÎö£¡");
+			System.out.println("[ï¼ï¼ï¼ERRORï¼ï¼ï¼] æ–¹æ³•["+ callMethod +"]ä¸åŒ…å«ParamNamesTagæ ‡ç­¾ï¼Œæ— æ³•åˆ†æï¼");
 			return;
 		}
 		List<String> paramNameList = paramNamesTag.getNames();
@@ -240,7 +240,7 @@ public class Bean {
 				if(v instanceof ParameterRef) {
 					if(argsIdxList.contains(new Integer(i))) {
 						Value def = u.getDefBoxes().get(0).getValue();
-						System.out.println("·½·¨["+ callMethod +"]µÄµÚ["+(i + 1)+"]¸ö²ÎÊıÎª["+def.toString()+"]("+def.getType().toString()+")");
+						System.out.println("æ–¹æ³•["+ callMethod +"]çš„ç¬¬["+(i + 1)+"]ä¸ªå‚æ•°ä¸º["+def.toString()+"]("+def.getType().toString()+")");
 						this.addMap(callMethod, def);
 					}
 					i ++;

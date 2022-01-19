@@ -28,13 +28,13 @@ public class CalculateTopN extends FinalBean implements IFinalProcessModule {
 				int sum = 0;
 				File buggyLineFile = new File(buggyLineFilePath.replaceAll("@:BUG_ID@", bugId));
 				if(!buggyLineFile.exists()) {
-					throw new Exception("[ERROR] ÎÄ¼ş¡¾"+buggyLineFile.getName()+"¡¿²»´æÔÚ£¬Çë½«ÎÄ¼ş·ÅÈëÄ¿Â¼¡¾"+buggyLineFile.getParent()+"¡¿ÖĞºóÖØÊÔ£¡");
+					throw new Exception("[ERROR] æ–‡ä»¶ã€"+buggyLineFile.getName()+"ã€‘ä¸å­˜åœ¨ï¼Œè¯·å°†æ–‡ä»¶æ”¾å…¥ç›®å½•ã€"+buggyLineFile.getParent()+"ã€‘ä¸­åé‡è¯•ï¼");
 				}
 				List<SortBean> list = Utils.getSuspValueListAfterSort(suspValueFilePath.replaceAll("@:BUG_ID@", bugId), i);
 				int size = list.size();
 				int topNsize = Math.min(size, top);
 				if(size < top) {
-					System.out.println("[INFO] " + buggyLineFile.getName() + "ÖĞÓï¾äµÄĞĞÊı("+size+")Ğ¡ÓÚtopN("+top+")");
+					System.out.println("[INFO] " + buggyLineFile.getName() + "ä¸­è¯­å¥çš„è¡Œæ•°("+size+")å°äºtopN("+top+")");
 				}
 				List<String> topNList = new ArrayList<String>(topNsize);
 				List<String> topNOnlyElementList = new ArrayList<String>(topNsize);
@@ -42,7 +42,7 @@ public class CalculateTopN extends FinalBean implements IFinalProcessModule {
 					topNList.add(list.get(j).toString());
 					topNOnlyElementList.add(list.get(j).toString().split(",")[0]);
 				}
-				System.out.println("[INFO] bug¡¾" + bugId + "¡¿¹«Ê½¡¾" + funcArr[i] + "¡¿µ¹ĞğÅÅĞòÇ°¡¾" + topNsize + "¡¿°üº¬µÄÓï¾ä£º " + topNList.toString());
+				System.out.println("[INFO] bugã€" + bugId + "ã€‘å…¬å¼ã€" + funcArr[i] + "ã€‘å€’å™æ’åºå‰ã€" + topNsize + "ã€‘åŒ…å«çš„è¯­å¥ï¼š " + topNList.toString());
 				List<String> tmpList = org.apache.commons.io.FileUtils.readLines(buggyLineFile);
 				List<BuggyLine> buggyLineBeanList = BuggyLine.getBuggyLineList(tmpList);
 				List<String> buggyLineList = BuggyLine.getAllElements(buggyLineBeanList);
@@ -53,10 +53,10 @@ public class CalculateTopN extends FinalBean implements IFinalProcessModule {
 //					buggyLineList.remove(j);
 //					buggyLineList.add(j, newBuggyLine);
 //				}
-				System.out.println("[INFO] " + buggyLineFile.getName() + "°üº¬µÄbugyylineÎª£º" + buggyLineList.toString());
+				System.out.println("[INFO] " + buggyLineFile.getName() + "åŒ…å«çš„bugyylineä¸ºï¼š" + buggyLineList.toString());
 				for(String buggyLine : buggyLineList) {
 					if(topNOnlyElementList.contains(buggyLine)) {
-						System.out.println("[INFO] topNÖĞ°üº¬buggyLine:" + buggyLine);
+						System.out.println("[INFO] topNä¸­åŒ…å«buggyLine:" + buggyLine);
 						sum += 1;
 					}
 				}
@@ -64,7 +64,7 @@ public class CalculateTopN extends FinalBean implements IFinalProcessModule {
 				FileUtils.writeStringToFile(outputFile, projectId+"-"+bugId + "," + funcArr[i] + "," + topNsize + "," + (sum > 0 ? "1" : "0") + "," + sum + "\r\n", true);
 				System.out.println("--------------------");
 			}
-			System.out.println("[INFO] ¹«Ê½¡¾"+funcArr[i]+"¡¿top¡¾"+top+"¡¿sum=¡¾"+funcSum+"¡¿");
+			System.out.println("[INFO] å…¬å¼ã€"+funcArr[i]+"ã€‘topã€"+top+"ã€‘sum=ã€"+funcSum+"ã€‘");
 		}
 		
 		

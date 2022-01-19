@@ -24,11 +24,11 @@ public class MakeLabel extends Bean implements IProcessModule {
 	public void process(Runtime runTime) throws Exception {
 		File sprctra = new File(sprctraPath);
 		if(!sprctra.exists()) {
-			throw new Exception("[ERROR] Î´ÕÒµ½¡¾"+sprctra.getParent()+"¡¿£¬Çë½«gzoltarÊä³öµÄÆµÆ×¼°Óï¾ä(spectraÎÄ¼şºÍmatrix)¸´ÖÆµ½¸ÃÄ¿Â¼ÏÂ");
+			throw new Exception("[ERROR] æœªæ‰¾åˆ°ã€"+sprctra.getParent()+"ã€‘ï¼Œè¯·å°†gzoltarè¾“å‡ºçš„é¢‘è°±åŠè¯­å¥(spectraæ–‡ä»¶å’Œmatrix)å¤åˆ¶åˆ°è¯¥ç›®å½•ä¸‹");
 		}
 		File buggyLines = new File(this.buggyLinePath);
 		if(!buggyLines.exists()) {
-			throw new Exception("[ERROR] Î´ÕÒµ½¡¾"+buggyLines.getParent()+"¡¿£¬Çë½«get_buggy_lineÊä³öµÄÎÄ¼ş(projectId-bugId.buggy.lines)¸´ÖÆµ½¸ÃÄ¿Â¼ÏÂ");
+			throw new Exception("[ERROR] æœªæ‰¾åˆ°ã€"+buggyLines.getParent()+"ã€‘ï¼Œè¯·å°†get_buggy_lineè¾“å‡ºçš„æ–‡ä»¶(projectId-bugId.buggy.lines)å¤åˆ¶åˆ°è¯¥ç›®å½•ä¸‹");
 		}
         List<String> spectra = FileUtils.readLines(sprctra,"UTF-8");
         List<String> buggyLine = FileUtils.readLines(buggyLines,"UTF-8");
@@ -38,7 +38,7 @@ public class MakeLabel extends Bean implements IProcessModule {
         	String temp2 = StringUtils.substringBefore(StringUtils.substringAfter(buggyLine.get(i),"#"),"#");
         	newBuggyLine.add(temp1+"#"+temp2);
         }
-        System.out.println("bugId" + super.bugId + "´íÎó´úÂëĞĞ£º" + newBuggyLine.toString());
+        System.out.println("bugId" + super.bugId + "é”™è¯¯ä»£ç è¡Œï¼š" + newBuggyLine.toString());
         spectra = compare(spectra, newBuggyLine);
         writeToFile(spectra);
 	}
@@ -50,18 +50,18 @@ public class MakeLabel extends Bean implements IProcessModule {
 		this.outputPath = projectPath + File.separator + "label";
 	}
 
-    //±È½Ï²¢Ìí¼Ó±êÇ©
+    //æ¯”è¾ƒå¹¶æ·»åŠ æ ‡ç­¾
     public List<String> compare(List<String> spectra,List<String> newBuggyLine){
-        System.out.println("[INFO] Æ¥Åä´úÂëĞĞ£º");
+        System.out.println("[INFO] åŒ¹é…ä»£ç è¡Œï¼š");
         for(int i = 0; i < spectra.size(); i++){
             for(int j = 0; j < newBuggyLine.size(); j++){
-                //ÅĞ¶Ï×Ö·û´®ÊÇ·ñÆ¥Åä,Æ¥Åä±ê¼Ç1
+                //åˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦åŒ¹é…,åŒ¹é…æ ‡è®°1
                 if(spectra.get(i).equals(newBuggyLine.get(j))){
                     System.out.println(spectra.get(i));
                     spectra.set(i,spectra.get(i)+",1");
                     break;
                 }
-                //Èç¹ûÑ­»·µ½ newBuggyLineµÄ×îºóÒ»¸ö»¹Î´Æ¥Åä,±ê¼Ç0
+                //å¦‚æœå¾ªç¯åˆ° newBuggyLineçš„æœ€åä¸€ä¸ªè¿˜æœªåŒ¹é…,æ ‡è®°0
                 if(j == (newBuggyLine.size()-1)){
                     spectra.set(i,spectra.get(i)+",0");
                 }
@@ -70,7 +70,7 @@ public class MakeLabel extends Bean implements IProcessModule {
         return spectra;
     }
 
-    //Ğ´³öµ½CSVÎÄ¼ş
+    //å†™å‡ºåˆ°CSVæ–‡ä»¶
     public void writeToFile(List<String> spectra) throws Exception {
     	File path = new File(this.outputPath);
     	if(!path.exists()) {

@@ -17,17 +17,17 @@ public class metricUtils {
 
         if (metric.equals("EXAM")){
             /*
-            int count = 0;  //²é¿´µ½´ï´íÎóÓï¾äÇ°,ÓĞ¶àÉÙÓï¾ä
-            int label = 0;  //ÅĞ¶ÏÊÇ·ñÊÇ´íÎóÓï¾ä
-            double fault_susValue = 0;  //Èç¹ûÊÇ´íÎóÓï¾ä,»ñÈ¡Æä»³ÒÉÖµ
-            int sameSusValue_count = 0; //ÏàÍ¬»³ÒÉÖµ,ÓĞ¶àÉÙÓï¾ä
-            int sameSusValueAndLabel_count =0;  //ÏàÍ¬»³ÒÉÖµºÍ±êÇ©,ÓĞ¶àÉÙÓï¾ä
-            double best = 0.0 ,worse = 0.0;     //×îÓÅºÍ×î²î
-            boolean flag = true;    //ÅĞ¶ÏÊÇ·ñµÚÒ»´ÎÓöµ½
+            int count = 0;  //æŸ¥çœ‹åˆ°è¾¾é”™è¯¯è¯­å¥å‰,æœ‰å¤šå°‘è¯­å¥
+            int label = 0;  //åˆ¤æ–­æ˜¯å¦æ˜¯é”™è¯¯è¯­å¥
+            double fault_susValue = 0;  //å¦‚æœæ˜¯é”™è¯¯è¯­å¥,è·å–å…¶æ€€ç–‘å€¼
+            int sameSusValue_count = 0; //ç›¸åŒæ€€ç–‘å€¼,æœ‰å¤šå°‘è¯­å¥
+            int sameSusValueAndLabel_count =0;  //ç›¸åŒæ€€ç–‘å€¼å’Œæ ‡ç­¾,æœ‰å¤šå°‘è¯­å¥
+            double best = 0.0 ,worse = 0.0;     //æœ€ä¼˜å’Œæœ€å·®
+            boolean flag = true;    //åˆ¤æ–­æ˜¯å¦ç¬¬ä¸€æ¬¡é‡åˆ°
 
             for (int i = 0; i < data.size(); i++) {
                 label = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
-                if(label != 1){ //´íÎóÓï¾ä
+                if(label != 1){ //é”™è¯¯è¯­å¥
                     count++;
                 }
                 if(label == 1 && flag == true){
@@ -37,7 +37,7 @@ public class metricUtils {
                     for (int j = i; j < data.size(); j++) {
                         double temp = Double.parseDouble(data.get(j).split("\\,")[col]);
                         //double temp = Double.parseDouble(StringUtils.substringBefore(data.get(j),","));
-                        if(temp == fault_susValue){ //»³ÒÉÖµÏàÍ¬
+                        if(temp == fault_susValue){ //æ€€ç–‘å€¼ç›¸åŒ
                             sameSusValue_count ++;
                             int tempLabel =  Integer.parseInt(StringUtils.substringAfterLast(data.get(j),","));
                             if(tempLabel == 1){
@@ -45,7 +45,7 @@ public class metricUtils {
                             }
                         }
                     }
-                    break; // µ½´ïµÚÒ»¸ö´íÎóÓï¾äÎ»ÖÃ,Ìø³ö
+                    break; // åˆ°è¾¾ç¬¬ä¸€ä¸ªé”™è¯¯è¯­å¥ä½ç½®,è·³å‡º
                 }
             }
             best = (float)count / data.size();
@@ -53,11 +53,11 @@ public class metricUtils {
             score[0] = best;
             score[1] = worse;
             */
-            int count = 0;  //²é¿´µ½´ï´íÎóÓï¾äÇ°,ÓĞ¶àÉÙÓï¾ä
-            int label = 0;  //ÅĞ¶ÏÊÇ·ñÊÇ´íÎóÓï¾ä
+            int count = 0;  //æŸ¥çœ‹åˆ°è¾¾é”™è¯¯è¯­å¥å‰,æœ‰å¤šå°‘è¯­å¥
+            int label = 0;  //åˆ¤æ–­æ˜¯å¦æ˜¯é”™è¯¯è¯­å¥
             for (int i = 0; i < data.size(); i++) {
                 label = Integer.parseInt(StringUtils.substringAfterLast(data.get(i),","));
-                if(label != 1) count++; //´íÎóÓï¾ä
+                if(label != 1) count++; //é”™è¯¯è¯­å¥
                 if(label == 1) break;
             }
             score = (float)count / data.size();

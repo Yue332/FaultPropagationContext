@@ -22,48 +22,48 @@ public class ConfigUtils {
 	public static String DEF_CONFIG_FILE_PATH = System.getProperty("user.home", "/tmp") + File.separator + "config.properties";
 	
 	public static String PRO_PROCESS_MODULE_KEY = "PROCESS_MODULE";
-	public static String PRO_PROCESS_MODULE_COMMENT = "# ´¦ÀíÄ£¿é¶à¸öÊ¹ÓÃÓ¢ÎÄ¶ººÅ¸ô¿ª£¬Àı£º " + Defects4j.class.getName() + "," + Gzoltar.class.getName();
+	public static String PRO_PROCESS_MODULE_COMMENT = "# å¤„ç†æ¨¡å—å¤šä¸ªä½¿ç”¨è‹±æ–‡é€—å·éš”å¼€ï¼Œä¾‹ï¼š " + Defects4j.class.getName() + "," + Gzoltar.class.getName();
 	
 	public static String PRO_FINAL_PROCESS_MODULE_KEY = "FINAL_PROCESS_MODULE";
-	public static String PRO_FINAL_PROCESS_MODULE_COMMENT = "# ×îÖÕ´¦ÀíÄ£¿é ¶à¸öÊ¹ÓÃÓ¢ÎÄ¶ººÅ¸ô¿ª£¬Àı£º" + CalculateExam.class.getName();
+	public static String PRO_FINAL_PROCESS_MODULE_COMMENT = "# æœ€ç»ˆå¤„ç†æ¨¡å— å¤šä¸ªä½¿ç”¨è‹±æ–‡é€—å·éš”å¼€ï¼Œä¾‹ï¼š" + CalculateExam.class.getName();
 	
 	public static String PRO_D4J_HOME_KEY = "D4J_HOME";
 	
-	public static String PRO_D4J_HOME_COMMENT = "# defects4j µÄÈ«Â·¾¶";
+	public static String PRO_D4J_HOME_COMMENT = "# defects4j çš„å…¨è·¯å¾„";
 	
 	public static String PRO_FAULT_LOCALIZATION_DATA_HOME_KEY = "FAULT_LOCALIZATION_DATA_HOME";
 	
-	public static String PRO_FAULT_LOCALIZATION_DATA_HOME_COMMENT = "# fault-localization-data µÄÈ«Â·¾¶";
+	public static String PRO_FAULT_LOCALIZATION_DATA_HOME_COMMENT = "# fault-localization-data çš„å…¨è·¯å¾„";
 	
 	public static String PRO_LITHIUM_SLICER_HOME_KEY = "LITHIUM_SLICER_HOME";
 	
-	public static String PRO_LITHIUM_SLICER_HOME_COMMENT = "# lithium-slicer µÄÈ«Â·¾¶";
+	public static String PRO_LITHIUM_SLICER_HOME_COMMENT = "# lithium-slicer çš„å…¨è·¯å¾„";
 	
 	public static String PRO_PROJECT_ID_KEY = "PROJECT_ID";
 	
-	public static String PRO_PROJECT_ID_COMMENT = "# defects4jÏîÄ¿ID [Lang, Chart, Closure, Math, Mockito, Time]";
+	public static String PRO_PROJECT_ID_COMMENT = "# defects4jé¡¹ç›®ID [Lang, Chart, Closure, Math, Mockito, Time]";
 	
 	public static String PRO_BUG_ID_KEY = "BUG_ID";
 	
-	public static String PRO_BUG_ID_COMMENT = "# defects4jÏîÄ¿BUG_ID£¬¶à¸öÊ¹ÓÃÓ¢ÎÄ¶ººÅ·Ö¸ô£¬²»ÅäÖÃÔòÊ¹ÓÃÈ«²¿bug";
+	public static String PRO_BUG_ID_COMMENT = "# defects4jé¡¹ç›®BUG_IDï¼Œå¤šä¸ªä½¿ç”¨è‹±æ–‡é€—å·åˆ†éš”ï¼Œä¸é…ç½®åˆ™ä½¿ç”¨å…¨éƒ¨bug";
 	
 	public static String PRO_TOP_KEY = "TOP";
 	
-	public static String PRO_TOP_COMMENT = "# lithium slicerµÄTOPÊôĞÔ";
+	public static String PRO_TOP_COMMENT = "# lithium slicerçš„TOPå±æ€§";
 	
 	public static String PRO_PROJECT_PATH_KEY = "PROJECT_PATH";
 	
-	public static String PRO_PROJECT_PATH_COMMENT = "# defects4j¼ì³öÏîÄ¿µÄÈ«Â·¾¶";
+	public static String PRO_PROJECT_PATH_COMMENT = "# defects4jæ£€å‡ºé¡¹ç›®çš„å…¨è·¯å¾„";
 	
 	public static String PRO_TOOL_KEY = "TOOL";
 	
-	public static String PRO_TOOL_COMMENT = "# gzoltarµÄTOOLÊôĞÔ [developer, evosuite, randoop]";
+	public static String PRO_TOOL_COMMENT = "# gzoltarçš„TOOLå±æ€§ [developer, evosuite, randoop]";
 	
 	public static String PRO_FUNC_KEY = "FUNC";
 	
-	public static String PRO_FUNC_COMMENT = "# ·ÖÎöÆµÆ×ËùÓÃ·½·¨£¬¶à¸öÊ¹ÓÃÓ¢ÎÄ¶ººÅ¸ô¿ª£¬Àı£º" + Ochiai.class.getName();
+	public static String PRO_FUNC_COMMENT = "# åˆ†æé¢‘è°±æ‰€ç”¨æ–¹æ³•ï¼Œå¤šä¸ªä½¿ç”¨è‹±æ–‡é€—å·éš”å¼€ï¼Œä¾‹ï¼š" + Ochiai.class.getName();
 	
-	public static String FAIL_FILE_PATH_COMMENT = "# Ö´ĞĞÊ§°ÜÊ±Ê§°ÜÈÕÖ¾Ğ´ÈëµÃÎÄ¼şÈ«Â·¾¶£¨Îª¿Õ²»Ğ´Èë£©";
+	public static String FAIL_FILE_PATH_COMMENT = "# æ‰§è¡Œå¤±è´¥æ—¶å¤±è´¥æ—¥å¿—å†™å…¥å¾—æ–‡ä»¶å…¨è·¯å¾„ï¼ˆä¸ºç©ºä¸å†™å…¥ï¼‰";
 	
 	public static String FAIL_FILE_PATH_KEY = "FAIL_FILE_PATH";
 	
@@ -73,7 +73,7 @@ public class ConfigUtils {
 	
 	public static String SORT_FUNC = "SORT_FUNC";
 	
-	public static String SORT_FUNC_COMMENT = "# csvÎÄ¼şÖĞÅÅµ¹ĞòµÄ¹«Ê½Ãû£¨ÈçÎª¿ÕÔòÄ¬ÈÏÊ¹ÓÃµÚÒ»¸ö¹«Ê½£©";
+	public static String SORT_FUNC_COMMENT = "# csvæ–‡ä»¶ä¸­æ’å€’åºçš„å…¬å¼åï¼ˆå¦‚ä¸ºç©ºåˆ™é»˜è®¤ä½¿ç”¨ç¬¬ä¸€ä¸ªå…¬å¼ï¼‰";
 	
 	public static final String DEFAULT_PROCESS_MODULES = "com.module.Defects4j,com.module.Gzoltar,com.module.LithiumSlicer,com.module.Analysis,com.module.CalculateValueAndGenCSV";
 	
@@ -134,7 +134,7 @@ public class ConfigUtils {
 	public static String[] getAllBugIdByFile(String projectId) throws Exception {
 		File allBugIdFile = new File(System.getProperty("user.home") + File.separator + projectId + "_allbugs");
 		if(!allBugIdFile.exists()) {
-			System.out.println("[INFO] ÎÄ¼ş¡¾"+allBugIdFile.getAbsolutePath()+"¡¿²»´æÔÚ£¬¿ªÊ¼Ê¹ÓÃdefects4jÃüÁîÉú³É");
+			System.out.println("[INFO] æ–‡ä»¶ã€"+allBugIdFile.getAbsolutePath()+"ã€‘ä¸å­˜åœ¨ï¼Œå¼€å§‹ä½¿ç”¨defects4jå‘½ä»¤ç”Ÿæˆ");
 			return null;
 		}
 		List<String> list = FileUtils.readLines(allBugIdFile, "UTF-8");

@@ -68,12 +68,12 @@ public class CalculateExamNew extends FinalBean implements IFinalProcessModule {
             List<String> buggyLineList = BuggyLine.getAllElements(buggyLineBeanList);
 
             if(!buggyLineFile.exists()){
-                throw new Exception("[ERROR] Î´ÕÒµ½buggyLineÎÄ¼ş£º" + buggyLineFile.getAbsolutePath());
+                throw new Exception("[ERROR] æœªæ‰¾åˆ°buggyLineæ–‡ä»¶ï¼š" + buggyLineFile.getAbsolutePath());
             }
             
             File suspValueFile = new File(this.suspValue.replaceAll("@:BUG_ID@", bugId));
             if(!suspValueFile.exists()) {
-            	throw new Exception("[ERROR] Î´ÕÒµ½»³ÒÉ¶ÈÎÄ¼ş£º" + suspValueFile.getAbsolutePath());
+            	throw new Exception("[ERROR] æœªæ‰¾åˆ°æ€€ç–‘åº¦æ–‡ä»¶ï¼š" + suspValueFile.getAbsolutePath());
             }
             List<String> suspValueList = FileUtils.readLines(suspValueFile);
             suspValueList.remove(0);
@@ -84,7 +84,7 @@ public class CalculateExamNew extends FinalBean implements IFinalProcessModule {
                 File dataDepNewFile = new File(dataDepen.replaceAll("@:BUG_ID@", bugId)
                         .replaceAll("@:FUNCID@", func));
                 if (!dataDepNewFile.exists()) {
-                    throw new Exception("[ERROR] Î´ÕÒµ½Êı¾İÒÀÀµÎÄ¼ş£º" + dataDepNewFile.getAbsolutePath());
+                    throw new Exception("[ERROR] æœªæ‰¾åˆ°æ•°æ®ä¾èµ–æ–‡ä»¶ï¼š" + dataDepNewFile.getAbsolutePath());
                 }
 
                 List<String> dataDepList = FileUtils.readLines(dataDepNewFile);
@@ -92,27 +92,27 @@ public class CalculateExamNew extends FinalBean implements IFinalProcessModule {
                 List<String> elements = DataDepNewBean.getAllElements(beanList);
 
                 List<SuspValueBean> suspBeanList = SuspValueBean.getBeanList(suspValueList, funcIdx);
-                // µ¹ĞòÅÅĞò
+                // å€’åºæ’åº
                 Collections.sort(suspBeanList);
                 
-                // ½«»³ÒÉ¶È±íÖĞº¬ÓĞÊı¾İÒÀÀµÓï¾äµÄĞĞÌŞ³ı
+                // å°†æ€€ç–‘åº¦è¡¨ä¸­å«æœ‰æ•°æ®ä¾èµ–è¯­å¥çš„è¡Œå‰”é™¤
                 for(String element : elements) {
                 	SuspValueBean.removeElement(suspBeanList, element);
                 }
-                // ½«Êı¾İÒÀÀµµÃµ½µÄÓï¾ä·ÅÈë»³ÒÉ¶È±íÖĞ
+                // å°†æ•°æ®ä¾èµ–å¾—åˆ°çš„è¯­å¥æ”¾å…¥æ€€ç–‘åº¦è¡¨ä¸­
                 for(int idx = 0, length = elements.size(); idx < length; idx ++) {
                 	String line = elements.get(idx) + "," + "0";
                 	SuspValueBean createBean = new SuspValueBean(line, 0);
                 	suspBeanList.add(idx, createBean);
                 }
-                // Êä³öµ½ÁÙÊ±ÎÄ¼ş£¬ÒÔ±ãµ÷ÊÔ
+                // è¾“å‡ºåˆ°ä¸´æ—¶æ–‡ä»¶ï¼Œä»¥ä¾¿è°ƒè¯•
 //                File tmpFile = new File(suspValueFile.getParent() + File.separator + "tmp" + File.separator + "tmp-" + bugId + "-" + func + ".csv");
 //                FileUtils.writeStringToFile(tmpFile, "", false);
 //                for(SuspValueBean bean : suspBeanList) {
 //                	FileUtils.writeStringToFile(tmpFile, bean.toString() + "\r\n", true);
 //                }
                 
-                // ¼ÆËãexam
+                // è®¡ç®—exam
                 int n = 0;
                 int m = suspBeanList.size();
                 for(SuspValueBean bean : suspBeanList) {

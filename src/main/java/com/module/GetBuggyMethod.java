@@ -23,7 +23,7 @@ public class GetBuggyMethod extends Bean implements IProcessModule {
     public void process(Runtime runTime) throws Exception {
         File buggyLineFile = new File(buggyLine);
         if(!buggyLineFile.exists()){
-            throw new Exception("buggyLine文件["+buggyLine+"]不存在！");
+            throw new Exception("buggyLine鏂囦欢["+buggyLine+"]涓嶅瓨鍦紒");
         }
         List<BuggyLineBean> beanList = getBuggyLineBeanList(FileUtils.readLines(buggyLineFile, "utf-8"));
         List<String> methodList = new ArrayList<>();
@@ -95,7 +95,7 @@ public class GetBuggyMethod extends Bean implements IProcessModule {
     	String buggyLine = "C:\\Users\\44789\\Desktop\\Lang-8.buggy.lines";
         File buggyLineFile = new File(buggyLine);
         if(!buggyLineFile.exists()){
-            throw new Exception("buggyLine文件["+buggyLine+"]不存在！");
+            throw new Exception("buggyLine鏂囦欢["+buggyLine+"]涓嶅瓨鍦紒");
         }
         List<com.run.BuggyLineBean> beanList = new ArrayList<com.run.BuggyLineBean>();
         for(String line : FileUtils.readLines(buggyLineFile, "utf-8")) {

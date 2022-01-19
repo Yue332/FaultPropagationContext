@@ -25,13 +25,13 @@ public class Test {
             File buggyMethod = new File("C:\\Users\\44789\\Desktop" + File.separator +
                     "BuggyMethod" + File.separator + projectId + "-" + bugId + ".buggy.methods");
             if(!buggyMethod.exists()){
-                throw new Exception("bugid["+bugId+"]ÎÄ¼ş["+buggyMethod.getAbsolutePath()+"]²»´æÔÚ£¡");
+                throw new Exception("bugid["+bugId+"]æ–‡ä»¶["+buggyMethod.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
             }
             List<String> buggyMethodList = FileUtils.readLines(buggyMethod, "utf-8");
             buggyMethodList.remove(0);
             File suspMethod = new File("C:\\Users\\44789\\Desktop" + File.separator + "methodSuspValue" + File.separator + projectId + "-" + bugId + "-" + func + "-method-suspValue.csv");
             if(!suspMethod.exists()){
-                throw new Exception("methodSuspValueÎÄ¼ş["+suspMethod.getAbsolutePath()+"]²»´æÔÚ£¡");
+                throw new Exception("methodSuspValueæ–‡ä»¶["+suspMethod.getAbsolutePath()+"]ä¸å­˜åœ¨ï¼");
             }
             List<String> suspMethodList = FileUtils.readLines(suspMethod, "utf-8");
             suspMethodList.remove(0);
@@ -48,10 +48,10 @@ public class Test {
                 }
             }
             if(nList.size() == 0){
-                throw new Exception("¼ÆËã³ön=0£¬ÎÄ¼ş["+suspMethod.getAbsolutePath()+"]ÖĞÎ´ÕÒµ½ÓëbuggymethodÎÄ¼ş["+buggyMethod.getAbsolutePath()+"]¶ÔÓ¦µÄÖµ");
+                throw new Exception("è®¡ç®—å‡ºn=0ï¼Œæ–‡ä»¶["+suspMethod.getAbsolutePath()+"]ä¸­æœªæ‰¾åˆ°ä¸buggymethodæ–‡ä»¶["+buggyMethod.getAbsolutePath()+"]å¯¹åº”çš„å€¼");
             }
             if(nList.size() != faultList.size()){
-                throw new Exception("nµÄÊıÁ¿ÓëfaultµÄÊıÁ¿²»Ò»ÖÂ£¡");
+                throw new Exception("nçš„æ•°é‡ä¸faultçš„æ•°é‡ä¸ä¸€è‡´ï¼");
             }
             BigDecimal sum = new BigDecimal("0");
             System.out.println("nlist:" + nList.toString() + "\r\n faultList:" + faultList.toString());

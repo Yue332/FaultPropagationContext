@@ -26,15 +26,15 @@ import soot.tagkit.ParamNamesTag;
 
 public class AnalysisBean {
 	/**
-	 * ÏòÇ°·ÖÎö
+	 * å‘å‰åˆ†æ
 	 */
 	public static final int ANALYSIS_DIRECTION_UP = 1;
 	/**
-	 * Ïòºó·ÖÎö
+	 * å‘ååˆ†æ
 	 */
 	public static final int ANALYSIS_DIRECTION_DOWN = 2;
 	/**
-	 * ÏòÇ°+Ïòºó·ÖÎö
+	 * å‘å‰+å‘ååˆ†æ
 	 */
 	public static final int ANALYSIS_DIRECTION_ALL = 3;
 	
@@ -54,7 +54,7 @@ public class AnalysisBean {
 		this.sootClass = sootClass;
 		this.sootMethod = sootMethod;
 		this.unit = unit;
-		// unitÎªreturnÊ±ÎªÏòÇ°£¨ÉÏ£©·ÖÎö  ÆäÓàÔİÊ±ÏÈ×öÈ«²¿·ÖÎö
+		// unitä¸ºreturnæ—¶ä¸ºå‘å‰ï¼ˆä¸Šï¼‰åˆ†æ  å…¶ä½™æš‚æ—¶å…ˆåšå…¨éƒ¨åˆ†æ
 		if(unit instanceof JReturnVoidStmt || unit instanceof JReturnStmt) {
 			this.analysisDirection = ANALYSIS_DIRECTION_UP;
 		}else {
@@ -91,7 +91,7 @@ public class AnalysisBean {
 			JReturnStmt stmt = (JReturnStmt) unit;
 			Value v = stmt.getOpBox().getValue();
 			if(v instanceof Constant) {
-				System.out.println("Óï¾ä ["+unit+"] ·µ»ØµÄÎª³£Á¿£¬²»·ÖÎö");
+				System.out.println("è¯­å¥ ["+unit+"] è¿”å›çš„ä¸ºå¸¸é‡ï¼Œä¸åˆ†æ");
 				return;
 			}
 			Body body = sootMethod.retrieveActiveBody();
@@ -101,8 +101,8 @@ public class AnalysisBean {
 					Value value = box.getValue();
 					if(value.equals(v)) {
 						int lineNum = MyMain.getLineNumber(unit);
-						System.out.println("Jimple±äÁ¿["+v.toString()+"]ÔÚÔ´´úÂë" + lineNum + "±»¶¨Òå");
-						System.out.println(unit.toString() + "Ô´´úÂëĞĞºÅ["+lineNum+"]");
+						System.out.println("Jimpleå˜é‡["+v.toString()+"]åœ¨æºä»£ç " + lineNum + "è¢«å®šä¹‰");
+						System.out.println(unit.toString() + "æºä»£ç è¡Œå·["+lineNum+"]");
 						lineNumberList.add(lineNum + "");
 						break;
 					}
@@ -111,7 +111,7 @@ public class AnalysisBean {
 				for(ValueBox box : useBoxList) {
 					Value value = box.getValue();
 					if(v.equals(value)) {
-						System.out.println(unit.toString() + "Ô´´úÂëĞĞºÅ["+MyMain.getLineNumber(unit)+"]");
+						System.out.println(unit.toString() + "æºä»£ç è¡Œå·["+MyMain.getLineNumber(unit)+"]");
 					}
 				}
 				if(unit.equals(this.unit)) {
@@ -122,9 +122,9 @@ public class AnalysisBean {
 	}
 	
 	/**
-	 * ·ÖÎöË¼Â·£º
-	 * 1.Ê¶±ğ³öÓï¾äµÄ±äÁ¿ defbox usebox  ÅĞ¶ÏÊÇ·ñº¬ÓĞ³ÉÔ±±äÁ¿ º¬ÓĞ³ÉÔ±±äÁ¿µÄĞèÒªÕÒµ½¸ÃÀàÖĞËùÓĞÊ¹ÓÃ³ÉÔ±±äÁ¿µÄÓï¾ä  ²»º¬³ÉÔ±±äÁ¿µÄÖ»ĞèÒª·ÖÎöÕâ¸ö·½·¨¼´¿É
-	 * 2.ÕÒµ½´ËÀàÖĞÊÇ·ñÓĞÆäÓà·½·¨µ÷ÓÃ¸ÃÓï¾äËùÔÚµÄ·½·¨¡£
+	 * åˆ†ææ€è·¯ï¼š
+	 * 1.è¯†åˆ«å‡ºè¯­å¥çš„å˜é‡ defbox usebox  åˆ¤æ–­æ˜¯å¦å«æœ‰æˆå‘˜å˜é‡ å«æœ‰æˆå‘˜å˜é‡çš„éœ€è¦æ‰¾åˆ°è¯¥ç±»ä¸­æ‰€æœ‰ä½¿ç”¨æˆå‘˜å˜é‡çš„è¯­å¥  ä¸å«æˆå‘˜å˜é‡çš„åªéœ€è¦åˆ†æè¿™ä¸ªæ–¹æ³•å³å¯
+	 * 2.æ‰¾åˆ°æ­¤ç±»ä¸­æ˜¯å¦æœ‰å…¶ä½™æ–¹æ³•è°ƒç”¨è¯¥è¯­å¥æ‰€åœ¨çš„æ–¹æ³•ã€‚
 	 */
 	public void doAnalysis() {
 		if(this.analysisDirection == ANALYSIS_DIRECTION_UP) {
@@ -135,27 +135,27 @@ public class AnalysisBean {
 	}
 	
 	/**
-	 * ¸ù¾İunit»ñÈ¡±»µ÷ÓÃµÄsootMethod
+	 * æ ¹æ®unitè·å–è¢«è°ƒç”¨çš„sootMethod
 	 * @return
 	 */
 	public List<SootMethod> getMethodsByUnit(){
 		List<SootMethod> list = new ArrayList<SootMethod>();
 		Map<SootMethod, Integer[]> map = new HashMap<SootMethod, Integer[]>();
-		// Èç¹ûÊÇµ÷ÓÃÁËÄ³¸ö·½·¨
+		// å¦‚æœæ˜¯è°ƒç”¨äº†æŸä¸ªæ–¹æ³•
 		if(unit instanceof JInvokeStmt) {
 			JInvokeStmt stmt = (JInvokeStmt) unit;
 			if(!stmt.containsInvokeExpr()) {
-				System.out.println("Óï¾ä["+unit.toString()+"]Ó¦µ÷ÓÃ·½·¨£¬µ«Î´µ÷ÓÃ£¡");
-			}else {//TODO: ÕâÒ»ĞĞÓï¾äµ÷ÓÃ¶à¸ö·½·¨µÄ´¦Àí£¨Èç¹û¶à¸ö·½·¨Ëã¶à¸öunitÕâÀï¾Í²»ÓÃ´¦Àí£©
+				System.out.println("è¯­å¥["+unit.toString()+"]åº”è°ƒç”¨æ–¹æ³•ï¼Œä½†æœªè°ƒç”¨ï¼");
+			}else {//TODO: è¿™ä¸€è¡Œè¯­å¥è°ƒç”¨å¤šä¸ªæ–¹æ³•çš„å¤„ç†ï¼ˆå¦‚æœå¤šä¸ªæ–¹æ³•ç®—å¤šä¸ªunitè¿™é‡Œå°±ä¸ç”¨å¤„ç†ï¼‰
 				InvokeExpr exp = stmt.getInvokeExpr();
-				SootMethod callMethod = exp.getMethod();// µ÷ÓÃµÄ·½·¨
-				// ±¾ÀàµÄ·½·¨²Å´¦Àí
+				SootMethod callMethod = exp.getMethod();// è°ƒç”¨çš„æ–¹æ³•
+				// æœ¬ç±»çš„æ–¹æ³•æ‰å¤„ç†
 				if(callMethod.getDeclaringClass().equals(sootClass)) {
 					List<Value> callArgs = exp.getArgs();
-					System.out.println("Óï¾ä["+unit.toString()+"]µ÷ÓÃÁË·½·¨["+callMethod.toString()+"]£¬²ÎÊı["+callArgs.toString()+"]");
+					System.out.println("è¯­å¥["+unit.toString()+"]è°ƒç”¨äº†æ–¹æ³•["+callMethod.toString()+"]ï¼Œå‚æ•°["+callArgs.toString()+"]");
 					map.put(callMethod, MyMain.getNoConstantParamsIdx(callArgs));
 				}else {
-					System.out.println("Óï¾ä["+unit.toString()+"]µ÷ÓÃÁË·Ç±¾ÀàµÄ·½·¨["+callMethod.toString()+"]£¬²»´¦Àí");
+					System.out.println("è¯­å¥["+unit.toString()+"]è°ƒç”¨äº†éæœ¬ç±»çš„æ–¹æ³•["+callMethod.toString()+"]ï¼Œä¸å¤„ç†");
 				}
 			}
 		}
@@ -218,7 +218,7 @@ public class AnalysisBean {
 			for(ValueBox valueBox : defBoxList) {
 				Value v = valueBox.getValue();
 				if(v instanceof Constant) {
-					System.out.println("value ["+v.toString()+"]Îª³£Á¿£¬²»·ÖÎö");
+					System.out.println("value ["+v.toString()+"]ä¸ºå¸¸é‡ï¼Œä¸åˆ†æ");
 					continue;
 				}
 				MyMain.addList(analysisValueList, valueBox);
@@ -228,7 +228,7 @@ public class AnalysisBean {
 				Value v = valueBox.getValue();
 				if(v instanceof JVirtualInvokeExpr) {
 					JVirtualInvokeExpr j = (JVirtualInvokeExpr) v;
-					//±¾ÀàµÄ·½·¨
+					//æœ¬ç±»çš„æ–¹æ³•
 					if(j.getMethodRef().declaringClass().equals(this.sootClass)) {
 						Value callValue = j.getBaseBox().getValue();
 						if(!(callValue instanceof Constant)) {

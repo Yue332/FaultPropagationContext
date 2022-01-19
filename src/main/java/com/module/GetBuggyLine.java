@@ -25,7 +25,7 @@ public class GetBuggyLine extends Bean implements IProcessModule {
 		}else {
 			File csvFile = new File(this.outputPath + File.separator + super.projectId + "-" + super.bugId + ".buggy.lines");
 			if(csvFile.exists()) {
-				System.out.println("[INFO] ÒÑ´æÔÚ"+super.projectId + "-" + super.bugId + ".buggy.lines"+"ÎÄ¼ş£¬²»ÔÙÊ¹ÓÃget_buggy_lines.shÃüÁî");
+				System.out.println("[INFO] å·²å­˜åœ¨"+super.projectId + "-" + super.bugId + ".buggy.lines"+"æ–‡ä»¶ï¼Œä¸å†ä½¿ç”¨get_buggy_lines.shå‘½ä»¤");
 				return;
 			}
 		}
@@ -35,7 +35,7 @@ public class GetBuggyLine extends Bean implements IProcessModule {
 				.replaceAll("@:BUG_ID@", super.bugId)
 				.replaceAll("@:OUTPUT_PATH@", this.outputPath));
 		if(!"0".equals(msg[0])) {
-			throw new Exception("[ERROR] get_buggy_lines.sh Ö´ĞĞÊ§°Ü£¡");
+			throw new Exception("[ERROR] get_buggy_lines.sh æ‰§è¡Œå¤±è´¥ï¼");
 		}
 	}
 

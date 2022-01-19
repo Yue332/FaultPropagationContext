@@ -37,7 +37,7 @@ public class DeleteOldCsv extends Bean implements IProcessModule{
     private void deleteFile(String oldCsvPath){
         File path = new File(oldCsvPath);
         if(!path.exists()){
-            System.out.println("[INFO] Ä¿Â¼" + path.getAbsolutePath() + "²»´æÔÚ£¬²»´¦Àí");
+            System.out.println("[INFO] ç›®å½•" + path.getAbsolutePath() + "ä¸å­˜åœ¨ï¼Œä¸å¤„ç†");
             return;
         }
         File[] list = path.listFiles(new FilenameFilter() {
@@ -47,7 +47,7 @@ public class DeleteOldCsv extends Bean implements IProcessModule{
             }
         });
         for(File f : list){
-            System.out.println("[INFO] É¾³ıÎÄ¼ş£º" + f.getAbsolutePath());
+            System.out.println("[INFO] åˆ é™¤æ–‡ä»¶ï¼š" + f.getAbsolutePath());
             f.delete();
         }
     }

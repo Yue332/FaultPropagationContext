@@ -26,7 +26,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 		boolean needCheckOut = "YES".equals(config.getConfig("NEED_CHECKOUT"));
 		String baseClassPath = config.getConfig(Command.PRO_KEY_CLASS_PATH);
 		if("".equals(baseClassPath)) {
-			throw new Exception("[ERROR] CLASS_PATH²»ÄÜÎª¿Õ£¡");
+			throw new Exception("[ERROR] CLASS_PATHä¸èƒ½ä¸ºç©ºï¼");
 		}
 		String projectBasePath = super.config.getConfig(Command.PRO_MUTATION_PROJECT_PATH);
 		String d4jPath = config.getConfig(ConfigUtils.PRO_D4J_HOME_KEY);
@@ -85,7 +85,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 		}
 		
 //		Utils.executeCommandLine(runTime, Command.COMMAND.replace("@MUTATION_FILE@", outputFile.getAbsolutePath()));
-		System.out.println("[INFO] Ä£¿éÖ´ĞĞÍê³É£¬ÇëÊ¹ÓÃÃüÁî sh " + outputFile.getAbsolutePath() + "Éú³É±äÒì±¨¸æ£¡£¡£¡");
+		System.out.println("[INFO] æ¨¡å—æ‰§è¡Œå®Œæˆï¼Œè¯·ä½¿ç”¨å‘½ä»¤ sh " + outputFile.getAbsolutePath() + "ç”Ÿæˆå˜å¼‚æŠ¥å‘Šï¼ï¼ï¼");
 	}
 	
 	private String getLoadClasses(String d4jHome, String projectId, String bugId) throws IOException{
@@ -127,7 +127,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 	private String getSrcDir(Runtime runTime, String projectPath, String projectId, String bug)throws Exception{
 		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath), COMMAND_LOAD_CLASS);
 		if(!"0".equals(ret[0])) {
-			throw new Exception("[ERROR] »ñÈ¡srcClasses_DirÒì³££¡");
+			throw new Exception("[ERROR] è·å–srcClasses_Dirå¼‚å¸¸ï¼");
 		}
 		return projectPath + File.separator + ret[1].replace("\n", "");
 	}
@@ -136,7 +136,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 	private String getTestClassDir(Runtime runTime, String projectPath, String projectId, String bug) throws Exception {
 		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath), COMMAND_TEST_DIR);
 		if(!"0".equals(ret[0])) {
-			throw new Exception("[ERROR] »ñÈ¡testClasses_DirÒì³££¡");
+			throw new Exception("[ERROR] è·å–testClasses_Dirå¼‚å¸¸ï¼");
 		}
 		return projectPath + File.separator + ret[1].replace("\n", "");
 //		int bugId = Integer.parseInt(bug);
@@ -163,7 +163,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 //			}
 //			return projectPath + File.separator + "build" + File.separator + "tests" + File.separator;
 //		default:
-//			throw new Exception("´íÎóµÄprojectId");
+//			throw new Exception("é”™è¯¯çš„projectId");
 //		}
 	}
 	
@@ -171,7 +171,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 	private String getSourceDir(Runtime runTime, String projectPath, String projectId, String bug)throws Exception{
 		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath), COMMAND_SOURCE_DIR);
 		if(!"0".equals(ret[0])) {
-			throw new Exception("[ERROR] »ñÈ¡source_dirÒì³££¡");
+			throw new Exception("[ERROR] è·å–source_dirå¼‚å¸¸ï¼");
 		}
 		return projectPath + File.separator + ret[1].replace("\n", "");
 	}

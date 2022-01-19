@@ -32,7 +32,7 @@ public class MethodSuspValue extends Bean implements IProcessModule {
 
 	@Override
 	public void process(Runtime runTime) throws Exception {
-		System.out.println("¿ªÊ¼¼ÆËã");
+		System.out.println("å¼€å§‹è®¡ç®—");
 		File suspValueFile = new File(this.suspValue);
 		List<String> list = FileUtils.readLines(suspValueFile);
 		list.remove(0);
@@ -49,7 +49,7 @@ public class MethodSuspValue extends Bean implements IProcessModule {
 				if(suspValue.compareTo(new BigDecimal("0")) == 0) {
 					continue;
 				}
-				System.out.println("[DEBUG] ¿ªÊ¼·ÖÎö" + bean.getLine());
+				System.out.println("[DEBUG] å¼€å§‹åˆ†æ" + bean.getLine());
 				MyMain.setSootEnv(this.projectPath, this.projectId, bugId);
 				String method = MyMain.analysis(info, clz, lineNumber);
 				G.reset();

@@ -16,7 +16,7 @@ public class AllMiddleParams {
     private int totalFailtoPassTestsNum;
 
     public AllMiddleParams(String filePath) throws Exception {
-        System.out.println("[DEBUG] ¶ÁÈ¡ÎÄ¼ş" + filePath);
+        System.out.println("[DEBUG] è¯»å–æ–‡ä»¶" + filePath);
         File file = new File(filePath);
         List<String> list = FileUtils.readLines(file, "utf-8");
         list.remove(0);

@@ -25,12 +25,12 @@ public class ElementMuse{
             this.muse = Double.parseDouble(tmp[1]);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("[ERROR] ĞĞ£º" + line + "Òì³££¡ÎŞ·¨×ª»»Îª¶ÔÏó£¡");
+            throw new RuntimeException("[ERROR] è¡Œï¼š" + line + "å¼‚å¸¸ï¼æ— æ³•è½¬æ¢ä¸ºå¯¹è±¡ï¼");
         }
     }
 
     public static List<ElementMuse> buildList(String project, String bug) throws Exception {
-        File museCsvFile = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bug + File.separator + "MUSE¼ÆËãµÄÓï¾äµÄ¿ÉÒÉÖµ.csv");
+        File museCsvFile = new File(System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project + File.separator + bug + File.separator + "MUSEè®¡ç®—çš„è¯­å¥çš„å¯ç–‘å€¼.csv");
         List<String> museCsvList = FileUtils.readLines(museCsvFile, "utf-8");
         museCsvList.remove(0);
         List<ElementMuse> retList = new ArrayList<>(museCsvList.size());

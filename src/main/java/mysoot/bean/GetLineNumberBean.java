@@ -63,7 +63,7 @@ public class GetLineNumberBean {
 		for(Entry<SootMethod, List<Value>> entry : this.map.entrySet()) {
 			SootMethod method = entry.getKey();
 			if(method.isAbstract()) {
-//				System.out.println("[INFO] method : ["+method.toString()+"]Îª³éÏó·½·¨£¬ÎŞ·¨·ÖÎö£¡£¡£¡");
+//				System.out.println("[INFO] method : ["+method.toString()+"]ä¸ºæŠ½è±¡æ–¹æ³•ï¼Œæ— æ³•åˆ†æï¼ï¼ï¼");
 				continue;
 			}
 			List<Value> list = entry.getValue();
@@ -86,7 +86,7 @@ public class GetLineNumberBean {
 
 		for(SootMethod method : this.sootClass.getMethods()) {
 			if(method.isAbstract()) {
-//				System.out.println("[INFO] method : ["+method.toString()+"]Îª³éÏó·½·¨£¬ÎŞ·¨·ÖÎö£¡£¡£¡");
+//				System.out.println("[INFO] method : ["+method.toString()+"]ä¸ºæŠ½è±¡æ–¹æ³•ï¼Œæ— æ³•åˆ†æï¼ï¼ï¼");
 				continue;
 			}
 			Body b = method.retrieveActiveBody();
