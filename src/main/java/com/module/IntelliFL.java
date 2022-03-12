@@ -12,13 +12,13 @@ public class IntelliFL extends Bean implements IProcessModule{
         super(config);
     }
 
-    private String command1 = "java -cp @:BUILD_TEST@;@:BUILD@ -javaagent:intelliFL.jar=covLevel=meth-cov org.junit.runner.JUnitCore org.junit.runner.JUnitCore @:TEST_CLASS@ \r\n";
+    private String command1 = "java -cp @:BUILD_TEST@:@:BUILD@ -javaagent:intelliFL.jar=covLevel=meth-cov org.junit.runner.JUnitCore org.junit.runner.JUnitCore @:TEST_CLASS@ \r\n";
 
     private String command2 = "java -cp /home/yy/intelliFL/intelliFL.jar set.intelliFL.cg.CallGraphBuilder @:BUILD@ \r\n";
     @Override
     public void process(Runtime runTime) throws Exception {
-        String buildPath = projectPath + File.separator + Utils.getSrcDir(runTime, projectPath);
-        String buildTestPath = projectPath + File.separator + Utils.getBuildTest(runTime, projectPath);
+        String buildPath = Utils.getSrcDir(runTime, projectPath);
+        String buildTestPath = Utils.getBuildTest(runTime, projectPath);
         String[] allTestArray = Utils.getAllTestArray(runTime, projectPath, projectId, bugId);
 
         File methcovFile = new File(System.getProperty("user.home") + File.separator + "intelliFL" + File.separator + projectId + "_methcov.sh");
