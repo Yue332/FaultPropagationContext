@@ -39,7 +39,7 @@ public class MyMain {
 		Options.v().set_src_prec(Options.src_prec_java);
 		Options.v().set_keep_line_number(true);
 		Options.v().set_whole_program(true);
-		
+
 //		System.out.println("java.home = " + System.getProperty("java.home"));
 //		System.out.println("user.home = " + System.getProperty("user.home"));
 		String[] bootpaths = System.getProperty("sun.boot.class.path").split(File.pathSeparator);
@@ -76,26 +76,26 @@ public class MyMain {
 					path.append(jar.getAbsolutePath()).append(File.pathSeparator);
 				}
 			}
-			
+
 		}
-		
+
 //	    String javapath = System.getProperty("java.class.path");
 //	    path.append(javapath).append(File.pathSeparator).append(projectPath);
 		path.append(projectPath + File.separator + Utils.getCompilePathByProjectID(projectId, bugId));
-	    System.out.println(path);
-	    Scene.v().setSootClassPath(path.toString());
-	    
+		System.out.println(path);
+		Scene.v().setSootClassPath(path.toString());
+
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 //		setSootEnv("C:\\Users\\44789\\Desktop\\Lang_23\\target\\classes\\");
 //		doMyAnalysis("org.apache.commons.lang3.text.ExtendedMessageFormat", 151);
-		
+
 //		setSootEnv("/home/yy/Locate_buggylines/SBFL-Closure/Closure_1/", "Closure", "1");
 		setSootEnv("C:\\Users\\86186\\IdeaProjects\\SBTandem\\", "test", "1");
 		doMyAnalysis("mysoot.test.A", 6);
 	}
-	
+
 	public static String analysis(StringBuilder info, String clzName, int lineNum) {
 		SootClass baseClz = Scene.v().loadClassAndSupport(clzName);//加载待分析的类
 		Scene.v().loadNecessaryClasses();
@@ -134,7 +134,7 @@ public class MyMain {
 		}
 		return null;
 	}
-	
+
 	public static List<String> doMyAnalysis(String clzName, int lineNum) {
 		Map<SootMethod, List<Value>> m = new HashMap<>();
 		List<Value> memberParamList = new ArrayList<>();
@@ -157,7 +157,7 @@ public class MyMain {
 						continue;
 					}
 //					System.out.println("unit ["+unit.toString()+"]对应源代码行号["+lineNum+"]");
-					
+
 					Bean b = new Bean(sootClass, method, unit);
 					b.analysis();
 					Map<SootMethod, List<Value>> map = b.getMap();
@@ -165,7 +165,7 @@ public class MyMain {
 					for(Entry<SootMethod, List<Value>> entry : map.entrySet()) {
 						MyMain.addMap(m, entry.getKey(), entry.getValue());
 					}
-					
+
 					List<Value> memberList = b.getMemberParamList();
 					for(Value v : memberList) {
 						MyMain.addList(memberParamList, v);
@@ -185,7 +185,7 @@ public class MyMain {
 //		System.out.println(memberParamList.toString());
 		GetLineNumberBean b = new GetLineNumberBean(sootClass, m, memberParamList);
 //		System.out.println("行号：" + b.get().toString());
-		
+
 		return b.get();
 	}
 
@@ -226,7 +226,7 @@ public class MyMain {
 		return bean.getBetweenClzAnalysis();
 	}
 
-	
+
 	public static int getLineNumber(Unit u) {
 		List<Tag> tagList = u.getTags();
 		for(Tag t : tagList) {
@@ -236,7 +236,7 @@ public class MyMain {
 		}
 		return -1;
 	}
-	
+
 	public static Integer[] getNoConstantParamsIdx(List<Value> list) {
 		List<Integer> l = new ArrayList<Integer>();
 		int idx = 0;
@@ -250,25 +250,25 @@ public class MyMain {
 		}
 		return l.toArray(new Integer[0]);
 	}
-	
+
 	public static void addList(List<String> list, String obj) {
 		if(!list.contains(obj)) {
 			list.add(obj);
 		}
 	}
-	
+
 	public static void addList(List<ValueBox> list, ValueBox obj) {
 		if(!list.contains(obj)) {
 			list.add(obj);
 		}
 	}
-	
+
 	public static void addList(List list, Object obj){
 		if(!list.contains(obj)) {
 			list.add(obj);
 		}
 	}
-	
+
 	public static void addMap(Map<SootMethod, List<Value>> m, SootMethod method, List<Value> oldList) {
 		List<Value> newList;
 		if(m.containsKey(method)) {
@@ -285,7 +285,7 @@ public class MyMain {
 
 	//需要引用额外jar包项目集合，如果还有再继续添加
 	public static List<String> DEAL_LIST = Arrays.asList(new String[] {"Mockito","Math","Time","Gson"});
-	
+
 	public static void setJar2Path(StringBuilder path, String projectId, String bugId)throws Exception{
 		if(!DEAL_LIST.contains(projectId)) {
 			return;

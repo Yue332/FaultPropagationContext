@@ -254,24 +254,30 @@ public class Utils {
 		return ret[1].split("\r\n");
 	}
 
+	public static String[] getAllTestArray(Runtime runTime, String projectPath) throws Exception {
+		String[] command = COMMAND_GETALLTESTS.replace("@PROJECT_PATH@", projectPath).split(",");
+		String[] ret = Utils.executeCommandLine(runTime, command);
+		return ret[1].split("\n");
+	}
+
 	static String COMMAND_CD = "cd @PROJECT_PATH@";
 	static String COMMAND_LOAD_CLASS = "defects4j export -p dir.bin.classes";
 
-	public static String getSrcDir(Runtime runTime, String projectPath, String projectId, String bug)throws Exception{
-		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath + File.separator + projectId + "_" + bug + File.separator), COMMAND_LOAD_CLASS);
+	public static String getSrcDir(Runtime runTime, String projectPath)throws Exception{
+		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath), COMMAND_LOAD_CLASS);
 		if(!"0".equals(ret[0])) {
 			throw new Exception("[ERROR] 获取srcClasses_Dir异常！");
 		}
-		return projectPath + File.separator + ret[1].replace("\n", "");
+		return projectPath + ret[1].replace("\n", "");
 	}
 
 	static String COMMAND_BUILD_TEST = "defects4j export -p dir.bin.tests";
-	public static String getBuildTest(Runtime runTime, String projectPath, String projectId, String bug)throws Exception{
-		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath + File.separator + projectId + "_" + bug + File.separator), COMMAND_BUILD_TEST);
+	public static String getBuildTest(Runtime runTime, String projectPath)throws Exception{
+		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPath), COMMAND_BUILD_TEST);
 		if(!"0".equals(ret[0])) {
 			throw new Exception("[ERROR] 获取srcClasses_Dir异常！");
 		}
-		return projectPath + File.separator + ret[1].replace("\n", "");
+		return projectPath + ret[1].replace("\n", "");
 	}
 
 	public static <T> T[] deleteArrayElements(T[] array, T... removeObj){

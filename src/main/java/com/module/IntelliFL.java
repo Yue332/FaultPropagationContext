@@ -17,8 +17,8 @@ public class IntelliFL extends Bean implements IProcessModule{
     private String command2 = "java -cp /home/yy/intelliFL/intelliFL.jar set.intelliFL.cg.CallGraphBuilder @:BUILD@ \r\n";
     @Override
     public void process(Runtime runTime) throws Exception {
-        String buildPath = projectPath + File.separator + Utils.getSrcDir(runTime, projectPath, projectId, bugId);
-        String buildTestPath = projectPath + File.separator + Utils.getBuildTest(runTime, projectPath, projectId, bugId);
+        String buildPath = projectPath + File.separator + Utils.getSrcDir(runTime, projectPath);
+        String buildTestPath = projectPath + File.separator + Utils.getBuildTest(runTime, projectPath);
         String[] allTestArray = Utils.getAllTestArray(runTime, projectPath, projectId, bugId);
 
         File methcovFile = new File(System.getProperty("user.home") + File.separator + "intelliFL" + File.separator + projectId + "_methcov.sh");
