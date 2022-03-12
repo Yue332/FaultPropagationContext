@@ -43,9 +43,9 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 //		if(this.sortFuncName == null || "".equals(this.sortFuncName)) {
 //			this.sortFuncName = funcArr[0];
 //			this.sortFuncIdx = 0;
-//			System.out.println("[INFO] Î´ÅäÖÃÅÅĞò¹«Ê½£¬°´ÕÕÄ¬ÈÏ¹«Ê½["+this.sortFuncName+"]½øĞĞÅÅĞò");
+//			System.out.println("[INFO] æœªé…ç½®æ’åºå…¬å¼ï¼ŒæŒ‰ç…§é»˜è®¤å…¬å¼["+this.sortFuncName+"]è¿›è¡Œæ’åº");
 //		}else if(!Arrays.asList(funcArr).contains(this.sortFuncName)) {
-//			System.out.println("[INFO] ÅÅĞò¹«Ê½["+this.sortFuncName+"]Î´ÕÒµ½£¬°´ÕÕÄ¬ÈÏ¹«Ê½["+funcArr[0]+"]½øĞĞÅÅĞò");
+//			System.out.println("[INFO] æ’åºå…¬å¼["+this.sortFuncName+"]æœªæ‰¾åˆ°ï¼ŒæŒ‰ç…§é»˜è®¤å…¬å¼["+funcArr[0]+"]è¿›è¡Œæ’åº");
 //			this.sortFuncName = funcArr[0];
 //			this.sortFuncIdx = 0;
 //		}
@@ -53,15 +53,15 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 
 	@Override
 	public void process(Runtime runTime) throws Exception {
-		// ÏÈ±àÒë4jÏîÄ¿
+		// å…ˆç¼–è¯‘4jé¡¹ç›®
 		String[] msg = Utils.executeCommandLine(runTime, CD_PROJECT_DIR_COMMAND.replaceAll("@:PROJECT_PATH@", super.projectPath),
 				D4J_COMPILE_COMMAND);
 		System.out.println("[DEBUG] " + Arrays.toString(msg));
 		File csvFilePath = new File(this.csvFilePath);
 		if(!csvFilePath.exists()) {
-			throw new Exception("[ERROR] Â·¾¶["+this.csvFilePath+"]²»´æÔÚ£¡");
+			throw new Exception("[ERROR] è·¯å¾„["+this.csvFilePath+"]ä¸å­˜åœ¨ï¼");
 		}
-		// ¶ÁÈ¡»³ÒÉ¶È±í
+		// è¯»å–æ€€ç–‘åº¦è¡¨
 		// Chart-1-suspValue.csv
 		File[] csvFileList = csvFilePath.listFiles(new FilenameFilter() {
 			@Override
@@ -73,18 +73,18 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 
 		for(File csvFile : csvFileList) {
 			// Chart-1-suspValue.csv
-			System.out.println("[INFO] ¶ÁÈ¡ÎÄ¼ş£º" + csvFile.getName());
+			System.out.println("[INFO] è¯»å–æ–‡ä»¶ï¼š" + csvFile.getName());
 			// element,fun1,func2,func3
 			// list[0] = xxx#121, 0.1, 1, 0.2
 			// list[1] = xxx#120, 0.5, 0.3, 0.3
 			List<String> csvList = FileUtils.readLines(csvFile, "UTF-8");
-			csvList.remove(0);// È¥µôÊ×ĞĞ
+			csvList.remove(0);// å»æ‰é¦–è¡Œ
 
 			// FUNC=func1,func2,func3
 			// 0,1,2
 			for(int sortFuncIdx = 0; sortFuncIdx < funcArr.length; sortFuncIdx ++){
 				String sortFuncName = funcArr[sortFuncIdx];
-				//¶¨ÒåÁËÒ»¸öÅÅĞòµÄ¶ÔÏó£¬½«»³ÒÉ¶ÈÖĞËùÓĞµÄÓï¾ä°´ÕÕsortFuncNameÅÅµ¹Ğò
+				//å®šä¹‰äº†ä¸€ä¸ªæ’åºçš„å¯¹è±¡ï¼Œå°†æ€€ç–‘åº¦ä¸­æ‰€æœ‰çš„è¯­å¥æŒ‰ç…§sortFuncNameæ’å€’åº
 				List<DataDependenceSortBean> list = new ArrayList<DataDependenceSortBean>();
 				for(String line : csvList) {
 					DataDependenceSortBean bean = new DataDependenceSortBean(line, sortFuncIdx);
@@ -98,10 +98,10 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 				String pFileName =  csvFileName + (csvFileName.endsWith("suspValue") ? "-src" : "") + "-" + sortFuncName + ".csv";
 				// Chart-1-suspValue-com.utils.cal.func.Ochiai.csv
 				File dataDependenceFile = new File((this.csvFilePath + File.separator + "dataDependence" + File.separator + pFileName.replaceAll("_", "-")));
-				System.out.println("[INFO] Ğ´ÈëÎÄ¼ş£º" + dataDependenceFile.getAbsolutePath());
+				System.out.println("[INFO] å†™å…¥æ–‡ä»¶ï¼š" + dataDependenceFile.getAbsolutePath());
 				FileUtils.write(dataDependenceFile, "", "UTF-8", false);
 
-				// Éú³Éµ¹ĞòÅÅĞòÒÔºóµÄ»³ÒÉ¶È±í
+				// ç”Ÿæˆå€’åºæ’åºä»¥åçš„æ€€ç–‘åº¦è¡¨
 				String pSortFileName = csvFileName + (csvFileName.endsWith("suspValue") ? "-src" : "") + "-" + sortFuncName + "-sort.csv";
 				File sortFile = new File(this.csvFilePath + File.separator + "sort" + File.separator);
 				if(!sortFile.exists()) {
@@ -124,7 +124,7 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 					String[] lineArr = element[0].split("#");
 					String clz = lineArr[0];
 					int lineNumber = Integer.parseInt(lineArr[1]);
-					System.out.println("[INFO] ¿ªÊ¼·ÖÎöÀà" + clz + "µÚ" + lineNumber + "ĞĞ");
+					System.out.println("[INFO] å¼€å§‹åˆ†æç±»" + clz + "ç¬¬" + lineNumber + "è¡Œ");
 					MyMain.setSootEnv(this.projectPath, this.projectId, bugId);
 					// [120,121,50]
 					List<String> lineNumberList = MyMain.doMyAnalysis(clz, lineNumber);
@@ -205,7 +205,7 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 			this.score = new BigDecimal(temp1[1]);
 			this.element = temp1[0];
 			if(temp.length < 2) {
-				System.out.println("[INFO] Óï¾ä" + this.line + "Ã»ÓĞ¶ÔÓ¦ĞĞºÅ");
+				System.out.println("[INFO] è¯­å¥" + this.line + "æ²¡æœ‰å¯¹åº”è¡Œå·");
 				canGetNewScore = false;
 				return;
 			}
@@ -225,7 +225,7 @@ public class DataDependenceAnalysis extends Bean implements IProcessModule {
 					a.setScale(IAnalysisFunc.scale, IAnalysisFunc.roundingMode);
 					sumScore = sumScore.add(a);
 				}else {
-					System.out.println("[INFO] »³ÒÉ¶ÈÖĞ²»°üº¬Óï¾ä£º" + this.clz + "#" + lineNumber);
+					System.out.println("[INFO] æ€€ç–‘åº¦ä¸­ä¸åŒ…å«è¯­å¥ï¼š" + this.clz + "#" + lineNumber);
 				}
 			}
 			return sumScore;

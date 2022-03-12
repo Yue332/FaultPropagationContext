@@ -4,7 +4,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import paperhelper.ReferencesHelper;
-import paperhelper.utils.PageHelperUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +31,8 @@ public interface ReferencesTemplate {
             String[] attrArray = attr.split("=");
             String val = attrArray[1].trim();
             StringBuilder builder = new StringBuilder(val);
-            String realVal = PageHelperUtils.getValueFromArray(array, i + 1, builder);
-            beanMap.put(attrArray[0].trim(), realVal.substring(1, realVal.length() - 1));
+//            String realVal = PageHelperUtils.getValueFromArray(array, i + 1, builder);
+//            beanMap.put(attrArray[0].trim(), realVal.substring(1, realVal.length() - 1));
 
         }
         ReferencesTemplate template;
@@ -43,14 +42,15 @@ public interface ReferencesTemplate {
                 template = new ArticleTemplate();
                 break;
             case ReferencesHelper.TYPE_INPROCEEDINGS:
-                template = new InproceedingsTemplate();
+//                template = new InproceedingsTemplate();
                 break;
             default:
                 throw new Exception("类型不对！");
         }
-        BeanUtils.populate(template, beanMap);
-        template.setIndex(index);
-        return template;
+//        BeanUtils.populate(template, beanMap);
+//        template.setIndex(index);
+//        return template;
+        return null;
     }
 
     void setIndex(int idx);
