@@ -12,7 +12,7 @@ public class IntelliFL extends Bean implements IProcessModule{
         super(config);
     }
 
-    private String command1 = "java -cp @:BUILD_TEST@;@:BUILD@ -javaagent:intelliFL.jar=covLevel=meth-cov org.junit.runner.JUnitCore -javaagent:intelliFL.jar=covLevel=meth-cov org.junit.runner.JUnitCore @:TEST_CLASS@ \r\n";
+    private String command1 = "java -cp @:BUILD_TEST@;@:BUILD@ -javaagent:intelliFL.jar=covLevel=meth-cov org.junit.runner.JUnitCore org.junit.runner.JUnitCore @:TEST_CLASS@ \r\n";
 
     private String command2 = "java -cp /home/yy/intelliFL/intelliFL.jar set.intelliFL.cg.CallGraphBuilder @:BUILD@ \r\n";
     @Override
