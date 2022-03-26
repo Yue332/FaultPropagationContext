@@ -33,8 +33,8 @@ public class IntelliFL1 extends FinalBean implements IFinalProcessModule {
         // intelliFL生成的txt文件目录
         File failIntellFLPath = new File(System.getProperty("user.home") + File.separator +
                 "MBFL" + File.separator + config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY) + File.separator +
-                config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY) + "_" + bug + File.separator +
-                "inelliFL" + File.separator);
+                config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY) + "-" + bug + File.separator +
+                "inteliFL" + File.separator);
         //先把成功的测试用例和失败的区分开
         //key=文件名,value=文件内容（去头）
         Map<String, List<String>> successMap = new HashMap<>();
