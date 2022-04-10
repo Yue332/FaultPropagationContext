@@ -280,6 +280,15 @@ public class Utils {
 		return projectPath + ret[1].replace("\n", "");
 	}
 
+	static String COMMAND_DIR_SRC_TESTS = "defects4j export -p dir.src.tests";
+	public static String getSrcTestDir(Runtime runTime, String projectPathWithBug)throws Exception{
+		String[] ret = Utils.executeCommandLine(runTime, COMMAND_CD.replace("@PROJECT_PATH@", projectPathWithBug), COMMAND_DIR_SRC_TESTS);
+		if(!"0".equals(ret[0])) {
+			throw new Exception("[ERROR] 获取dir.src.tests异常！");
+		}
+		return projectPathWithBug + ret[1].replace("\n", "");
+	}
+
 	public static <T> T[] deleteArrayElements(T[] array, T... removeObj){
 		List<T> list = new ArrayList<>(array.length - removeObj.length);
 		List<T> removeList = Arrays.asList(removeObj);
