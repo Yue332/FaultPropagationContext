@@ -80,7 +80,15 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 						.replace("@source_Dir@", sourceDir);
 				
 				FileUtils.writeStringToFile(outputFile, "rm -rf " + reportDir + File.separator + "* \n", true);
+				if("1".equals(bugId)){
+					FileUtils.writeStringToFile(outputFile, "startTime = $(date \"+%Y-%m-%d %H:%M:%S\").$((`date \"+%N\"`/1000000)) \n", true);
+				}
 				FileUtils.writeStringToFile(outputFile, command+"\n", true);
+				if("1".equals(bugId)){
+					FileUtils.writeStringToFile(outputFile, "endTime = $(date \"+%Y-%m-%d %H:%M:%S\").$((`date \"+%N\"`/1000000)) \n", true);
+					FileUtils.writeStringToFile(outputFile, "echo \"cost time : \" \n", true);
+					FileUtils.writeStringToFile(outputFile, "echo $(($endTime - $startTime)) > /home/yy/mutationReports/"+project+"-"+bugId+"-cost.txt \n", true);
+				}
 			}
 		}
 		
