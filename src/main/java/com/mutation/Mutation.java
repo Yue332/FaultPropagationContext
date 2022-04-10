@@ -87,7 +87,7 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 				if("1".equals(bugId)){
 					FileUtils.writeStringToFile(outputFile, "endTime = $(date \"+%Y-%m-%d %H:%M:%S\").$((`date \"+%N\"`/1000000)) \n", true);
 					FileUtils.writeStringToFile(outputFile, "echo \"cost time : \" \n", true);
-					FileUtils.writeStringToFile(outputFile, "echo $(($endTime - $startTime)) > /home/yy/mutationReports/"+project+"-"+bugId+"-cost.txt \n", true);
+					FileUtils.writeStringToFile(outputFile, "echo $(($endTime - $startTime)) > "+System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project+"-"+bugId+"-cost.txt \n", true);
 				}
 			}
 		}
