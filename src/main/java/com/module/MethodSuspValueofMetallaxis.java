@@ -1,7 +1,6 @@
 package com.module;
 
 import com.utils.Bean;
-import com.utils.ConfigUtils;
 import com.utils.Configer;
 import com.utils.SuspValueBean;
 import mysoot.MyMain;
@@ -14,11 +13,11 @@ import java.math.BigDecimal;
 import java.util.*;
 
 //Ochiai,Wong3,Dstar,Binary
-public class MethodSuspValueofMBFL extends Bean implements IProcessModule {
+public class MethodSuspValueofMetallaxis extends Bean implements IProcessModule {
 	private String suspValue;
 	private String output;
 	private String[] funcArr;
-	public MethodSuspValueofMBFL(Configer config) {
+	public MethodSuspValueofMetallaxis(Configer config) {
 		super(config);
 	}
 	
