@@ -81,13 +81,14 @@ public class Mutation extends FinalBean implements IFinalProcessModule {
 				
 				FileUtils.writeStringToFile(outputFile, "rm -rf " + reportDir + File.separator + "* \n", true);
 				if("1".equals(bugId)){
-					FileUtils.writeStringToFile(outputFile, "startTime = $(date \"+%Y-%m-%d %H:%M:%S\").$((`date \"+%N\"`/1000000)) \n", true);
+					FileUtils.writeStringToFile(outputFile, "startTime=`date +%Y%m%d-%H:%M:%S`\n" +
+							"startTime_s=`date +%s` \n", true);
 				}
 				FileUtils.writeStringToFile(outputFile, command+"\n", true);
 				if("1".equals(bugId)){
-					FileUtils.writeStringToFile(outputFile, "endTime = $(date \"+%Y-%m-%d %H:%M:%S\").$((`date \"+%N\"`/1000000)) \n", true);
-					FileUtils.writeStringToFile(outputFile, "echo \"cost time : \" \n", true);
-					FileUtils.writeStringToFile(outputFile, "echo $(($endTime - $startTime)) > "+System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project+"-"+bugId+"-cost.txt \n", true);
+					FileUtils.writeStringToFile(outputFile, "endTime=`date +%Y%m%d-%H:%M:%S`\n" +
+							"endTime_s=`date +%s` \n", true);
+					FileUtils.writeStringToFile(outputFile, "echo $(($endTime_s-$startTime_s)) > "+ System.getProperty("user.home") + File.separator + "mutationReports" + File.separator + project+"-"+bugId+"-cost.txt \n", true);
 				}
 			}
 		}
