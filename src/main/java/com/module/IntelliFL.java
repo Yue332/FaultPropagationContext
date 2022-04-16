@@ -4,6 +4,7 @@ import com.utils.Bean;
 import com.utils.Configer;
 import com.utils.Utils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.File;
 import java.util.List;
@@ -27,6 +28,9 @@ public class IntelliFL extends Bean implements IProcessModule{
         String buildPath = Utils.getSrcDir(runTime, projectPath);
         String buildTestPath = Utils.getBuildTest(runTime, projectPath);
         String[] allTestArray = Utils.getAllTestArray(runTime, projectPath);
+        if(ObjectUtils.isEmpty(allTestArray) || allTestArray.length<1){
+            throw new Exception("测试用例不存在");
+        }
 
         File methcovFile = new File(System.getProperty("user.home") + File.separator + "intelliFL" + File.separator + projectId + File.separator + projectId + "-" + bugId + "_methcov.sh");
         StringBuilder methcov = new StringBuilder();

@@ -24,6 +24,7 @@ public class IntelliFL1 extends FinalBean implements IFinalProcessModule {
     }
 
     public void dealOneBug(String bug)throws Exception{
+        System.out.println("[INFFO] 开始处理bug " + bug);
         //failing_tests 文件路径
         File failingTests = new File(super.config.getConfig(ConfigUtils.PRO_PROJECT_PATH_KEY) + File.separator +
                 config.getConfig(ConfigUtils.PRO_PROJECT_ID_KEY) + "_" + bug + File.separator + "failing_tests");
@@ -89,6 +90,7 @@ public class IntelliFL1 extends FinalBean implements IFinalProcessModule {
         StringBuilder str = new StringBuilder();
         removeList.forEach(row -> str.append(row).append("\r\n"));
         FileUtils.writeStringToFile(outputFile, str.toString(), "utf-8", false);
+        System.out.println("[INFO] bug " + bug + "处理完成");
     }
 
     public Map<String, List<String>> getFailingTest(File failingTests)throws Exception{
