@@ -1,4 +1,4 @@
-package com.finalmodule;
+package com.finalmodule.intellil;
 
 import com.finalmodule.base.FinalBean;
 import com.finalmodule.base.IFinalProcessModule;
@@ -94,8 +94,8 @@ public class IntelliFL2 extends FinalBean implements IFinalProcessModule {
     private static class MethodRemoveVister extends ModifierVisitor<String> {
         @Override
         public Visitable visit(MethodDeclaration method, String removeMethodName) {
-//            System.out.println("[DEBUG] 移除测试用例：" + method.getNameAsString());
             if(method.getNameAsString().equals(removeMethodName)){
+                System.out.println("[DEBUG] 移除测试用例：" + method.getNameAsString());
                 method.remove();
             }
             return super.visit(method, removeMethodName);

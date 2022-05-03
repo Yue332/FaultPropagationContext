@@ -1,5 +1,6 @@
-package com.module;
+package com.module.intellifl;
 
+import com.module.IProcessModule;
 import com.utils.Bean;
 import com.utils.Configer;
 import com.utils.Utils;
@@ -9,14 +10,12 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.io.File;
 import java.util.List;
 
-public class IntelliFL extends Bean implements IProcessModule{
+public class IntelliFL extends Bean implements IProcessModule {
     public IntelliFL(Configer config) {
         super(config);
     }
 
     private String command1 = "java -cp @:BUILD_TEST@:@:BUILD@@:OTHERLIB@ -javaagent:intelliFL.jar=covLevel=meth-cov org.junit.runner.JUnitCore @:TEST_CLASS@ \r\n";
-
-    private String command2 = "java -cp /home/yy/intelliFL/intelliFL.jar set.intelliFL.cg.CallGraphBuilder @:BUILD@ \r\n";
 
     private String command3 = "if [ ! -d /home/yy/MBFL/@:PROJECTID@/@:PROJECTID@-@:BUGID@/inteliFL ];then\n" +
             "        mkdir -p /home/yy/MBFL/@:PROJECTID@/@:PROJECTID@-@:BUGID@/inteliFL\n" +
@@ -39,7 +38,7 @@ public class IntelliFL extends Bean implements IProcessModule{
             methcov.append(command1.replace("@:BUILD_TEST@", buildTestPath).
                     replace("@:BUILD@", buildPath)
                     .replace("@:TEST_CLASS@", test)
-                    .replace("@:OTHERLIB@", getOtherLib()));
+                    .replace("@:OTHERLIB@", getOtherLib(projectId, projectPath)));
         }
         methcov.append("\n").append(command3.replace("@:PROJECTID@", projectId).replace("@:BUGID@", bugId));
         FileUtils.writeStringToFile(methcovFile, methcov.toString(), false);
@@ -63,7 +62,7 @@ public class IntelliFL extends Bean implements IProcessModule{
 //        FileUtils.writeStringToFile(callGraphFile, command2.replace("@:BUILD@", buildPath), false);
     }
 
-    public String getOtherLib(){
+    public static String getOtherLib(String projectId, String projectPath){
         StringBuilder otherLib = new StringBuilder();
         String home = System.getProperty("user.home");
         if("Mockito".equals(projectId)) {
@@ -89,7 +88,7 @@ public class IntelliFL extends Bean implements IProcessModule{
         return "";
     }
 
-    private void buildOtherLib(StringBuilder otherLib, String libPath){
+    public static void buildOtherLib(StringBuilder otherLib, String libPath){
         File libDir = new File(libPath);
         if(!libDir.exists()){
             throw new RuntimeException(libDir.getAbsolutePath() + "不存在！");

@@ -1,4 +1,4 @@
-package com.finalmodule;
+package com.finalmodule.intellil;
 
 import com.finalmodule.base.FinalBean;
 import com.finalmodule.base.IFinalProcessModule;
