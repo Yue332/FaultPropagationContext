@@ -10,10 +10,10 @@ import java.io.File;
 
 public class IntelliFLCallGraph extends Bean implements IProcessModule {
 
-    private String call_graph_command = "java -cp /home/yy/intelliFL/intelliFL.jar set.intelliFL.cg.CallGraphBuilder @:BUILD@ \r\n";
+    private String call_graph_command = "java -cp /home/yy/intelliFL/intelliFL.jar set.intelliFL.cg.CallGraphBuilder @:BUILD@ /home/yy/MBFL2/result/@:PROJECTID@/@:PROJECTID@-@:BUGID@/ \r\n";
 
-    private String outputPath = System.getProperty("user.home") + "/MBFL/@:PROJECTID@/@:PROJECTID@-@:BUGID@/inteliFL/callGraph/@:BUGID@.sh";
-    private String outputGeneralPath = System.getProperty("user.home") + "/MBFL/@:PROJECTID@.sh";
+    private String outputPath = System.getProperty("user.home") + "/MBFL2/@:PROJECTID@/@:PROJECTID@-@:BUGID@/inteliFL/callGraph/@:BUGID@.sh";
+    private String outputGeneralPath = System.getProperty("user.home") + "/MBFL2/@:PROJECTID@.sh";
 
     public IntelliFLCallGraph(Configer config) {
         super(config);
@@ -24,8 +24,10 @@ public class IntelliFLCallGraph extends Bean implements IProcessModule {
         String buildPath = Utils.getSrcDir(runTime, projectPath);
         File outputFile = new File(outputPath.replace("@:PROJECTID@", projectId)
                 .replace("@:BUGID@", bugId));
-        FileUtils.writeStringToFile(outputFile, call_graph_command.replace("@:BUILD@", buildPath), "utf-8", false);
-        File generalFile = new File(outputGeneralPath);
+        FileUtils.writeStringToFile(outputFile, call_graph_command.replace("@:BUILD@", buildPath)
+                .replace("@:PROJECTID@", projectId)
+                .replace("@:BUGID@", bugId), "utf-8", false);
+        File generalFile = new File(outputGeneralPath.replace("@:PROJECTID@", projectId));
         if(!generalFile.exists()){
             FileUtils.writeStringToFile(generalFile, "#!/bin/bash\n", "utf-8", false);
         }
